@@ -626,66 +626,133 @@ function sortSiteBy(col) {
 
 // ═══════════════ INVOICE TABLE ═══════════════
 function renderInvoiceTable() {
-  const q=(document.getElementById("inv-search")?.value||"").toLowerCase();
-  const site=document.getElementById("inv-filter")?.value||"";
-  const daysF=parseInt(document.getElementById("inv-days-filter")?.value||"0")||0;
+  const q = (document.getElementById("inv-search")?.value||"").toLowerCase();
+  const siteFilter = document.getElementById("inv-filter")?.value||"";
+  const daysF = document.getElementById("inv-days-filter")?.value||"";
 
-  // Populate site filter
-  const sel=document.getElementById("inv-filter");
-  if(sel && sel.options.length<=1) {
-    const sites=[...new Set(INVOICES.map(i=>i.site))].sort();
-    sites.forEach(s=>{const o=document.createElement("option");o.value=s;o.textContent=s;sel.appendChild(o);});
+  // ★ Sirf pending bill > 0 wali sites ★
+  const pendingSites = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site));
+
+  let rows = [];
+
+  if (INVOICES.length > 0) {
+    // Apps Script se invoice data aaya — pending sites filter karo
+    rows = INVOICES.filter(i => pendingSites.has(i.site) && (i.pending > 0.01 || i.totalInv > 0));
+  } else {
+    // Fallback: summary se pending sites dikhao
+    rows = DATA.filter(r => r.pending > 0.01).map(r => ({
+      site: r.site, invNo: "—", invDate: "—",
+      daysOld: 0, totalInv: r.total,
+      payRcvd: 0, pending: r.pending
+    }));
   }
 
-  let rows = INVOICES.length > 0 ? INVOICES.filter(i=>i.shortPay>0||i.totalInv>0) : [];
+  // Search filter
+  if (q) rows = rows.filter(r => (r.site+r.invNo).toLowerCase().includes(q));
+  if (siteFilter) rows = rows.filter(r => r.site === siteFilter);
 
-  if(q) rows=rows.filter(r=>(r.site+r.invNo).toLowerCase().includes(q));
-  if(site) rows=rows.filter(r=>r.site===site);
-  if(daysF) {
-    if(daysF===30) rows=rows.filter(r=>r.daysOld<=30);
-    else if(daysF===60) rows=rows.filter(r=>r.daysOld>30&&r.daysOld<=60);
-    else if(daysF===90) rows=rows.filter(r=>r.daysOld>60&&r.daysOld<=90);
-    else rows=rows.filter(r=>r.daysOld>90);
+  // Days filter
+  if (daysF) {
+    const df = parseInt(daysF);
+    if (df === 30) rows = rows.filter(r => r.daysOld <= 30);
+    else if (df === 60) rows = rows.filter(r => r.daysOld > 30 && r.daysOld <= 60);
+    else if (df === 90) rows = rows.filter(r => r.daysOld > 60 && r.daysOld <= 90);
+    else if (df === 999) rows = rows.filter(r => r.daysOld > 90);
   }
 
-  rows.sort((a,b)=>b.daysOld-a.daysOld);
+  // Populate site dropdown — sirf pending wali sites
+  const sel = document.getElementById("inv-filter");
+  if (sel && sel.options.length <= 1) {
+    const sites = [...pendingSites].sort();
+    sites.forEach(s => {
+      const o = document.createElement("option");
+      o.value = s; o.textContent = s;
+      sel.appendChild(o);
+    });
+  }
 
-  if(rows.length===0) {
-    document.getElementById("inv-tbody").innerHTML=`<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--faint)">Apps Script se invoice data load hone par yahan dikh jayega. Abhi static data hai.</td></tr>`;
+  // Sort: sabse zyada purane pehle
+  rows.sort((a,b) => b.daysOld - a.daysOld);
+
+  if (rows.length === 0) {
+    document.getElementById("inv-tbody").innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--faint)">Koi pending bill amount wali site nahi mili.</td></tr>`;
     return;
   }
 
-  document.getElementById("inv-tbody").innerHTML=rows.map(r=>{
-    const dc=daysColor(r.daysOld);
-    const pending=r.shortPay>0?r.shortPay:(r.totalInv-r.payRcvd);
+  // Total pending
+  const totalPending = rows.reduce((s,r) => s + (r.pending||0), 0);
+  const avgDays = rows.length > 0 ? Math.round(rows.reduce((s,r) => s + r.daysOld, 0) / rows.length) : 0;
+
+  document.getElementById("inv-tbody").innerHTML = rows.map(r => {
+    const dc = daysColor(r.daysOld);
+    const status = r.daysOld <= 30 ? "Fresh" : r.daysOld <= 60 ? "Follow up" : r.daysOld <= 90 ? "Urgent" : "Critical";
     return `<tr>
       <td><span class="site-name">${r.site}</span></td>
-      <td style="font-family:monospace;font-size:11px">${r.invNo}</td>
-      <td>${r.invDate||"–"}</td>
-      <td class="r"><span class="days-badge" style="background:${dc.bg};color:${dc.c}">${r.daysOld} days</span></td>
-      <td class="r">${r.totalInv>0?"₹"+fmt(r.totalInv):"–"}</td>
-      <td class="r">${r.payRcvd>0?"₹"+fmt(r.payRcvd):"–"}</td>
-      <td class="r" style="font-weight:600;color:${pending>0?"#c81e1e":"var(--text)"}">${pending>0?"₹"+fmt(pending):"–"}</td>
-      <td><span style="font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;background:${dc.bg};color:${dc.c}">${r.daysOld<=30?"Fresh":r.daysOld<=60?"Follow up":r.daysOld<=90?"Urgent":"Critical"}</span></td>
+      <td style="font-family:monospace;font-size:11px;color:var(--muted)">${r.invNo}</td>
+      <td style="font-size:12px">${r.invDate||"—"}</td>
+      <td class="r"><span class="days-badge" style="background:${dc.bg};color:${dc.c};font-weight:600">${r.daysOld > 0 ? r.daysOld+" days" : "—"}</span></td>
+      <td class="r">${r.totalInv>0?"₹"+fmt(r.totalInv):"—"}</td>
+      <td class="r">${r.payRcvd>0?"₹"+fmt(r.payRcvd):"—"}</td>
+      <td class="r" style="font-weight:600;color:#c81e1e">${r.pending>0?"₹"+fmt(r.pending):"—"}</td>
+      <td><span style="font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;background:${dc.bg};color:${dc.c}">${status}</span></td>
     </tr>`;
-  }).join("");
+  }).join("") + `<tr class="total-row">
+    <td colspan="3">Total (${rows.length} invoices | Avg: ${avgDays} days)</td>
+    <td></td><td></td><td></td>
+    <td class="r" style="color:#c81e1e">₹${fmt(totalPending)}</td>
+    <td></td>
+  </tr>`;
 }
 
 function renderInvoiceChart() {
-  if(INVOICES.length===0) return;
-  // Site-wise average days
-  const siteMap={};
-  INVOICES.filter(i=>i.shortPay>0).forEach(i=>{
-    if(!siteMap[i.site]) siteMap[i.site]={total:0,count:0};
-    siteMap[i.site].total+=i.daysOld;
-    siteMap[i.site].count++;
-  });
-  const sites=Object.keys(siteMap).map(s=>({site:s,avg:Math.round(siteMap[s].total/siteMap[s].count)})).sort((a,b)=>b.avg-a.avg).slice(0,12);
-  if(charts.siteDays) charts.siteDays.destroy();
-  charts.siteDays=new Chart(document.getElementById("chart-site-days"),{type:"bar",
-    data:{labels:sites.map(s=>s.site.length>14?s.site.slice(0,14)+"…":s.site),datasets:[{data:sites.map(s=>s.avg),backgroundColor:sites.map(s=>s.avg>90?"#c81e1e":s.avg>60?"#d97706":s.avg>30?"#f59e0b":"#059669"),borderWidth:0}]},
-    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+" days"}}},
-      scales:{x:{ticks:{callback:v=>v+" days",font:{size:10},color:"#9a9a94"},grid:{color:"rgba(0,0,0,0.05)"},title:{display:true,text:"Average days outstanding",font:{size:11}}},y:{ticks:{font:{size:10},color:"#6b6b66"},grid:{display:false}}}}
+  // ★ Sirf pending bill > 0 wali sites ★
+  const pendingSites = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site));
+  const siteMap = {};
+
+  if (INVOICES.length > 0) {
+    INVOICES.filter(i => pendingSites.has(i.site) && i.daysOld > 0).forEach(i => {
+      if (!siteMap[i.site]) siteMap[i.site] = {total:0, count:0, maxDays:0};
+      siteMap[i.site].total   += i.daysOld;
+      siteMap[i.site].count   += 1;
+      siteMap[i.site].maxDays  = Math.max(siteMap[i.site].maxDays, i.daysOld);
+    });
+  } else {
+    // Fallback: pending sites with 0 days (will show as unknown)
+    DATA.filter(r => r.pending > 0.01).forEach(r => {
+      siteMap[r.site] = {total:0, count:1, maxDays:0};
+    });
+  }
+
+  const sites = Object.keys(siteMap)
+    .map(s => ({site:s, avg:Math.round(siteMap[s].total/siteMap[s].count), max:siteMap[s].maxDays}))
+    .sort((a,b) => b.avg - a.avg)
+    .slice(0, 15);
+
+  if (sites.length === 0) return;
+
+  if (charts.siteDays) charts.siteDays.destroy();
+  charts.siteDays = new Chart(document.getElementById("chart-site-days"), {
+    type: "bar",
+    data: {
+      labels: sites.map(s => s.site.length>16 ? s.site.slice(0,16)+"…" : s.site),
+      datasets: [{
+        label: "Avg days",
+        data: sites.map(s => s.avg),
+        backgroundColor: sites.map(s => s.avg>90?"#c81e1e":s.avg>60?"#d97706":s.avg>30?"#f59e0b":"#059669"),
+        borderWidth: 0
+      }]
+    },
+    options: {
+      indexAxis: "y", responsive:true, maintainAspectRatio:false,
+      plugins: {
+        legend: {display:false},
+        tooltip: {callbacks:{label:ctx=>` ${ctx.raw} days outstanding`}}
+      },
+      scales: {
+        x: {ticks:{callback:v=>v+" days",font:{size:10},color:"#9a9a94"}, grid:{color:"rgba(0,0,0,0.05)"}},
+        y: {ticks:{font:{size:10},color:"#6b6b66"}, grid:{display:false}}
+      }
+    }
   });
 }
 
