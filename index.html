@@ -487,63 +487,39 @@ async function loadData() {
   document.getElementById("as-on-badge").textContent = "Refreshing...";
   setNotice("Data load ho raha hai...", "info");
 
-  // Render static data immediately so charts appear
+  // ★ Pehle static data render karo — charts kabhi blank nahi rahenge ★
   DATA    = [...FALLBACK];
   DEBTORS = [...FALLBACK_DEBTORS];
   renderAll();
 
-  // ── Method 1: Apps Script (invoice data + actual days) ──
-  if (CONFIG.APPS_SCRIPT_URL && CONFIG.APPS_SCRIPT_URL.trim() !== "") {
-    try {
-      const resp = await fetch(CONFIG.APPS_SCRIPT_URL + "?t=" + Date.now());
-      if (resp.ok) {
-        const json = await resp.json();
-        if (json.status === "ok" && json.summary && json.summary.length >= 1) {
-          DATA     = json.summary.map(r => ({...r, comm: r.comm||0}));
-          INVOICES = json.invoices || [];
-          DEBTORS  = json.daywise  || [...FALLBACK_DEBTORS];
-          lastUpdated = new Date(json.updated || Date.now());
-          setSidebar("live");
-          setNotice("✓ Live data loaded. Updated: " + lastUpdated.toLocaleTimeString("en-IN"), "success");
-          document.getElementById("as-on-badge").textContent = "As on: " + lastUpdated.toLocaleDateString("en-IN");
-          renderAll();
-          return;
-        }
-      }
-    } catch(e) {
-      console.warn("Apps Script failed:", e.message);
+  // ── Try Google Sheets CSV ──
+  try {
+    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv&t=" + Date.now();
+    const resp   = await fetch(csvUrl);
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const csv    = await resp.text();
+    console.log("CSV first 200 chars:", csv.slice(0,200));
+    const parsed = parseCSV(csv);
+    console.log("CSV parsed rows:", parsed.length);
+    if (parsed.length >= 3) {
+      DATA        = parsed;
+      lastUpdated = new Date();
+      setSidebar("live");
+      setNotice("✓ Live — Google Sheets. Updated: " + lastUpdated.toLocaleTimeString("en-IN"), "success");
+      document.getElementById("as-on-badge").textContent = "As on: " + lastUpdated.toLocaleDateString("en-IN");
+      renderAll();
+      return;
+    } else {
+      console.warn("CSV parsed but only", parsed.length, "rows found");
     }
+  } catch(e) {
+    console.error("CSV fetch error:", e.message);
   }
 
-  // ── Method 2: Google Sheets CSV ──
-  if (CONFIG.CSV_URL && CONFIG.CSV_URL.trim() !== "") {
-    try {
-      const resp = await fetch(CONFIG.CSV_URL + "&t=" + Date.now());
-      if (resp.ok) {
-        const csv    = await resp.text();
-        const parsed = parseCSV(csv);
-        if (parsed.length >= 3) {
-          DATA = parsed;
-          lastUpdated = new Date();
-          setSidebar("live");
-          setNotice("✓ Live data loaded (CSV). Updated: " + lastUpdated.toLocaleTimeString("en-IN"), "success");
-          document.getElementById("as-on-badge").textContent = "As on: " + lastUpdated.toLocaleDateString("en-IN");
-          renderAll();
-          return;
-        }
-      }
-    } catch(e) {
-      console.warn("CSV fetch failed:", e.message);
-    }
-  }
-
-  // ── Fallback: Static Excel data ──
-  DATA    = [...FALLBACK];
-  DEBTORS = [...FALLBACK_DEBTORS];
+  // ── Fallback: Static data already rendered above ──
   setSidebar("static");
-  setNotice("⚠ Google Sheets se connect nahi hua. Neeche steps follow karo. Static Excel data dikh raha hai.", "warn");
+  setNotice("⚠ Google Sheets CSV load nahi hua. Static data dikh raha hai. Refresh dabao.", "warn");
   document.getElementById("as-on-badge").textContent = "As on: 07 May 2026";
-  renderAll();
 }
 
 // ═══════════════ NAVIGATION ═══════════════
@@ -1039,211 +1015,195 @@ function findSiteInvoices(siteName) {
 function smartAnswer(q) {
   const ql = q.toLowerCase();
   const a  = A();
+  const NL = "\n";
 
   // 1. SUMMARY
   if (ql.match(/summary|overall|total|kitna|poora|sab kuch|overview|report/)) {
-    return [
-      `📊 VISHAL ELECTRICALS — OUTSTANDING SUMMARY`,
-      `📅 As on: ${new Date().toLocaleDateString("en-IN")}`,
-      ``,
-      `💰 Kul Outstanding : ₹${fmt(a.totalOut)}  (${fmtCr(a.totalOut)})`,
-      `🏢 Active Sites    : ${a.active.length} / ${a.d.length}`,
-      `📅 Avg Debtor Days : ${a.avgDays} days`,
-      ``,
-      `── BREAKUP ──────────────────────`,
-      `📋 Pending Bills   : ₹${fmt(a.totalPend)}`,
-      `🔴 LD Deduction    : ₹${fmt(a.totalLD)}`,
-      `🟡 SD Deduction    : ₹${fmt(a.totalSD)}`,
-      `⚫ Withheld/Comm   : ₹${fmt(a.totalWit)}`,
-      a.totalGST>0 ? `🔵 GST Hold        : ₹${fmt(a.totalGST)}` : null,
-      a.totalOth>0 ? `⚪ Other           : ₹${fmt(a.totalOth)}` : null,
-      ``,
-      `── ALERTS ───────────────────────`,
-      a.critical.length>0  ? `🚨 Very Critical (180+ days): ${a.critical.length} invoices` : null,
-      a.veryOld.length>0   ? `🔴 Critical (90-180 days)  : ${a.veryOld.length} invoices` : null,
-      a.urgent.length>0    ? `⚠️  Urgent (60-90 days)     : ${a.urgent.length} invoices` : null,
-      ``,
-      `── TOP 3 SITES ──────────────────`,
-      ...a.top5.slice(0,3).map((r,i)=>`${i+1}. ${r.site}: ₹${fmt(r.total)}`),
-    ].filter(x=>x!==null).join('
-');
+    var lines = [
+      "VISHAL ELECTRICALS — OUTSTANDING SUMMARY",
+      "As on: " + new Date().toLocaleDateString("en-IN"),
+      "",
+      "Total Outstanding : Rs." + fmt(a.totalOut) + " (" + fmtCr(a.totalOut) + ")",
+      "Active Sites      : " + a.active.length + " / " + a.d.length,
+      "Avg Debtor Days   : " + a.avgDays + " days",
+      "",
+      "BREAKUP:",
+      "Pending Bills  : Rs." + fmt(a.totalPend),
+      "LD Deduction   : Rs." + fmt(a.totalLD),
+      "SD Deduction   : Rs." + fmt(a.totalSD),
+      "Withheld/Comm  : Rs." + fmt(a.totalWit)
+    ];
+    if (a.totalGST > 0) lines.push("GST Hold       : Rs." + fmt(a.totalGST));
+    if (a.totalOth > 0) lines.push("Other          : Rs." + fmt(a.totalOth));
+    lines.push("", "ALERTS:");
+    if (a.critical.length > 0) lines.push("Critical 180+d : " + a.critical.length + " invoices");
+    if (a.veryOld.length  > 0) lines.push("90-180 days    : " + a.veryOld.length  + " invoices");
+    if (a.urgent.length   > 0) lines.push("Urgent 60-90d  : " + a.urgent.length   + " invoices");
+    lines.push("", "TOP 3 SITES:");
+    a.top5.slice(0,3).forEach(function(r,i){ lines.push((i+1)+". "+r.site+" : Rs."+fmt(r.total)); });
+    return lines.join(NL);
   }
 
   // 2. PENDING BILLS
   if (ql.match(/pending|bill|unpaid/)) {
-    if (a.pendSites.length === 0)
-      return `✅ Koi pending bill amount nahi hai abhi.`;
-    return [
-      `📋 PENDING BILL AMOUNT — ${a.pendSites.length} SITES`,
-      ``,
-      ...a.pendSites.slice(0,12).map((r,i)=>
-        `${i+1}. ${r.site}
-   Pending: ₹${fmt(r.pending)} | Total OS: ₹${fmt(r.total)}`
-      ),
-      ``,
-      `💰 Total Pending Bills: ₹${fmt(a.totalPend)}`,
-    ].join('
-');
+    if (a.pendSites.length === 0) return "Koi pending bill nahi hai abhi.";
+    var lines = ["PENDING BILL AMOUNT — " + a.pendSites.length + " SITES", ""];
+    a.pendSites.slice(0,12).forEach(function(r,i){
+      lines.push((i+1)+". "+r.site);
+      lines.push("   Pending: Rs."+fmt(r.pending)+" | Total: Rs."+fmt(r.total));
+    });
+    lines.push("", "Total Pending: Rs." + fmt(a.totalPend));
+    return lines.join(NL);
   }
 
-  // 3. CRITICAL / OLD INVOICES
+  // 3. CRITICAL
   if (ql.match(/critical|180|very old|purana|overdue|bahut|zyada din/)) {
-    if (a.critical.length === 0)
-      return `✅ Koi 180+ days wala invoice nahi hai.`;
-    return [
-      `🚨 VERY CRITICAL INVOICES (180+ DAYS):`,
-      ``,
-      ...a.critical.slice(0,8).map(i=>
-        `• ${i.site}
-  Invoice: ${i.invNo}  Date: ${i.invDate}
-  Days: ${i.daysOld} | Pending: ₹${fmt(i.pending)}`
-      ),
-    ].join('
-');
+    if (a.critical.length === 0) return "Koi 180+ days wala invoice nahi hai.";
+    var lines = ["CRITICAL INVOICES (180+ DAYS):", ""];
+    a.critical.slice(0,8).forEach(function(i){
+      lines.push("Site    : " + i.site);
+      lines.push("Invoice : " + i.invNo + " | Date: " + i.invDate);
+      lines.push("Days    : " + i.daysOld + " | Pending: Rs." + fmt(i.pending));
+      lines.push("");
+    });
+    return lines.join(NL);
   }
 
+  // 4. URGENT
   if (ql.match(/urgent|90|60 day|follow|delay/)) {
-    const list = [...a.veryOld, ...a.urgent].sort((a,b)=>b.daysOld-a.daysOld);
-    if (list.length === 0) return `✅ Koi urgent invoice nahi hai.`;
-    return [
-      `⚠️ URGENT INVOICES (60-180 DAYS): ${list.length} invoices`,
-      ``,
-      ...list.slice(0,8).map(i=>
-        `• ${i.site}  →  ${i.daysOld} days  →  ₹${fmt(i.pending)}`
-      ),
-    ].join('
-');
+    var list = a.veryOld.concat(a.urgent).sort(function(a,b){return b.daysOld-a.daysOld;});
+    if (list.length === 0) return "Koi urgent invoice nahi hai.";
+    var lines = ["URGENT INVOICES (60-180 DAYS): " + list.length, ""];
+    list.slice(0,8).forEach(function(i){
+      lines.push(i.site + " | " + i.daysOld + " days | Rs." + fmt(i.pending));
+    });
+    return lines.join(NL);
   }
 
-  // 4. LD DEDUCTION
-  if (ql.match(/ld|liquidated|ld deduction/)) {
-    return [
-      `🔴 LD DEDUCTION ANALYSIS`,
-      ``,
-      `Total LD: ₹${fmt(a.totalLD)}  (${((a.totalLD/Math.max(a.totalOut,1))*100).toFixed(1)}% of OS)`,
-      ``,
-      `TOP LD SITES:`,
-      ...a.topLD.map((r,i)=>
-        `${i+1}. ${r.site}
-   LD: ₹${fmt(r.ld)} | Total OS: ₹${fmt(r.total)}`
-      ),
-    ].join('
-');
+  // 5. LD DEDUCTION
+  if (ql.match(/\bld\b|liquidated/)) {
+    var lines = [
+      "LD DEDUCTION ANALYSIS", "",
+      "Total LD: Rs." + fmt(a.totalLD) + " (" + ((a.totalLD/Math.max(a.totalOut,1))*100).toFixed(1) + "% of OS)",
+      "", "TOP LD SITES:"
+    ];
+    a.topLD.forEach(function(r,i){
+      lines.push((i+1)+". "+r.site);
+      lines.push("   LD: Rs."+fmt(r.ld)+" | Total: Rs."+fmt(r.total));
+    });
+    return lines.join(NL);
   }
 
-  // 5. SD DEDUCTION
-  if (ql.match(/sd|security deposit|sd deduction/)) {
-    return [
-      `🟡 SD DEDUCTION ANALYSIS`,
-      ``,
-      `Total SD: ₹${fmt(a.totalSD)}  (${((a.totalSD/Math.max(a.totalOut,1))*100).toFixed(1)}% of OS)`,
-      ``,
-      `TOP SD SITES:`,
-      ...a.topSD.map((r,i)=>
-        `${i+1}. ${r.site}
-   SD: ₹${fmt(r.sd)} | Total OS: ₹${fmt(r.total)}`
-      ),
-    ].join('
-');
+  // 6. SD DEDUCTION
+  if (ql.match(/\bsd\b|security deposit/)) {
+    var lines = [
+      "SD DEDUCTION ANALYSIS", "",
+      "Total SD: Rs." + fmt(a.totalSD) + " (" + ((a.totalSD/Math.max(a.totalOut,1))*100).toFixed(1) + "% of OS)",
+      "", "TOP SD SITES:"
+    ];
+    a.topSD.forEach(function(r,i){
+      lines.push((i+1)+". "+r.site);
+      lines.push("   SD: Rs."+fmt(r.sd)+" | Total: Rs."+fmt(r.total));
+    });
+    return lines.join(NL);
   }
 
-  // 6. DEBTOR DAYS / AGING
+  // 7. DEBTOR DAYS
   if (ql.match(/day|din|aging|debtor|oldest/)) {
-    const oldest = [...a.pendInv].sort((a,b)=>b.daysOld-a.daysOld).slice(0,6);
-    return [
-      `📅 DEBTOR DAYS ANALYSIS`,
-      ``,
-      `Weighted Avg Days  : ${a.avgDays} days`,
-      `Pending Invoices   : ${a.pendInv.length}`,
-      ``,
-      `OLDEST INVOICES:`,
-      ...oldest.map(i =>
-        `• ${i.site}  ${i.invDate}  →  ${i.daysOld} DAYS  →  ₹${fmt(i.pending)}`
-      ),
-    ].join('
-');
+    var oldest = a.pendInv.slice().sort(function(a,b){return b.daysOld-a.daysOld;}).slice(0,6);
+    var lines  = [
+      "DEBTOR DAYS ANALYSIS", "",
+      "Weighted Avg : " + a.avgDays + " days",
+      "Pending Inv  : " + a.pendInv.length,
+      "", "OLDEST INVOICES:"
+    ];
+    oldest.forEach(function(i){
+      lines.push(i.site + " | " + i.invDate + " | " + i.daysOld + " days | Rs." + fmt(i.pending));
+    });
+    return lines.join(NL);
   }
 
-  // 7. TOP SITES
+  // 8. TOP SITES
   if (ql.match(/top|sabse|highest|largest|ranking/)) {
-    return [
-      `🏆 TOP 5 OUTSTANDING SITES:`,
-      ``,
-      ...a.top5.map((r,i)=> [
-        `${i+1}. ${r.site}`,
-        `   Total   : ₹${fmt(r.total)}`,
-        r.pending>0.01 ? `   Pending : ₹${fmt(r.pending)}` : null,
-        r.ld>0.01      ? `   LD      : ₹${fmt(r.ld)}`      : null,
-        r.sd>0.01      ? `   SD      : ₹${fmt(r.sd)}`      : null,
-      ].filter(Boolean).join('
-')),
-    ].join('
-');
+    var lines = ["TOP 5 OUTSTANDING SITES:", ""];
+    a.top5.forEach(function(r,i){
+      lines.push((i+1)+". "+r.site);
+      lines.push("   Total  : Rs."+fmt(r.total));
+      if (r.pending > 0.01) lines.push("   Pending: Rs."+fmt(r.pending));
+      if (r.ld > 0.01)      lines.push("   LD     : Rs."+fmt(r.ld));
+      if (r.sd > 0.01)      lines.push("   SD     : Rs."+fmt(r.sd));
+      lines.push("");
+    });
+    return lines.join(NL);
   }
 
-  // 8. SPECIFIC SITE DETAIL
-  const siteMatches = findSite(q);
+  // 9. SITE SEARCH
+  var siteMatches = findSite(q);
   if (siteMatches.length > 0) {
-    return siteMatches.slice(0,2).map(r => {
-      const invs = findSiteInvoices(r.site);
-      const maxDays = invs.length > 0 ? Math.max(...invs.map(i=>i.daysOld)) : null;
-      return [
-        `📍 ${r.site}`,
-        `${'─'.repeat(40)}`,
-        `💰 Total Outstanding : ₹${fmt(r.total)}`,
-        maxDays !== null ? `📅 Oldest Invoice    : ${maxDays} days` : null,
-        r.pending>0.01   ? `📋 Pending Bill      : ₹${fmt(r.pending)}` : null,
-        r.ld>0.01        ? `🔴 LD Deduction      : ₹${fmt(r.ld)}`      : null,
-        r.sd>0.01        ? `🟡 SD Deduction      : ₹${fmt(r.sd)}`      : null,
-        r.gst>0.01       ? `🔵 GST Hold          : ₹${fmt(r.gst)}`     : null,
-        (r.withheld+r.comm)>0.01 ? `⚫ Withheld          : ₹${fmt(r.withheld+r.comm)}` : null,
-        r.other>0.01     ? `⚪ Other             : ₹${fmt(r.other)}`   : null,
-        invs.length>0 ? [`
-📄 INVOICES (${invs.length}):`,
-          ...invs.sort((a,b)=>b.daysOld-a.daysOld).map(i=>
-            `  ${i.invNo.padEnd(20)} ${i.invDate}  ${i.daysOld} days  ₹${fmt(i.pending)}`
-          )].join('
-') : null,
-      ].filter(x=>x!==null).join('
-');
-    }).join('
-
-');
+    var lines = [];
+    siteMatches.slice(0,2).forEach(function(r){
+      var invs    = findSiteInvoices(r.site);
+      var maxDays = invs.length > 0 ? Math.max.apply(null, invs.map(function(i){return i.daysOld;})) : null;
+      lines.push(r.site);
+      lines.push("----------------------------------------");
+      lines.push("Total Outstanding: Rs." + fmt(r.total));
+      if (maxDays !== null)          lines.push("Oldest Invoice   : " + maxDays + " days");
+      if (r.pending > 0.01)          lines.push("Pending Bill     : Rs." + fmt(r.pending));
+      if (r.ld > 0.01)               lines.push("LD Deduction     : Rs." + fmt(r.ld));
+      if (r.sd > 0.01)               lines.push("SD Deduction     : Rs." + fmt(r.sd));
+      if (r.gst > 0.01)              lines.push("GST Hold         : Rs." + fmt(r.gst));
+      if ((r.withheld+r.comm)>0.01)  lines.push("Withheld         : Rs." + fmt(r.withheld+r.comm));
+      if (r.other > 0.01)            lines.push("Other            : Rs." + fmt(r.other));
+      if (invs.length > 0) {
+        lines.push("", "INVOICES (" + invs.length + "):");
+        invs.sort(function(a,b){return b.daysOld-a.daysOld;}).forEach(function(i){
+          lines.push(i.invNo + " | " + i.invDate + " | " + i.daysOld + " days | Rs." + fmt(i.pending));
+        });
+      }
+      lines.push("");
+    });
+    return lines.join(NL);
   }
 
-  // 9. HELP
-  if (ql.match(/help|kya|what can|kaise/)) {
+  // 10. HELP
+  if (ql.match(/help|kya kar|what can/)) {
     return [
-      `🤖 AI ASSISTANT — YEH SAB POOCHO:`,
-      ``,
-      `📊 "Summary batao"          → Poora overview`,
-      `🏆 "Top sites"              → Sabse zyada outstanding`,
-      `📋 "Pending bills"          → Pending amount sites`,
-      `🔴 "LD deduction"           → LD analysis`,
-      `🟡 "SD deduction"           → SD analysis`,
-      `🚨 "Critical invoices"      → 180+ days`,
-      `⚠️  "Urgent invoices"        → 60-90 days`,
-      `📅 "Debtor days"            → Aging analysis`,
-      `📍 "IOCL Madurai detail"    → Specific site full detail`,
-      `📍 "Ahmednagar"             → Site name likho`,
-      ``,
-      `Koi bhi site ka naam likhein — poori detail milegi!`,
-    ].join('
-');
+      "AI ASSISTANT — YEH SAB POOCHO:", "",
+      "summary batao       -> Poora overview",
+      "top sites           -> Top outstanding",
+      "pending bills       -> Pending amount sites",
+      "ld deduction        -> LD analysis",
+      "sd deduction        -> SD analysis",
+      "critical invoices   -> 180+ days",
+      "urgent invoices     -> 60-90 days",
+      "debtor days         -> Aging analysis",
+      "IOCL Madurai detail -> Specific site detail",
+      "", "Koi bhi site ka naam likhein!"
+    ].join(NL);
   }
 
-  // 10. DEFAULT — broad search
-  return [
-    `Samajh nahi aaya. Kuch aise poocho:`,
-    ``,
-    `• "Summary batao"`,
-    `• "IOCL Madurai detail"`,
-    `• "Top outstanding sites"`,
-    `• "Critical invoices"`,
-    `• "Pending bills"`,
-    `• "LD deduction analysis"`,
-  ].join('
-');
+  // 11. DEFAULT broad search
+  var broad = a.d.filter(function(r){
+    return q.split(" ").some(function(w){ return w.length>3 && r.site.toLowerCase().includes(w.toLowerCase()); });
+  });
+  if (broad.length > 0) {
+    var r    = broad[0];
+    var invs = findSiteInvoices(r.site);
+    var lines = [r.site, "Total: Rs."+fmt(r.total)];
+    if (r.pending > 0.01) lines.push("Pending: Rs."+fmt(r.pending));
+    if (r.ld > 0.01)      lines.push("LD: Rs."+fmt(r.ld));
+    if (r.sd > 0.01)      lines.push("SD: Rs."+fmt(r.sd));
+    if (invs.length > 0) {
+      lines.push("", "Invoices:");
+      invs.forEach(function(i){ lines.push(i.invNo+" | "+i.daysOld+" days | Rs."+fmt(i.pending)); });
+    }
+    return lines.join(NL);
+  }
+
+  return ["Samajh nahi aaya. Kuch aise poocho:", "",
+    "summary batao", "IOCL Madurai detail", "top outstanding sites",
+    "critical invoices", "pending bills", "ld deduction"
+  ].join(NL);
 }
 
 function sendAI() {
