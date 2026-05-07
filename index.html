@@ -267,7 +267,7 @@ const CONFIG = {
     <!-- PAGE: DEBTORS -->
     <div class="page" id="page-debtors">
       <div class="card">
-        <div class="card-header"><div><div class="card-title">Debtors outstanding — day-wise</div><div class="card-sub">Sheet ke DAYWISE OS tab se live data</div></div></div>
+        <div class="card-header"><div><div class="card-title">Debtors outstanding — day-wise</div><div class="card-sub">Sirf Pending Bill wali sites — Invoice date se actual days calculated</div></div></div>
         <div class="day-grid" id="deb-day-grid"></div>
         <div class="tbl-wrap">
           <table><thead><tr>
@@ -377,24 +377,22 @@ const FALLBACK = [
   {sno:29,site:"Transrail Lighting Ltd",pending:1683475,sd:0,ld:0,gst:0,instant:0,other:0,withheld:1299025,comm:0,total:1683475}
 ];
 
+// ★★★ IMPORTANT: actualInvDate = Aapki sheet ki actual invoice date (YYYY-MM-DD format mein)
+// Jab Apps Script connected hoga tab live INVOICES se automatically calculate hoga
+// Abhi ye fallback dates hain — apni sheet dekh ke update karo ★★★
 const FALLBACK_DEBTORS = [
-  {name:"IOCL Madurai",d0:0,d30:0,d45:0,d60:228116,total:228116},
-  {name:"IOCL Ahmednagar",d0:0,d30:3841050.31,d45:0,d60:781197.22,total:4622247.53},
-  {name:"Transrail Lighting Ltd",d0:0,d30:0,d45:0,d60:1683475,total:1683475},
-  {name:"IOCL Panipat Refinery",d0:0,d30:3907380.83,d45:0,d60:0,total:3907380.83},
-  {name:"IOCL Vijaywada",d0:0,d30:231880.69,d45:0,d60:0,total:231880.69},
-  {name:"GAIL Vijaipur",d0:0,d30:1308904.38,d45:0,d60:0,total:1308904.38},
-  {name:"Paradip Port Authority",d0:0,d30:1109318,d45:0,d60:0,total:1109318},
-  {name:"IOCL Sarpara",d0:0,d30:2445113.24,d45:0,d60:0,total:2445113.24},
-  {name:"IOCL Vizag",d0:0,d30:267548.59,d45:0,d60:0,total:267548.59},
-  {name:"IOCL Hissar",d0:0,d30:2054704.29,d45:0,d60:0,total:2054704.29},
-  {name:"IOCL Tirupati",d0:0,d30:371062.8,d45:0,d60:0,total:371062.8},
-  {name:"IOCL Salem",d0:0,d30:817313.81,d45:0,d60:0,total:817313.81},
-  {name:"IOCL Jharsuguda",d0:0,d30:1564080.45,d45:0,d60:0,total:1564080.45},
-  {name:"IOCL Mumbai DO",d0:0,d30:995139.73,d45:0,d60:0,total:995139.73},
-  {name:"NTPC Dadri",d0:270223.78,d30:0,d45:0,d60:0,total:270223.78},
-  {name:"IOCL Barauni",d0:273215.16,d30:0,d45:0,d60:0,total:273215.16}
-];
+  {name:"IOCL Madurai DO",      pending:228116.61, d0:0,d30:0,d45:0,d60:228116,   total:228116.61,   actualInvDate:"2025-03-31"},
+  {name:"IOCL Ahmednagar",      pending:4622247.53,d0:0,d30:3841050.31,d45:0,d60:781197.22,total:4622247.53,actualInvDate:"2025-03-15"},
+  {name:"Transrail Lighting Ltd",pending:1683475,  d0:0,d30:0,d45:0,d60:1683475, total:1683475,     actualInvDate:"2025-01-10"},
+  {name:"IOCL Panipat Refinery", pending:3907381.72,d0:0,d30:3907380.83,d45:0,d60:0,total:3907381.72,actualInvDate:"2025-03-20"},
+  {name:"IOCL Salem DO",         pending:817313.81, d0:0,d30:817313.81,d45:0,d60:0,total:817313.81,  actualInvDate:"2025-03-25"},
+  {name:"IOCL Hissar DO",        pending:2054704.29,d0:0,d30:2054704.29,d45:0,d60:0,total:2054704.29,actualInvDate:"2025-03-18"},
+  {name:"IOCL Jharsuguda",       pending:1564080.45,d0:0,d30:1564080.45,d45:0,d60:0,total:1564080.45,actualInvDate:"2025-03-22"},
+  {name:"IOCL Mumbai DO",        pending:995139.73, d0:0,d30:995139.73,d45:0,d60:0,total:995139.73,  actualInvDate:"2025-03-28"},
+  {name:"IOCL Sarpara",          pending:2445113.24,d0:0,d30:2445113.24,d45:0,d60:0,total:2445113.24,actualInvDate:"2025-03-10"},
+  {name:"IOCL Barauni",          pending:273215.16, d0:273215.16,d30:0,d45:0,d60:0,total:273215.16,  actualInvDate:"2025-04-20"},
+  {name:"IOCL Moradabad DO",     pending:0,         d0:0,d30:0,d45:0,d60:0,total:0,actualInvDate:null}
+].filter(r => r.pending > 0.01);
 
 // ═══════════════ STATE ═══════════════
 let DATA = [...FALLBACK];
@@ -492,17 +490,55 @@ async function loadData() {
   DEBTORS = [...FALLBACK_DEBTORS];
   renderAll();
 
-  // ── Try Google Sheets CSV ──
+  // ── Try Google Sheets CSV via CORS proxies ──
+  const SHEET_CSV_BASE = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv";
+  const PROXIES = [
+    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    u => u  // direct attempt last
+  ];
+  let proxyResp = null, proxyErr = "";
+  for (const mkProxy of PROXIES) {
+    try {
+      const tryUrl = mkProxy(SHEET_CSV_BASE + "&t=" + Date.now());
+      console.log("Trying:", tryUrl.slice(0,70));
+      const r = await fetch(tryUrl, { cache:"no-store" });
+      if (r.ok) { proxyResp = r; break; }
+    } catch(ex) { proxyErr = ex.message; }
+  }
   try {
-    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv&t=" + Date.now();
-    const resp   = await fetch(csvUrl);
-    if (!resp.ok) throw new Error("HTTP " + resp.status);
-    const csv    = await resp.text();
+    if (!proxyResp) throw new Error("All proxies failed: " + proxyErr);
+    const csv    = await proxyResp.text();
     console.log("CSV first 200 chars:", csv.slice(0,200));
     const parsed = parseCSV(csv);
     console.log("CSV parsed rows:", parsed.length);
     if (parsed.length >= 3) {
       DATA        = parsed;
+      // Rebuild DEBTORS from live DATA — only pending bill > 0 sites
+      // Merge with FALLBACK_DEBTORS for aging bucket data & invoice dates
+      const fbMap = {};
+      FALLBACK_DEBTORS.forEach(r => { fbMap[r.name.toLowerCase()] = r; });
+      DEBTORS = DATA.filter(r => r.pending > 0.01).map(r => {
+        // Try to find matching fallback debtor for aging buckets / invoice date
+        const rn = r.site.toLowerCase();
+        let fb = fbMap[rn];
+        if (!fb) {
+          for (const key of Object.keys(fbMap)) {
+            const words = rn.split(' ').filter(w=>w.length>3);
+            if (words.some(w => key.includes(w))) { fb = fbMap[key]; break; }
+          }
+        }
+        return {
+          name: r.site,
+          pending: r.pending,
+          d0:  fb ? (fb.d0  || 0) : 0,
+          d30: fb ? (fb.d30 || 0) : 0,
+          d45: fb ? (fb.d45 || 0) : 0,
+          d60: fb ? (fb.d60 || 0) : 0,
+          total: r.pending, // use pending as debtor total
+          actualInvDate: fb ? (fb.actualInvDate || null) : null
+        };
+      });
       lastUpdated = new Date();
       setSidebar("live");
       setNotice("✓ Live — Google Sheets. Updated: " + lastUpdated.toLocaleTimeString("en-IN"), "success");
@@ -837,14 +873,38 @@ function matchSiteInvoices(debtorName) {
 }
 
 function renderDebtorTable() {
-  // Build rows with ACTUAL days from invoice data
-  const rows = DEBTORS.map(r => {
-    const invs = matchSiteInvoices(r.name).filter(i => i.daysOld > 0);
-    // Actual days = max days among matched invoices (oldest invoice)
-    const actualDays = invs.length > 0
-      ? Math.max(...invs.map(i => i.daysOld))
-      : null; // null = no invoice data, show as unknown
-    return { ...r, actualDays, hasLive: invs.length > 0 };
+  // ★ ONLY sites where Pending Bill > 0 (match with DATA summary) ★
+  const pendingSiteNames = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site.toLowerCase().trim()));
+
+  // Build rows — only pending bill sites
+  const rows = DEBTORS.filter(r => {
+    // Match debtor name against DATA pending sites (fuzzy)
+    const rn = r.name.toLowerCase().trim();
+    // Direct match or partial match
+    if (pendingSiteNames.has(rn)) return true;
+    for (const sn of pendingSiteNames) {
+      const words = rn.split(' ').filter(w => w.length > 3);
+      if (words.some(w => sn.includes(w))) return true;
+    }
+    // Also keep if r.pending > 0 (field set directly)
+    return (r.pending || 0) > 0.01;
+  }).map(r => {
+    // Try live INVOICES first
+    const invs = matchSiteInvoices(r.name).filter(i => i.daysOld > 0 && i.pending > 0);
+    let actualDays = null;
+    let hasLive = false;
+
+    if (invs.length > 0) {
+      // Actual days = max days (oldest pending invoice) from live data
+      actualDays = Math.max(...invs.map(i => i.daysOld));
+      hasLive = true;
+    } else if (r.actualInvDate) {
+      // Fallback: calculate from hardcoded invoice date
+      const invDate = new Date(r.actualInvDate);
+      const todayD = today();
+      actualDays = Math.round((todayD - invDate) / (1000*60*60*24));
+    }
+    return { ...r, actualDays, hasLive };
   });
 
   const gt  = rows.reduce((s,r) => s + r.total, 0);
