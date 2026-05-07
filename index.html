@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vishal Electricals — Outstanding Payment Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0eeea;
+    --border: rgba(0,0,0,0.09);
+    --border2: rgba(0,0,0,0.16);
+    --text: #1a1a18;
+    --muted: #6b6b66;
+    --faint: #9a9a94;
+    --accent: #1a56db;
+    --accent-bg: #eff4ff;
+    --red: #c81e1e;
+    --red-bg: #fdf2f2;
+    --amber: #92400e;
+    --amber-bg: #fffbeb;
+    --green: #065f46;
+    --green-bg: #ecfdf5;
+    --teal: #0e7490;
+    --teal-bg: #ecfeff;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 0 0 0.5px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; min-height: 100vh; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+  /* ─── SIDEBAR ─── */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar { width: 220px; background: var(--surface); border-right: 0.5px solid var(--border2); display: flex; flex-direction: column; padding: 0; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; }
+  .sidebar-logo { padding: 20px 18px 16px; border-bottom: 0.5px solid var(--border); }
+  .sidebar-logo-mark { width: 32px; height: 32px; background: #1a56db; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+  .sidebar-company { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .sidebar-sub { font-size: 10px; color: var(--faint); margin-top: 1px; }
+  .sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+  .nav-section { font-size: 10px; font-weight: 600; color: var(--faint); letter-spacing: .06em; text-transform: uppercase; padding: 10px 8px 4px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; color: var(--muted); margin-bottom: 1px; border: none; background: none; width: 100%; text-align: left; font-family: inherit; transition: background .15s; }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: var(--accent-bg); color: var(--accent); font-weight: 500; }
+  .nav-item svg { flex-shrink: 0; }
+  .sidebar-footer { padding: 14px 18px; border-top: 0.5px solid var(--border); }
+  .data-pill { display: flex; align-items: center; gap: 6px; font-size: 11px; padding: 6px 10px; background: var(--surface2); border-radius: 20px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-live { background: #10b981; }
+  .dot-static { background: var(--faint); }
+
+  /* ─── MAIN ─── */
+  .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .topbar { background: var(--surface); border-bottom: 0.5px solid var(--border2); padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 90; }
+  .topbar-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: var(--surface); color: var(--muted); font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all .15s; }
+  .btn:hover { background: var(--surface2); color: var(--text); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #1648c0; }
+  .date-badge { font-size: 11px; color: var(--faint); padding: 5px 10px; background: var(--surface2); border-radius: 20px; }
+
+  .content { padding: 24px 28px; flex: 1; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ─── METRIC CARDS ─── */
+  .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .metric-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; }
+  .metric-label { font-size: 11px; color: var(--faint); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+  .metric-value { font-size: 26px; font-weight: 600; color: var(--text); line-height: 1.1; }
+  .metric-value.accent { color: var(--accent); }
+  .metric-value.red { color: var(--red); }
+  .metric-value.amber { color: #d97706; }
+  .metric-value.green { color: #059669; }
+  .metric-sub { font-size: 11px; color: var(--faint); margin-top: 4px; }
+  .metric-tag { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 20px; margin-top: 4px; font-weight: 500; }
+
+  /* ─── CARDS ─── */
+  .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px; margin-bottom: 18px; }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .card-sub { font-size: 11px; color: var(--faint); margin-top: 2px; }
+
+  /* ─── CHARTS GRID ─── */
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+  .chart-wrap { position: relative; width: 100%; }
+  .h260 { height: 260px; }
+  .h220 { height: 220px; }
+  .h180 { height: 180px; }
+
+  /* ─── LEGEND ─── */
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ─── TABLE ─── */
+  .tbl-wrap { overflow-x: auto; }
+  .search-bar { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+  .search-input { flex: 1; padding: 8px 12px; border: 0.5px solid var(--border2); border-radius: var(--radius-sm); font-size: 13px; background: var(--surface2); color: var(--text); font-family: inherit; outline: none; }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,86,219,.12); }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead th { text-align: left; padding: 9px 10px; font-size: 10px; font-weight: 600; color: var(--faint); text-transform: uppercase; letter-spacing: .05em; border-bottom: 0.5px solid var(--border2); white-space: nowrap; background: var(--surface); }
+  th.r, td.r { text-align: right; }
+  td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); color: var(--text); }
+  tr:hover td { background: var(--surface2); }
+  tr:last-child td { border-bottom: none; }
+  .total-row td { font-weight: 600; border-top: 1px solid var(--border2); border-bottom: none; background: var(--surface2); }
+  .site-name { font-weight: 500; color: var(--accent); font-size: 12px; }
+  .pill { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 500; margin: 1px; white-space: nowrap; }
+  .pill-sd { background: var(--amber-bg); color: var(--amber); }
+  .pill-ld { background: var(--red-bg); color: var(--red); }
+  .pill-gst { background: var(--accent-bg); color: var(--accent); }
+  .pill-wit { background: var(--green-bg); color: var(--green); }
+  .pill-oth { background: var(--surface2); color: var(--muted); }
+  .aging-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 500; }
+
+  /* ─── BAR TRACK ─── */
+  .bar-track { height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+
+  /* ─── NOTICE ─── */
+  .notice { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 12px; margin-bottom: 16px; }
+  .notice-info { background: var(--accent-bg); color: var(--accent); border: 0.5px solid #bfdbfe; }
+  .notice-success { background: var(--green-bg); color: var(--green); border: 0.5px solid #a7f3d0; }
+  .notice-warn { background: var(--amber-bg); color: var(--amber); border: 0.5px solid #fde68a; }
+
+  /* ─── DAYWISE SUMMARY ─── */
+  .day-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+  .day-card { background: var(--surface2); border-radius: var(--radius-sm); padding: 14px 16px; }
+  .day-card-lbl { font-size: 10px; color: var(--faint); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+  .day-card-val { font-size: 18px; font-weight: 600; color: var(--text); }
+  .day-card-pct { font-size: 11px; color: var(--faint); margin-top: 2px; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .sidebar { width: 60px; }
+    .sidebar-company, .sidebar-sub, .nav-section, .nav-item span, .sidebar-footer .data-pill span { display: none; }
+    .main { margin-left: 60px; }
+    .charts-row { grid-template-columns: 1fr; }
+    .day-grid { grid-template-columns: 1fr 1fr; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+  ⚙️  CONFIGURATION — EDIT THIS SECTION
+  Replace CSV_URL with your own public CSV
+════════════════════════════════════════ -->
+<script>
+const CONFIG = {
+  // ▶ Paste your Google Sheets public CSV URL here:
+  CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv',
+  // ▶ Auto-refresh every N minutes (0 = disabled):
+  AUTO_REFRESH_MINUTES: 5,
+  // ▶ Dashboard title:
+  COMPANY: 'Vishal Electricals',
+  AS_ON_DATE: '07 May 2026'
+};
+</script>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">VE</div>
+      <div class="sidebar-company">Vishal Electricals</div>
+      <div class="sidebar-sub">Finance Dashboard</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Overview</div>
+      <button class="nav-item active" onclick="showPage('overview',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span>Overview</span>
+      </button>
+      <div class="nav-section">Reports</div>
+      <button class="nav-item" onclick="showPage('sitewise',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <span>Site-wise Breakup</span>
+      </button>
+      <button class="nav-item" onclick="showPage('debtors',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Debtor Days</span>
+      </button>
+      <button class="nav-item" onclick="showPage('deductions',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span>Deduction Analysis</span>
+      </button>
+      <button class="nav-item" onclick="showPage('finance',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>Finance Weekly</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="data-pill">
+        <div class="dot dot-static" id="sidebar-dot"></div>
+        <span id="sidebar-src" style="font-size:10px;color:var(--faint)">Checking...</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="topbar-title">Overview</div>
+      </div>
+      <div class="topbar-right">
+        <div class="date-badge" id="as-on">As on: 07 May 2026</div>
+        <button class="btn" onclick="loadData(true)">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          Refresh
+        </button>
+        <button class="btn btn-primary" onclick="window.print()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ════════════ PAGE: OVERVIEW ════════════ -->
+      <div class="page active" id="page-overview">
+
+        <div class="notice notice-info" id="data-notice">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+          <span id="notice-text">Fetching live data from Google Sheets...</span>
+        </div>
+
+        <div class="metrics-grid" id="metrics-grid"></div>
+
+        <div class="charts-row">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Top 10 outstanding sites</div>
+                <div class="card-sub">Stacked by deduction type</div>
+              </div>
+            </div>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-sq" style="background:#1a56db"></span>Pending bill</span>
+              <span class="legend-item"><span class="legend-sq" style="background:#c81e1e"></span>LD deduction</span>
+              <span class="legend-item"><span class="legend-sq" style="background:#d97706"></span>SD deduction</span>
+              <span class="legend-item"><span class="legend-sq" style="background:#059669"></span>Withheld</span>
+            </div>
+            <div class="chart-wrap h260"><canvas id="chart-top10" role="img" aria-label="Top 10 outstanding sites bar chart"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Deduction breakdown</div>
+                <div class="card-sub">All sites combined</div>
+              </div>
+            </div>
+            <div class="chart-wrap h260"><canvas id="chart-donut" role="img" aria-label="Deduction type donut chart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Debtor aging snapshot</div>
+              <div class="card-sub">Outstanding days-wise as on <span id="ov-date">07/05/2026</span></div>
+            </div>
+          </div>
+          <div class="day-grid" id="ov-day-grid"></div>
+          <div class="chart-wrap h180"><canvas id="chart-aging-ov" role="img" aria-label="Aging bucket bar chart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- ════════════ PAGE: SITE-WISE ════════════ -->
+      <div class="page" id="page-sitewise">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Site-wise outstanding breakup</div>
+              <div class="card-sub">All deduction heads per site</div>
+            </div>
+          </div>
+          <div class="search-bar">
+            <input type="text" class="search-input" placeholder="🔍  Search site name..." id="site-search" oninput="renderSiteTable()">
+            <button class="btn" onclick="sortSiteTable()">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+              Sort by amount
+            </button>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Project / Site name</th>
+                  <th class="r">Pending bill</th>
+                  <th class="r">SD deduction</th>
+                  <th class="r">LD deduction</th>
+                  <th class="r">GST hold</th>
+                  <th class="r">Instant release</th>
+                  <th class="r">Other deduction</th>
+                  <th class="r">Withheld / Comm</th>
+                  <th class="r">Total outstanding</th>
+                  <th>Share</th>
+                </tr>
+              </thead>
+              <tbody id="site-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════ PAGE: DEBTORS ════════════ -->
+      <div class="page" id="page-debtors">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Debtors outstanding — day-wise</div>
+              <div class="card-sub">Aging bucket analysis as on 07/05/2026</div>
+            </div>
+          </div>
+          <div class="day-grid" id="deb-day-grid"></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Debtor name</th>
+                  <th class="r">0–30 days</th>
+                  <th class="r">30–45 days</th>
+                  <th class="r">45–60 days</th>
+                  <th class="r">&gt; 60 days</th>
+                  <th class="r">Total</th>
+                  <th class="r">Avg bucket</th>
+                  <th>Debtor days</th>
+                </tr>
+              </thead>
+              <tbody id="deb-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Aging distribution</div>
+          </div>
+          <div class="legend">
+            <span class="legend-item"><span class="legend-sq" style="background:#059669"></span>0–30 days</span>
+            <span class="legend-item"><span class="legend-sq" style="background:#d97706"></span>30–45 days</span>
+            <span class="legend-item"><span class="legend-sq" style="background:#c81e1e"></span>&gt; 60 days</span>
+          </div>
+          <div class="chart-wrap h260"><canvas id="chart-aging" role="img" aria-label="Aging distribution stacked bar chart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- ════════════ PAGE: DEDUCTIONS ════════════ -->
+      <div class="page" id="page-deductions">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Deduction analysis — all sites</div>
+              <div class="card-sub">SD, LD, GST hold, withheld, and other deductions</div>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Site</th>
+                  <th class="r">SD (₹)</th>
+                  <th class="r">LD (₹)</th>
+                  <th class="r">GST hold (₹)</th>
+                  <th class="r">Other (₹)</th>
+                  <th class="r">Withheld/Comm (₹)</th>
+                  <th class="r">Total deductions (₹)</th>
+                  <th>Breakdown</th>
+                </tr>
+              </thead>
+              <tbody id="ded-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="charts-row">
+          <div class="card">
+            <div class="card-header"><div class="card-title">LD deduction — top sites</div></div>
+            <div class="chart-wrap h220"><canvas id="chart-ld" role="img" aria-label="LD deduction top sites"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">SD deduction — top sites</div></div>
+            <div class="chart-wrap h220"><canvas id="chart-sd" role="img" aria-label="SD deduction top sites"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════ PAGE: FINANCE WEEKLY ════════════ -->
+      <div class="page" id="page-finance">
+        <div class="notice notice-warn">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Finance Weekly Review table — fill amounts in Google Sheet to see here. Current data from sheet shows structure only.
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Debtor</div>
+            <div class="metric-value accent" id="fw-debtor">—</div>
+            <div class="metric-sub">As on 31 March 2026</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Inventory</div>
+            <div class="metric-value" id="fw-inv">—</div>
+            <div class="metric-sub">As on 31 March 2026</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Cash conversion cycle</div>
+            <div class="metric-value amber" id="fw-ccc">—</div>
+            <div class="metric-sub">Days</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Revenue</div>
+            <div class="metric-value green" id="fw-rev">—</div>
+            <div class="metric-sub">Period amount</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Cash block total (bifurcation)</div>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Particulars</th><th class="r">Amount (₹)</th><th class="r">Days</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>a. Debtor</td><td class="r">—</td><td class="r">—</td></tr>
+              <tr><td>b. SD (Security Deposit)</td><td class="r">—</td><td class="r">—</td></tr>
+              <tr><td>c. LD (Liquidated Damages)</td><td class="r">—</td><td class="r">—</td></tr>
+              <tr><td>d. Inventory</td><td class="r">—</td><td class="r">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  STATIC FALLBACK DATA (from Excel upload)
+// ═══════════════════════════════════════════
+const FALLBACK_SUMMARY = [
+  {sno:1,site:'IOCL Mathura BDFP',pending:0,sd:0,ld:1143938.95,gst:0,instant:0,other:0,withheld:0,comm:0,total:1143938.95},
+  {sno:2,site:'IOCL Panipat DO',pending:0,sd:0,ld:358778.71,gst:0,instant:0,other:0,withheld:0,comm:0,total:358778.71},
+  {sno:3,site:'IOCL Salem DO',pending:817313.81,sd:4159.40,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:821473.21},
+  {sno:4,site:'IOCL Coimbatore DO',pending:0,sd:0,ld:0,gst:0,instant:0,other:0,withheld:0,comm:593380.89,total:593380.89},
+  {sno:5,site:'IOCL Trichy DO',pending:0,sd:0,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:0},
+  {sno:6,site:'IOCL Madurai DO',pending:228116.61,sd:0,ld:0,gst:0,instant:0,other:0,withheld:0,comm:81055.95,total:228116.62},
+  {sno:7,site:'IOCL Chennai',pending:0,sd:905314.25,ld:989416.45,gst:0,instant:0,other:0,withheld:0,comm:614480,total:2509210.70},
+  {sno:8,site:'IOCL Hissar DO',pending:2054704.29,sd:0,ld:1145966.13,gst:0,instant:0,other:0,withheld:0,comm:0,total:3200670.42},
+  {sno:9,site:'IOCL Panipat Refinery',pending:3907381.72,sd:37208.44,ld:1394719.05,gst:0,instant:0,other:369114.64,withheld:0,comm:0,total:5708423.85},
+  {sno:10,site:'IOCL Barauni',pending:273215.16,sd:0,ld:999625.16,gst:0,instant:0,other:0,withheld:0,comm:0,total:1272840.32},
+  {sno:11,site:'IOCL Kanpur',pending:0,sd:0,ld:921902.65,gst:0,instant:0,other:0,withheld:0,comm:0,total:921902.65},
+  {sno:12,site:'IOCL Howrah',pending:0,sd:139834.52,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:139834.52},
+  {sno:13,site:'IOCL Loni',pending:0,sd:0,ld:441100.30,gst:0,instant:0,other:0,withheld:0,comm:0,total:441100.30},
+  {sno:14,site:'IOCL Jatni',pending:0,sd:0,ld:739952.21,gst:0,instant:0,other:0,withheld:0,comm:0,total:739952.21},
+  {sno:15,site:'IOCL Paradeep Automation',pending:0,sd:0,ld:292393,gst:0,instant:0,other:0,withheld:0,comm:0,total:292393},
+  {sno:16,site:'IOCL Ahmednagar',pending:4622247.53,sd:1087388.61,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:5709636.14},
+  {sno:17,site:'IOCL Allahabad',pending:0,sd:478849.64,ld:685785.03,gst:0,instant:0,other:0,withheld:0,comm:0,total:1164634.67},
+  {sno:18,site:'IOCL Khunti',pending:0,sd:91765,ld:824686,gst:0,instant:80565.9966,other:0,withheld:0,comm:0,total:997016.997},
+  {sno:19,site:'IOCL Jharsuguda',pending:1564080.45,sd:0,ld:928887.91,gst:0,instant:0,other:0,withheld:0,comm:0,total:2492968.36},
+  {sno:20,site:'IOCL Nashik',pending:0,sd:500213.15,ld:186372.13,gst:0,instant:0,other:0,withheld:0,comm:0,total:686585.28},
+  {sno:21,site:'HPCL Loni',pending:0,sd:215597.68,ld:297091,gst:0,instant:0,other:0,withheld:0,comm:0,total:512688.68},
+  {sno:22,site:'NFC Kota Township',pending:0,sd:164005.78,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:164005.78},
+  {sno:23,site:'NFC Kota',pending:0,sd:1073156.58,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:1073156.58},
+  {sno:24,site:'NFC Hyderabad',pending:0,sd:949417.48,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:949417.48},
+  {sno:25,site:'IOCL Mumbai DO (VTPL)',pending:995139.73,sd:433343.59,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:1428483.32},
+  {sno:26,site:'Genpact DLF Gurgaon',pending:0,sd:0,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:0},
+  {sno:27,site:'IOCL Sarpara',pending:2445113.24,sd:0,ld:51982.55,gst:0,instant:0,other:0,withheld:0,comm:0,total:2497095.79},
+  {sno:28,site:'IOCL Moradabad DO',pending:0,sd:249925.38,ld:77648.16,gst:0,instant:0,other:0,withheld:0,comm:0,total:327573.54},
+  {sno:29,site:'Transrail Lighting Ltd',pending:1683475,sd:0,ld:0,gst:0,instant:0,other:0,withheld:1299025,comm:0,total:1683475},
+  {sno:30,site:'IOCL Bangalore DO',pending:0,sd:0,ld:0,gst:0,instant:0,other:0,withheld:0,comm:0,total:0}
+];
+
+const DEBTORS = [
+  {name:'IOCL Madurai',d0:0,d30:0,d45:0,d60:228116,total:228116},
+  {name:'IOCL Ahmednagar',d0:0,d30:3841050.31,d45:0,d60:781197.22,total:4622247.53},
+  {name:'Transrail Lighting Ltd',d0:0,d30:0,d45:0,d60:1683475,total:1683475},
+  {name:'IOCL Panipat Refinery',d0:0,d30:3907380.83,d45:0,d60:0,total:3907380.83},
+  {name:'IOCL Vijaywada',d0:0,d30:231880.69,d45:0,d60:0,total:231880.69},
+  {name:'GAIL Vijaipur',d0:0,d30:1308904.38,d45:0,d60:0,total:1308904.38},
+  {name:'Paradip Port Authority',d0:0,d30:1109318,d45:0,d60:0,total:1109318},
+  {name:'IOCL Sarpara',d0:0,d30:2445113.24,d45:0,d60:0,total:2445113.24},
+  {name:'IOCL Vizag',d0:0,d30:267548.59,d45:0,d60:0,total:267548.59},
+  {name:'IOCL Hissar',d0:0,d30:2054704.29,d45:0,d60:0,total:2054704.29},
+  {name:'IOCL Tirupati',d0:0,d30:371062.8,d45:0,d60:0,total:371062.8},
+  {name:'IOCL Salem',d0:0,d30:817313.81,d45:0,d60:0,total:817313.81},
+  {name:'IOCL Jharsuguda',d0:0,d30:1564080.45,d45:0,d60:0,total:1564080.45},
+  {name:'IOCL Mumbai DO',d0:0,d30:995139.73,d45:0,d60:0,total:995139.73},
+  {name:'NTPC Dadri',d0:270223.78,d30:0,d45:0,d60:0,total:270223.78},
+  {name:'IOCL Barauni',d0:273215.16,d30:0,d45:0,d60:0,total:273215.16}
+];
+
+// ═══════════════════════════════
+//  STATE
+// ═══════════════════════════════
+let DATA = [...FALLBACK_SUMMARY];
+let siteSortAsc = false;
+let charts = {};
+
+// ═══════════════════════════════
+//  HELPERS
+// ═══════════════════════════════
+const fmt = v => Math.round(v).toLocaleString('en-IN');
+const fmtCr = v => '₹' + (v / 1e7).toFixed(2) + ' Cr';
+const fmtL = v => '₹' + (v / 1e5).toFixed(2) + ' L';
+
+function parseCsv(csv) {
+  const lines = csv.trim().split('\n');
+  const rows = [];
+  for (let i = 2; i < lines.length; i++) {
+    const cols = splitCsvRow(lines[i]);
+    const sno = parseInt(cols[0]);
+    if (isNaN(sno)) continue;
+    const total = parseFloat(cols[10]) || 0;
+    rows.push({
+      sno, site: (cols[1] || '').trim().replace(/\s+/g, ' '),
+      pending: parseFloat(cols[3]) || 0,
+      sd:      parseFloat(cols[4]) || 0,
+      ld:      parseFloat(cols[5]) || 0,
+      gst:     parseFloat(cols[6]) || 0,
+      instant: parseFloat(cols[7]) || 0,
+      other:   parseFloat(cols[8]) || 0,
+      withheld:parseFloat(cols[9]) || 0,
+      comm:    0,
+      total
+    });
+  }
+  return rows.filter(r => r.site);
+}
+
+function splitCsvRow(row) {
+  const cols = []; let field = '', inQ = false;
+  for (const c of row) {
+    if (c === '"') inQ = !inQ;
+    else if (c === ',' && !inQ) { cols.push(field.trim()); field = ''; }
+    else field += c;
+  }
+  cols.push(field.trim());
+  return cols;
+}
+
+function setNotice(msg, type = 'info') {
+  const n = document.getElementById('data-notice');
+  n.className = 'notice notice-' + type;
+  n.querySelector('span').textContent = msg;
+}
+
+function setSidebar(live) {
+  document.getElementById('sidebar-dot').className = 'dot ' + (live ? 'dot-live' : 'dot-static');
+  document.getElementById('sidebar-src').textContent = live ? 'Live — Google Sheets' : 'Static — Excel file';
+}
+
+// ═══════════════════════════════
+//  DATA LOADING
+// ═══════════════════════════════
+async function loadData(force = false) {
+  setNotice('Fetching live data from Google Sheets...', 'info');
+  try {
+    const resp = await fetch(CONFIG.CSV_URL + '&t=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const csv = await resp.text();
+    const parsed = parseCsv(csv);
+    if (parsed.length >= 3) {
+      DATA = parsed;
+      setNotice('Live data loaded from Google Sheets. Last updated: ' + new Date().toLocaleTimeString(), 'success');
+      setSidebar(true);
+    } else {
+      throw new Error('Empty data');
+    }
+  } catch (e) {
+    DATA = [...FALLBACK_SUMMARY];
+    setNotice('Google Sheets fetch failed (CORS / access). Showing data from uploaded Excel file. Click Refresh to retry.', 'warn');
+    setSidebar(false);
+  }
+  renderAll();
+}
+
+// ═══════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════
+const PAGE_TITLES = {
+  overview: 'Overview',
+  sitewise: 'Site-wise Breakup',
+  debtors: 'Debtor Days',
+  deductions: 'Deduction Analysis',
+  finance: 'Finance Weekly Review'
+};
+
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('topbar-title').textContent = PAGE_TITLES[id];
+}
+
+// ═══════════════════════════════
+//  RENDER ALL
+// ═══════════════════════════════
+function renderAll() {
+  renderMetrics();
+  renderChartTop10();
+  renderChartDonut();
+  renderAgingOverview();
+  renderSiteTable();
+  renderDebtorTable();
+  renderDeductionTable();
+  renderDeductionCharts();
+}
+
+// ═══════════════════════════════
+//  METRICS
+// ═══════════════════════════════
+function renderMetrics() {
+  const d = DATA;
+  const totalOut  = d.reduce((s, r) => s + Math.max(0, r.total), 0);
+  const totalPend = d.reduce((s, r) => s + Math.max(0, r.pending), 0);
+  const totalLD   = d.reduce((s, r) => s + Math.max(0, r.ld), 0);
+  const totalSD   = d.reduce((s, r) => s + Math.max(0, r.sd), 0);
+  const totalGST  = d.reduce((s, r) => s + Math.max(0, r.gst), 0);
+  const totalWit  = d.reduce((s, r) => s + Math.max(0, r.withheld + r.comm), 0);
+  const active    = d.filter(r => r.total > 0).length;
+  const grandDebtor = 22149724.26;
+
+  document.getElementById('metrics-grid').innerHTML = `
+    <div class="metric-card">
+      <div class="metric-label">Total outstanding</div>
+      <div class="metric-value accent">${fmtCr(totalOut)}</div>
+      <div class="metric-sub">₹${fmt(totalOut)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Pending bills</div>
+      <div class="metric-value red">${fmtL(totalPend)}</div>
+      <div class="metric-sub">${d.filter(r => r.pending > 0.01).length} sites pending</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">LD deduction</div>
+      <div class="metric-value" style="color:#c81e1e">${fmtL(totalLD)}</div>
+      <div class="metric-sub">${((totalLD / totalOut) * 100).toFixed(1)}% of total</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">SD deduction</div>
+      <div class="metric-value amber">${fmtL(totalSD)}</div>
+      <div class="metric-sub">${((totalSD / totalOut) * 100).toFixed(1)}% of total</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Active sites</div>
+      <div class="metric-value">${active}</div>
+      <div class="metric-sub">of ${d.length} total sites</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Total debtor value</div>
+      <div class="metric-value green">${fmtCr(grandDebtor)}</div>
+      <div class="metric-sub">16 debtors tracked</div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════
+//  CHART: TOP 10
+// ═══════════════════════════════
+function renderChartTop10() {
+  const top10 = [...DATA].filter(r => r.total > 0).sort((a, b) => b.total - a.total).slice(0, 10);
+  const labels = top10.map(r => r.site.length > 16 ? r.site.slice(0, 16) + '…' : r.site);
+  if (charts.top10) charts.top10.destroy();
+  charts.top10 = new Chart(document.getElementById('chart-top10'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Pending bill', data: top10.map(r => Math.max(0, r.pending)), backgroundColor: '#1a56db', borderWidth: 0 },
+        { label: 'LD deduction', data: top10.map(r => Math.max(0, r.ld)),      backgroundColor: '#c81e1e', borderWidth: 0 },
+        { label: 'SD deduction', data: top10.map(r => Math.max(0, r.sd)),      backgroundColor: '#d97706', borderWidth: 0 },
+        { label: 'Withheld',     data: top10.map(r => r.withheld + r.comm),    backgroundColor: '#059669', borderWidth: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ₹' + fmt(ctx.raw) } } },
+      scales: {
+        x: { stacked: true, ticks: { font: { size: 10 }, color: '#9a9a94', maxRotation: 35 }, grid: { display: false } },
+        y: { stacked: true, ticks: { callback: v => '₹' + (v / 1e6).toFixed(0) + 'M', font: { size: 10 }, color: '#9a9a94' }, grid: { color: 'rgba(0,0,0,0.05)' } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════
+//  CHART: DONUT
+// ═══════════════════════════════
+function renderChartDonut() {
+  const d = DATA;
+  const sd  = d.reduce((s, r) => s + Math.max(0, r.sd), 0);
+  const ld  = d.reduce((s, r) => s + Math.max(0, r.ld), 0);
+  const gst = d.reduce((s, r) => s + Math.max(0, r.gst), 0);
+  const oth = d.reduce((s, r) => s + Math.max(0, r.other), 0);
+  const wit = d.reduce((s, r) => s + Math.max(0, r.withheld + r.comm), 0);
+  const ttl = sd + ld + gst + oth + wit || 1;
+  if (charts.donut) charts.donut.destroy();
+  charts.donut = new Chart(document.getElementById('chart-donut'), {
+    type: 'doughnut',
+    data: {
+      labels: ['SD deduction', 'LD deduction', 'GST hold', 'Other', 'Withheld / Comm'],
+      datasets: [{ data: [sd, ld, gst, oth, wit], backgroundColor: ['#d97706','#c81e1e','#1a56db','#6b6b66','#059669'], borderWidth: 2, borderColor: '#fff', hoverOffset: 8 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '62%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11 }, padding: 14, usePointStyle: true, pointStyleWidth: 10 }
+        },
+        tooltip: { callbacks: { label: ctx => ` ₹${fmt(ctx.raw)}  (${((ctx.raw / ttl) * 100).toFixed(1)}%)` } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════
+//  AGING OVERVIEW
+// ═══════════════════════════════
+function renderAgingOverview() {
+  const d0tot  = DEBTORS.reduce((s, r) => s + r.d0, 0);
+  const d30tot = DEBTORS.reduce((s, r) => s + r.d30, 0);
+  const d60tot = DEBTORS.reduce((s, r) => s + r.d60, 0);
+  const gtot   = DEBTORS.reduce((s, r) => s + r.total, 0);
+  const wtd    = Math.round((d0tot * 15 + d30tot * 37 + d60tot * 75) / gtot);
+
+  document.getElementById('ov-day-grid').innerHTML = `
+    <div class="day-card"><div class="day-card-lbl">0–30 days</div><div class="day-card-val" style="color:#059669">₹${fmt(d0tot)}</div><div class="day-card-pct">${((d0tot / gtot) * 100).toFixed(1)}% of total</div></div>
+    <div class="day-card"><div class="day-card-lbl">30–45 days</div><div class="day-card-val" style="color:#d97706">₹${fmt(d30tot)}</div><div class="day-card-pct">${((d30tot / gtot) * 100).toFixed(1)}% of total</div></div>
+    <div class="day-card"><div class="day-card-lbl">&gt; 60 days</div><div class="day-card-val" style="color:#c81e1e">₹${fmt(d60tot)}</div><div class="day-card-pct">${((d60tot / gtot) * 100).toFixed(1)}% of total</div></div>
+    <div class="day-card"><div class="day-card-lbl">Weighted avg days</div><div class="day-card-val">${wtd} days</div><div class="day-card-pct">Calculated as on date</div></div>
+  `;
+  if (charts.agingOv) charts.agingOv.destroy();
+  charts.agingOv = new Chart(document.getElementById('chart-aging-ov'), {
+    type: 'bar',
+    data: {
+      labels: DEBTORS.map(r => r.name.length > 14 ? r.name.slice(0, 14) + '…' : r.name),
+      datasets: [
+        { label: '0–30 days', data: DEBTORS.map(r => r.d0),  backgroundColor: '#059669', borderWidth: 0 },
+        { label: '30–45 days', data: DEBTORS.map(r => r.d30), backgroundColor: '#d97706', borderWidth: 0 },
+        { label: '> 60 days',  data: DEBTORS.map(r => r.d60), backgroundColor: '#c81e1e', borderWidth: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ₹' + fmt(ctx.raw) } } },
+      scales: {
+        x: { stacked: true, ticks: { font: { size: 9 }, color: '#9a9a94', maxRotation: 40 }, grid: { display: false } },
+        y: { stacked: true, ticks: { callback: v => '₹' + (v / 1e6).toFixed(1) + 'M', font: { size: 10 }, color: '#9a9a94' }, grid: { color: 'rgba(0,0,0,0.05)' } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════
+//  SITE TABLE
+// ═══════════════════════════════
+function renderSiteTable() {
+  const q = (document.getElementById('site-search')?.value || '').toLowerCase();
+  const rows = DATA.filter(r => r.site.toLowerCase().includes(q));
+  const grandTotal = DATA.reduce((s, r) => s + Math.max(0, r.total), 0);
+  const maxT = Math.max(...rows.map(r => r.total), 1);
+
+  document.getElementById('site-tbody').innerHTML = rows.map(r => `
+    <tr>
+      <td style="color:#9a9a94;font-size:11px">${r.sno}</td>
+      <td><span class="site-name">${r.site}</span></td>
+      <td class="r">${r.pending > 0.01 ? fmt(r.pending) : '–'}</td>
+      <td class="r">${r.sd > 0.01 ? fmt(r.sd) : '–'}</td>
+      <td class="r">${r.ld > 0.01 ? fmt(r.ld) : '–'}</td>
+      <td class="r">${r.gst > 0.01 ? fmt(r.gst) : '–'}</td>
+      <td class="r">${r.instant > 0.01 ? fmt(r.instant) : '–'}</td>
+      <td class="r">${r.other > 0.01 ? fmt(r.other) : '–'}</td>
+      <td class="r">${(r.withheld + r.comm) > 0.01 ? fmt(r.withheld + r.comm) : '–'}</td>
+      <td class="r" style="font-weight:600">${r.total > 0.01 ? '₹' + fmt(r.total) : '–'}</td>
+      <td style="min-width:90px">
+        ${r.total > 0 ? `
+          <div style="font-size:10px;color:#9a9a94;margin-bottom:2px">${((r.total / grandTotal) * 100).toFixed(1)}%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, (r.total / maxT) * 100).toFixed(1)}%;background:#1a56db"></div></div>
+        ` : '–'}
+      </td>
+    </tr>
+  `).join('') + `
+  <tr class="total-row">
+    <td></td><td>Grand Total</td>
+    <td class="r">${fmt(rows.reduce((s, r) => s + Math.max(0, r.pending), 0))}</td>
+    <td class="r">${fmt(rows.reduce((s, r) => s + Math.max(0, r.sd), 0))}</td>
+    <td class="r">${fmt(rows.reduce((s, r) => s + Math.max(0, r.ld), 0))}</td>
+    <td class="r">${fmt(rows.reduce((s, r) => s + Math.max(0, r.gst), 0))}</td>
+    <td class="r">${fmt(rows.reduce((s, r) => s + Math.max(0, r.instant), 0))}</td>
+    <td class="r">${fmt(rows.reduce((s, r) => s + Math.max(0, r.other), 0))}</td>
+    <td class="r">${fmt(rows.reduce((s, r) => s + r.withheld + r.comm, 0))}</td>
+    <td class="r" style="font-weight:700">₹${fmt(rows.reduce((s, r) => s + Math.max(0, r.total), 0))}</td>
+    <td></td>
+  </tr>`;
+}
+
+function sortSiteTable() {
+  siteSortAsc = !siteSortAsc;
+  DATA.sort((a, b) => siteSortAsc ? a.total - b.total : b.total - a.total);
+  renderSiteTable();
+}
+
+// ═══════════════════════════════
+//  DEBTOR TABLE
+// ═══════════════════════════════
+function renderDebtorTable() {
+  const d0t  = DEBTORS.reduce((s, r) => s + r.d0, 0);
+  const d30t = DEBTORS.reduce((s, r) => s + r.d30, 0);
+  const d60t = DEBTORS.reduce((s, r) => s + r.d60, 0);
+  const gt   = DEBTORS.reduce((s, r) => s + r.total, 0);
+  const wtd  = Math.round((d0t * 15 + d30t * 37 + d60t * 75) / gt);
+
+  document.getElementById('deb-day-grid').innerHTML = `
+    <div class="day-card"><div class="day-card-lbl">0–30 days</div><div class="day-card-val" style="color:#059669">₹${fmt(d0t)}</div><div class="day-card-pct">${((d0t / gt) * 100).toFixed(1)}%</div></div>
+    <div class="day-card"><div class="day-card-lbl">30–45 days</div><div class="day-card-val" style="color:#d97706">₹${fmt(d30t)}</div><div class="day-card-pct">${((d30t / gt) * 100).toFixed(1)}%</div></div>
+    <div class="day-card"><div class="day-card-lbl">&gt; 60 days</div><div class="day-card-val" style="color:#c81e1e">₹${fmt(d60t)}</div><div class="day-card-pct">${((d60t / gt) * 100).toFixed(1)}%</div></div>
+    <div class="day-card"><div class="day-card-lbl">Debtor days (wtd avg)</div><div class="day-card-val">${wtd} days</div><div class="day-card-pct">₹${fmt(gt)} total</div></div>
+  `;
+
+  document.getElementById('deb-tbody').innerHTML = DEBTORS.map((r, i) => {
+    const bucket = r.d0 > 0 ? '0–30' : r.d30 > 0 ? '30–45' : r.d45 > 0 ? '45–60' : '> 60';
+    const bColor = r.d0 > 0 ? '#ecfdf5' : r.d30 > 0 ? '#fffbeb' : '#fdf2f2';
+    const tColor = r.d0 > 0 ? '#065f46' : r.d30 > 0 ? '#92400e' : '#9b1c1c';
+    const dDays  = r.d0 > 0 ? 15 : r.d30 > 0 ? 37 : r.d45 > 0 ? 52 : 75;
+    return `<tr>
+      <td style="color:#9a9a94;font-size:11px">${i + 1}</td>
+      <td><span class="site-name">${r.name}</span></td>
+      <td class="r">${r.d0 > 0 ? '₹' + fmt(r.d0) : '–'}</td>
+      <td class="r">${r.d30 > 0 ? '₹' + fmt(r.d30) : '–'}</td>
+      <td class="r">${r.d45 > 0 ? '₹' + fmt(r.d45) : '–'}</td>
+      <td class="r">${r.d60 > 0 ? '₹' + fmt(r.d60) : '–'}</td>
+      <td class="r" style="font-weight:600">₹${fmt(r.total)}</td>
+      <td class="r">${dDays} days</td>
+      <td><span class="aging-badge" style="background:${bColor};color:${tColor}">${bucket}</span></td>
+    </tr>`;
+  }).join('') + `
+  <tr class="total-row">
+    <td></td><td>Grand Total</td>
+    <td class="r">₹${fmt(d0t)}</td>
+    <td class="r">₹${fmt(d30t)}</td>
+    <td class="r">–</td>
+    <td class="r">₹${fmt(d60t)}</td>
+    <td class="r" style="font-weight:700">₹${fmt(gt)}</td>
+    <td class="r">${wtd} days</td>
+    <td></td>
+  </tr>`;
+
+  if (charts.aging) charts.aging.destroy();
+  charts.aging = new Chart(document.getElementById('chart-aging'), {
+    type: 'bar',
+    data: {
+      labels: DEBTORS.map(r => r.name.length > 14 ? r.name.slice(0, 14) + '…' : r.name),
+      datasets: [
+        { label: '0–30 days', data: DEBTORS.map(r => r.d0),  backgroundColor: '#059669', borderWidth: 0 },
+        { label: '30–45 days',data: DEBTORS.map(r => r.d30), backgroundColor: '#d97706', borderWidth: 0 },
+        { label: '> 60 days', data: DEBTORS.map(r => r.d60), backgroundColor: '#c81e1e', borderWidth: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ₹' + fmt(ctx.raw) } } },
+      scales: {
+        x: { stacked: true, ticks: { font: { size: 9 }, color: '#9a9a94', maxRotation: 40 }, grid: { display: false } },
+        y: { stacked: true, ticks: { callback: v => '₹' + (v / 1e6).toFixed(1) + 'M', font: { size: 10 }, color: '#9a9a94' }, grid: { color: 'rgba(0,0,0,0.05)' } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════
+//  DEDUCTION TABLE
+// ═══════════════════════════════
+function renderDeductionTable() {
+  const rows = DATA.filter(r => (r.sd + r.ld + r.gst + r.other + r.withheld + r.comm) > 0.01);
+  document.getElementById('ded-tbody').innerHTML = rows.map(r => {
+    const tot = r.sd + r.ld + r.gst + r.other + r.withheld + r.comm;
+    const pills = [];
+    if (r.sd > 0.01)              pills.push(`<span class="pill pill-sd">SD ₹${fmt(r.sd)}</span>`);
+    if (r.ld > 0.01)              pills.push(`<span class="pill pill-ld">LD ₹${fmt(r.ld)}</span>`);
+    if (r.gst > 0.01)             pills.push(`<span class="pill pill-gst">GST ₹${fmt(r.gst)}</span>`);
+    if (r.other > 0.01)           pills.push(`<span class="pill pill-oth">Other ₹${fmt(r.other)}</span>`);
+    if ((r.withheld+r.comm)>0.01) pills.push(`<span class="pill pill-wit">Withheld ₹${fmt(r.withheld+r.comm)}</span>`);
+    return `<tr>
+      <td><span class="site-name">${r.site}</span></td>
+      <td class="r">${r.sd > 0.01 ? fmt(r.sd) : '–'}</td>
+      <td class="r">${r.ld > 0.01 ? fmt(r.ld) : '–'}</td>
+      <td class="r">${r.gst > 0.01 ? fmt(r.gst) : '–'}</td>
+      <td class="r">${r.other > 0.01 ? fmt(r.other) : '–'}</td>
+      <td class="r">${(r.withheld + r.comm) > 0.01 ? fmt(r.withheld + r.comm) : '–'}</td>
+      <td class="r" style="font-weight:600">₹${fmt(tot)}</td>
+      <td>${pills.join('')}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDeductionCharts() {
+  const ldData  = [...DATA].filter(r => r.ld > 0).sort((a, b) => b.ld - a.ld).slice(0, 8);
+  const sdData  = [...DATA].filter(r => r.sd > 0).sort((a, b) => b.sd - a.sd).slice(0, 8);
+  const shorten = s => s.length > 14 ? s.slice(0, 14) + '…' : s;
+
+  if (charts.ld) charts.ld.destroy();
+  charts.ld = new Chart(document.getElementById('chart-ld'), {
+    type: 'bar',
+    data: { labels: ldData.map(r => shorten(r.site)), datasets: [{ data: ldData.map(r => r.ld), backgroundColor: '#c81e1e', borderWidth: 0 }] },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ₹' + fmt(ctx.raw) } } },
+      scales: {
+        x: { ticks: { callback: v => '₹' + (v / 1e5).toFixed(0) + 'L', font: { size: 10 }, color: '#9a9a94' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+        y: { ticks: { font: { size: 10 }, color: '#6b6b66' }, grid: { display: false } }
+      }
+    }
+  });
+
+  if (charts.sd) charts.sd.destroy();
+  charts.sd = new Chart(document.getElementById('chart-sd'), {
+    type: 'bar',
+    data: { labels: sdData.map(r => shorten(r.site)), datasets: [{ data: sdData.map(r => r.sd), backgroundColor: '#d97706', borderWidth: 0 }] },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ₹' + fmt(ctx.raw) } } },
+      scales: {
+        x: { ticks: { callback: v => '₹' + (v / 1e5).toFixed(0) + 'L', font: { size: 10 }, color: '#9a9a94' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+        y: { ticks: { font: { size: 10 }, color: '#6b6b66' }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════
+//  AUTO REFRESH
+// ═══════════════════════════════
+if (CONFIG.AUTO_REFRESH_MINUTES > 0) {
+  setInterval(() => loadData(), CONFIG.AUTO_REFRESH_MINUTES * 60 * 1000);
+}
+
+// ═══════════════════════════════
+//  INIT
+// ═══════════════════════════════
+loadData();
+</script>
+</body>
+</html>
