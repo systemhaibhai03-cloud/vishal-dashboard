@@ -431,41 +431,117 @@ function setSidebar(state) {
 }
 
 // ═══════════════ DATA LOADING ═══════════════
+// CSV parser - handles Google Sheets SUMMARY format
+function parseCSV(csv) {
+  const lines = csv.trim().split("\n");
+  const out   = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const cols = splitCSVRow(lines[i]);
+    // Find rows where col[0] is a valid S.No. (1,2,3...)
+    const sno  = parseInt(cols[0]);
+    if (isNaN(sno) || sno <= 0) continue;
+    const site = (cols[1] || "").trim();
+    if (!site || site.length < 3) continue;
+    // Skip if col[1] looks like a header
+    if (site.toLowerCase().includes("project") || site.toLowerCase().includes("site name")) continue;
+
+    out.push({
+      sno,
+      site,
+      sheetTab: (cols[2]  || "").trim(),
+      pending:  toN(cols[3]),
+      sd:       toN(cols[4]),
+      ld:       toN(cols[5]),
+      gst:      toN(cols[6]),
+      instant:  toN(cols[7]),
+      other:    toN(cols[8]),
+      withheld: toN(cols[9]),
+      total:    toN(cols[10]),
+      comm:     0
+    });
+  }
+  return out;
+}
+
+function splitCSVRow(row) {
+  const cols = []; let field = "", inQ = false;
+  for (const c of row) {
+    if (c === '"') { inQ = !inQ; }
+    else if (c === "," && !inQ) { cols.push(field.trim()); field = ""; }
+    else field += c;
+  }
+  cols.push(field.trim());
+  return cols;
+}
+
+function toN(v) {
+  if (!v && v !== 0) return 0;
+  const s = String(v).replace(/,/g, "").replace(/₹/g, "").trim();
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+
 async function loadData() {
   setSidebar("loading");
   document.getElementById("as-on-badge").textContent = "Refreshing...";
+  setNotice("Data load ho raha hai...", "info");
 
-  // Try Apps Script
-  if (CONFIG.APPS_SCRIPT_URL) {
+  // Render static data immediately so charts appear
+  DATA    = [...FALLBACK];
+  DEBTORS = [...FALLBACK_DEBTORS];
+  renderAll();
+
+  // ── Method 1: Apps Script (invoice data + actual days) ──
+  if (CONFIG.APPS_SCRIPT_URL && CONFIG.APPS_SCRIPT_URL.trim() !== "") {
     try {
       const resp = await fetch(CONFIG.APPS_SCRIPT_URL + "?t=" + Date.now());
-      if (!resp.ok) throw new Error("HTTP " + resp.status);
-      const json = await resp.json();
-      if (json.status === "ok") {
-        if (json.summary && json.summary.length >= 3) {
-          DATA = json.summary.map(r => ({...r, comm: r.comm||0}));
+      if (resp.ok) {
+        const json = await resp.json();
+        if (json.status === "ok" && json.summary && json.summary.length >= 1) {
+          DATA     = json.summary.map(r => ({...r, comm: r.comm||0}));
+          INVOICES = json.invoices || [];
+          DEBTORS  = json.daywise  || [...FALLBACK_DEBTORS];
+          lastUpdated = new Date(json.updated || Date.now());
+          setSidebar("live");
+          setNotice("✓ Live data loaded. Updated: " + lastUpdated.toLocaleTimeString("en-IN"), "success");
+          document.getElementById("as-on-badge").textContent = "As on: " + lastUpdated.toLocaleDateString("en-IN");
+          renderAll();
+          return;
         }
-        if (json.invoices && json.invoices.length > 0) {
-          INVOICES = json.invoices;
-        }
-        if (json.daywise && json.daywise.length > 0) {
-          DEBTORS = json.daywise;
-        }
-        lastUpdated = new Date(json.updated || Date.now());
-        setSidebar("live");
-        setNotice("✓ Live data loaded. Last updated: " + lastUpdated.toLocaleTimeString("en-IN"), "success");
-        document.getElementById("as-on-badge").textContent = "As on: " + lastUpdated.toLocaleDateString("en-IN");
-        renderAll();
-        return;
       }
-    } catch(e) { console.log("Apps Script error:", e); }
+    } catch(e) {
+      console.warn("Apps Script failed:", e.message);
+    }
   }
 
-  // Fallback
-  DATA = [...FALLBACK];
+  // ── Method 2: Google Sheets CSV ──
+  if (CONFIG.CSV_URL && CONFIG.CSV_URL.trim() !== "") {
+    try {
+      const resp = await fetch(CONFIG.CSV_URL + "&t=" + Date.now());
+      if (resp.ok) {
+        const csv    = await resp.text();
+        const parsed = parseCSV(csv);
+        if (parsed.length >= 3) {
+          DATA = parsed;
+          lastUpdated = new Date();
+          setSidebar("live");
+          setNotice("✓ Live data loaded (CSV). Updated: " + lastUpdated.toLocaleTimeString("en-IN"), "success");
+          document.getElementById("as-on-badge").textContent = "As on: " + lastUpdated.toLocaleDateString("en-IN");
+          renderAll();
+          return;
+        }
+      }
+    } catch(e) {
+      console.warn("CSV fetch failed:", e.message);
+    }
+  }
+
+  // ── Fallback: Static Excel data ──
+  DATA    = [...FALLBACK];
   DEBTORS = [...FALLBACK_DEBTORS];
   setSidebar("static");
-  setNotice("⚠ Google Sheets se connect nahi hua. Static Excel data dikh raha hai.", "warn");
+  setNotice("⚠ Google Sheets se connect nahi hua. Neeche steps follow karo. Static Excel data dikh raha hai.", "warn");
   document.getElementById("as-on-badge").textContent = "As on: 07 May 2026";
   renderAll();
 }
