@@ -2,756 +2,572 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Vishal Electricals - Live Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vishal Electricals - Finance Management</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-:root {
-  --primary: #1a56db; --primary-dark: #1e40af; --primary-light: #dbeafe;
-  --success: #059669; --warning: #d97706; --danger: #dc2626;
-  --bg: #f1f5f9; --white: #ffffff; --text: #1e293b;
-  --text-light: #64748b; --border: #e2e8f0; --sidebar-width: 240px;
-}
-body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
-
-.sidebar { position: fixed; left:0; top:0; bottom:0; width: var(--sidebar-width);
-  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-  color: white; overflow-y: auto; z-index: 100; }
-.sidebar-header { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }
-.sidebar-header .logo { width: 36px; height: 36px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
-.sidebar-header .brand { font-size: 14px; }
-.sidebar-header .brand span { display: block; font-size: 11px; color: #94a3b8; }
-.sidebar-section { padding: 12px 0; }
-.sidebar-section-title { padding: 4px 16px 8px; font-size: 10px; text-transform: uppercase; color: #64748b; letter-spacing: 1px; }
-.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; font-size: 13px; color: #cbd5e1; transition: all 0.2s; border-left: 3px solid transparent; }
-.sidebar-item:hover { background: rgba(255,255,255,0.05); color: white; }
-.sidebar-item.active { background: rgba(26,86,219,0.2); color: #60a5fa; border-left-color: #60a5fa; }
-
-.topbar { position: fixed; top: 0; left: var(--sidebar-width); right: 0; height: 56px;
-  background: white; border-bottom: 1px solid var(--border); display: flex;
-  align-items: center; justify-content: space-between; padding: 0 20px; z-index: 99; }
-.topbar-search { display: flex; align-items: center; gap: 8px; background: #f8fafc;
-  border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; min-width: 300px; }
-.topbar-search input { border: none; background: none; outline: none; font-size: 13px; width: 100%; }
-.topbar-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer; font-size: 12px; }
-.topbar-user { display: flex; align-items: center; gap: 8px; }
-.topbar-user .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
-
-.main { margin-left: var(--sidebar-width); margin-top: 56px; padding: 20px; min-height: calc(100vh - 56px); }
-
-.tab-content { display: none; background: white; border-radius: 10px; padding: 20px; }
-.tab-content.active { display: block; }
-
-.card { background: white; border-radius: 10px; border: 1px solid var(--border); padding: 20px; margin-bottom: 16px; }
-.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.card-title { font-size: 16px; font-weight: 600; }
-
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
-.stat-card { background: white; border-radius: 10px; padding: 16px; border: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
-.stat-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-.stat-icon.blue { background: #dbeafe; color: #2563eb; }
-.stat-icon.green { background: #d1fae5; color: #059669; }
-.stat-icon.orange { background: #fef3c7; color: #d97706; }
-.stat-icon.red { background: #fee2e2; color: #dc2626; }
-.stat-icon.purple { background: #ede9fe; color: #7c3aed; }
-.stat-info .stat-value { font-size: 22px; font-weight: 700; }
-.stat-info .stat-label { font-size: 12px; color: var(--text-light); }
-
-.table-container { overflow-x: auto; max-height: 600px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { background: #f8fafc; padding: 10px 12px; text-align: left; font-weight: 600; color: var(--text-light); border-bottom: 2px solid var(--border); white-space: nowrap; position: sticky; top: 0; z-index: 10; }
-td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
-tr:hover { background: #f8fafc; }
-
-.btn { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
-.btn-primary { background: var(--primary); color: white; }
-.btn-success { background: var(--success); color: white; }
-.btn-outline { background: white; border: 1px solid var(--border); color: var(--text); }
-.btn-sm { padding: 5px 10px; font-size: 12px; }
-
-.amount { font-family: 'Courier New', monospace; font-weight: 600; }
-.amount.positive { color: var(--success); }
-.amount.negative { color: var(--danger); }
-
-.sync-status { position: fixed; bottom: 16px; left: 16px; background: #0f172a; color: white;
-  padding: 10px 16px; border-radius: 8px; font-size: 12px; z-index: 100;
-  display: flex; align-items: center; gap: 8px; width: calc(var(--sidebar-width) - 32px); }
-.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-.search-box { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; background: white; max-width: 300px; }
-.search-box input { border: none; outline: none; font-size: 13px; width: 100%; }
-
-.filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
-
-.badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-.age-badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; color: white; }
-
-#wipSummaryCard { background: linear-gradient(135deg, #1a56db 0%, #7c3aed 100%); color: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-#wipSummaryCard .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 16px; }
-#wipSummaryCard .summary-box { background: rgba(255,255,255,0.15); padding: 14px; border-radius: 8px; }
-#wipSummaryCard .summary-box.highlight { background: rgba(255,255,255,0.25); border: 2px solid rgba(255,255,255,0.5); }
-#wipSummaryCard .label { font-size: 11px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
-#wipSummaryCard .value { font-size: 22px; font-weight: 700; margin-top: 6px; }
-#wipSummaryCard .sub { font-size: 11px; opacity: 0.85; margin-top: 4px; }
-
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #f1f5f9; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-
-.section-row { background: linear-gradient(90deg, #fb923c, #f59e0b); color: white; }
-.section-row.vtpl { background: linear-gradient(90deg, #7c3aed, #a855f7); }
-.section-row td { padding: 12px !important; font-weight: 700; font-size: 14px; }
-.total-row { font-weight: 700; }
-.total-row.ve { background: #fed7aa; }
-.total-row.vtpl { background: #ddd6fe; }
-.grand-total { background: linear-gradient(90deg, #1a56db, #7c3aed); color: white; }
-.grand-total td { padding: 14px !important; font-weight: 700; font-size: 15px; }
-
-.loading { text-align: center; padding: 40px; color: var(--text-light); }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#1a56db;--primary-dark:#1e40af;--primary-light:#dbeafe;--success:#059669;--warning:#d97706;--danger:#dc2626;--bg:#f1f5f9;--white:#fff;--text:#1e293b;--text-light:#64748b;--border:#e2e8f0;--sidebar:240px}
+body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text)}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);background:linear-gradient(180deg,#0f172a,#1e293b);color:#fff;overflow-y:auto;z-index:100}
+.sidebar-header{padding:16px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px}
+.logo{width:36px;height:36px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.brand{font-size:14px}.brand span{display:block;font-size:11px;color:#94a3b8}
+.s-title{padding:4px 16px 8px;font-size:10px;text-transform:uppercase;color:#64748b;letter-spacing:1px}
+.s-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;font-size:13px;color:#cbd5e1;border-left:3px solid transparent;transition:.2s}
+.s-item:hover{background:rgba(255,255,255,.05);color:#fff}
+.s-item.active{background:rgba(26,86,219,.2);color:#60a5fa;border-left-color:#60a5fa}
+.topbar{position:fixed;top:0;left:var(--sidebar);right:0;height:56px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:99}
+.t-search{display:flex;align-items:center;gap:8px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:8px 14px;min-width:280px}
+.t-search input{border:none;background:none;outline:none;font-size:13px;width:100%}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.main{margin-left:var(--sidebar);margin-top:56px;padding:20px;min-height:calc(100vh - 56px)}
+.tab-content{display:none}.tab-content.active{display:block}
+.card{background:#fff;border-radius:10px;border:1px solid var(--border);padding:20px;margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.card-title{font-size:16px;font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+.stat-card{background:#fff;border-radius:10px;padding:14px;border:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.stat-icon.blue{background:#dbeafe;color:#2563eb}.stat-icon.green{background:#d1fae5;color:#059669}
+.stat-icon.orange{background:#fef3c7;color:#d97706}.stat-icon.red{background:#fee2e2;color:#dc2626}
+.stat-icon.purple{background:#ede9fe;color:#7c3aed}
+.stat-value{font-size:20px;font-weight:700}.stat-label{font-size:11px;color:var(--text-light)}
+.tbl-wrap{overflow-x:auto;max-height:500px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#f8fafc;padding:8px 10px;text-align:left;font-weight:600;color:var(--text-light);border-bottom:2px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:5}
+td{padding:8px 10px;border-bottom:1px solid var(--border)}
+tr:hover{background:#f8fafc}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.form-group{display:flex;flex-direction:column;gap:3px}
+.form-group label{font-size:11px;font-weight:600;color:var(--text-light)}
+.form-group input,.form-group select,.form-group textarea{padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary)}
+.btn{padding:7px 14px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;transition:.2s}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:#fff}.btn-danger{background:var(--danger);color:#fff}
+.btn-outline{background:#fff;border:1px solid var(--border);color:var(--text)}.btn-outline:hover{background:#f8fafc}
+.btn-sm{padding:4px 8px;font-size:11px}
+.sub-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.sub-tab{padding:6px 14px;border-radius:16px;cursor:pointer;font-size:11px;background:#f1f5f9;color:var(--text-light);border:none;font-weight:500}
+.sub-tab.active{background:var(--primary);color:#fff}
+.sub-tab-content{display:none}.sub-tab-content.active{display:block}
+.badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.badge-pending{background:#fef3c7;color:#92400e}.badge-paid{background:#d1fae5;color:#065f46}
+.badge-overdue{background:#fee2e2;color:#991b1b}.badge-hold{background:#e0e7ff;color:#3730a3}
+.badge-new{background:#dbeafe;color:#1e40af}.badge-repeat{background:#d1fae5;color:#065f46}
+.search-box{display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:6px;padding:5px 10px;background:#fff;max-width:260px}
+.search-box input{border:none;outline:none;font-size:12px;width:100%}
+.filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.amount{font-family:'Courier New',monospace;font-weight:600}
+.del-btn{color:var(--danger);cursor:pointer;border:none;background:none;font-size:14px}
+.section-divider{border-top:2px solid var(--border);margin:16px 0;padding-top:14px}
+.section-title{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px}
+.dd-search{position:relative}.dd-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:6px;max-height:180px;overflow-y:auto;z-index:50;display:none;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.dd-list.show{display:block}.dd-item{padding:6px 10px;cursor:pointer;font-size:12px}.dd-item:hover{background:var(--primary-light)}
+.file-drop{border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:.2s}
+.file-drop:hover{border-color:var(--primary);background:var(--primary-light)}
+.sync-status{position:fixed;bottom:12px;left:12px;background:#0f172a;color:#fff;padding:8px 14px;border-radius:8px;font-size:11px;z-index:100;display:flex;align-items:center;gap:6px;width:calc(var(--sidebar) - 24px)}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;justify-content:center;align-items:center}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:12px;width:92%;max-width:700px;max-height:85vh;overflow-y:auto;padding:20px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-close{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-light)}
+.section-row{color:#fff}.section-row td{padding:10px!important;font-weight:700;font-size:13px}
+.section-row.ve{background:linear-gradient(90deg,#fb923c,#f59e0b)}.section-row.vtpl{background:linear-gradient(90deg,#7c3aed,#a855f7)}
+.total-row{font-weight:700}.total-row.ve{background:#fed7aa}.total-row.vtpl{background:#ddd6fe}
+.grand-total{background:linear-gradient(90deg,#1a56db,#7c3aed);color:#fff}
+.grand-total td{padding:12px!important;font-weight:700;font-size:14px}
+.age-badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;color:#fff}
+#wipCard{background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;border-radius:12px;padding:18px;margin-bottom:16px}
+#wipCard .wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px}
+#wipCard .wb{background:rgba(255,255,255,.15);padding:12px;border-radius:8px}
+#wipCard .wb.hl{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.5)}
+#wipCard .wl{font-size:10px;opacity:.9;text-transform:uppercase;letter-spacing:.5px}
+#wipCard .wv{font-size:20px;font-weight:700;margin-top:4px}
+#wipCard .ws{font-size:10px;opacity:.8;margin-top:3px}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.topbar{left:0}.stats-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="sidebar-header">
-    <div class="logo">VE</div>
-    <div class="brand">VISHAL<br><span>ELECTRICALS</span></div>
+  <div class="sidebar-header"><div class="logo">VE</div><div class="brand">VISHAL<br><span>ELECTRICALS</span></div></div>
+  <div style="padding:12px 0">
+    <div class="s-title">MAIN</div>
+    <div class="s-item active" onclick="switchTab('report',this)"><span>📊</span> Report</div>
+    <div class="s-item" onclick="switchTab('sales',this)"><span>💰</span> Sales</div>
+    <div class="s-item" onclick="switchTab('dataentry',this)"><span>📝</span> Data Entry</div>
+    <div class="s-item" onclick="switchTab('payment',this)"><span>💳</span> Payment Received</div>
+    <div class="s-item" onclick="switchTab('stock',this)"><span>📦</span> Stock (LIVE)</div>
   </div>
-  <div class="sidebar-section">
-    <div class="sidebar-section-title">MAIN</div>
-    <div class="sidebar-item" onclick="switchTab('report', this)"><span>📊</span> Report</div>
-    <div class="sidebar-item" onclick="switchTab('sales', this)"><span>💰</span> Sales</div>
-    <div class="sidebar-item" onclick="switchTab('dataentry', this)"><span>📝</span> Data Entry</div>
-    <div class="sidebar-item" onclick="switchTab('payment', this)"><span>💳</span> Payment</div>
-    <div class="sidebar-item active" onclick="switchTab('stock', this)"><span>📦</span> Stock (LIVE)</div>
-  </div>
-  <div class="sidebar-section">
-    <div class="sidebar-section-title">SYNC</div>
-    <div class="sidebar-item" onclick="liveSync()"><span>🔄</span> Sync Now</div>
+  <div style="padding:12px 0">
+    <div class="s-title">SYNC</div>
+    <div class="s-item" onclick="liveSync()"><span>🔄</span> Sync Google Sheet</div>
   </div>
   <div class="sync-status">
-    <span class="sync-dot"></span>
-    <div>
-      <div>Live Sync</div>
-      <div style="color:#94a3b8;font-size:10px" id="lastSync">Initializing...</div>
-    </div>
+    <span class="sync-dot" id="syncDot"></span>
+    <div><div>Live Sync</div><div style="color:#94a3b8;font-size:9px" id="lastSync">Starting...</div></div>
   </div>
 </div>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-search">
-    <span>🔍</span>
-    <input type="text" placeholder="Search..." id="globalSearch">
-  </div>
-  <div style="display:flex;gap:12px;align-items:center">
-    <button class="topbar-btn" onclick="liveSync()">🔄 Refresh</button>
-    <div class="topbar-user">
-      <div class="avatar">VS</div>
-      <div style="font-size:13px">
-        <div style="font-weight:600">Vishal Soni</div>
-        <div style="font-size:10px;color:#94a3b8">Administrator</div>
-      </div>
-    </div>
+  <div class="t-search"><span>🔍</span><input placeholder="Search..." id="gSearch"></div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <button class="btn btn-outline btn-sm" onclick="liveSync()">🔄 Sync</button>
+    <button class="btn btn-outline btn-sm" onclick="exportAll()">📥 Export</button>
+    <div style="display:flex;align-items:center;gap:6px"><div class="avatar">VS</div><div style="font-size:12px"><div style="font-weight:600">Vishal Soni</div><div style="font-size:9px;color:#94a3b8">Admin</div></div></div>
   </div>
 </div>
 
 <div class="main">
 
-<!-- STOCK TAB (DEFAULT ACTIVE) -->
-<div class="tab-content active" id="tab-stock">
-  <h2 style="margin-bottom:4px">📦 Stock Management - LIVE</h2>
-  <p style="color:var(--text-light);font-size:13px;margin-bottom:20px">
-    Auto-fetched from Google Sheets every 5 minutes
-  </p>
-
+<!-- ==================== TAB 1: REPORT ==================== -->
+<div class="tab-content active" id="tab-report">
+  <h2 style="margin-bottom:4px">📊 Report Dashboard</h2>
+  <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">Pending Bills, SD, LD, Hold, Deductions, GST, Withheld</p>
+  
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon blue">🏢</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalSites">0</div>
-        <div class="stat-label">Total Sites</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon green">💰</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalStockValue">₹ 0</div>
-        <div class="stat-label">Total Stock Value</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon orange">📊</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalNetWIP">₹ 0</div>
-        <div class="stat-label">Combined Net WIP</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon red">⚠️</div>
-      <div class="stat-info">
-        <div class="stat-value" id="highAgeingCount">0</div>
-        <div class="stat-label">High Ageing (>180d)</div>
-      </div>
-    </div>
+    <div class="stat-card"><div class="stat-icon orange">📋</div><div><div class="stat-value" id="rPending">₹0</div><div class="stat-label">Pending Bills</div></div></div>
+    <div class="stat-card"><div class="stat-icon blue">🔒</div><div><div class="stat-value" id="rSD">₹0</div><div class="stat-label">SD Amount</div></div></div>
+    <div class="stat-card"><div class="stat-icon red">⚠️</div><div><div class="stat-value" id="rLD">₹0</div><div class="stat-label">LD Amount</div></div></div>
+    <div class="stat-card"><div class="stat-icon purple">✋</div><div><div class="stat-value" id="rHold">₹0</div><div class="stat-label">Hold Amount</div></div></div>
+    <div class="stat-card"><div class="stat-icon green">📄</div><div><div class="stat-value" id="rGST">₹0</div><div class="stat-label">GST Amount</div></div></div>
   </div>
 
-  <!-- WIP Summary Card will be inserted here -->
-  <div id="wipSummaryContainer"></div>
+  <div class="card">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="rSub('pending')">📋 Pending Bills</button>
+      <button class="sub-tab" onclick="rSub('sd')">🔒 SD</button>
+      <button class="sub-tab" onclick="rSub('ld')">⚠️ LD</button>
+      <button class="sub-tab" onclick="rSub('hold')">✋ Hold</button>
+      <button class="sub-tab" onclick="rSub('otherDed')">📑 Other Deductions</button>
+      <button class="sub-tab" onclick="rSub('gst')">📄 GST</button>
+      <button class="sub-tab" onclick="rSub('withheld')">🔐 Withheld</button>
+    </div>
+
+    <div class="sub-tab-content active" id="rsub-pending">
+      <div class="filter-bar">
+        <div class="search-box"><span>🔍</span><input placeholder="Search..." onkeyup="fTbl('tblPending',this.value)"></div>
+        <button class="btn btn-primary btn-sm" onclick="addModal('pending')">+ Add</button>
+      </div>
+      <div class="tbl-wrap"><table id="tblPending"><thead><tr><th>#</th><th>Site</th><th>Party</th><th>Invoice</th><th>Date</th><th>Amount</th><th>Days</th><th>Status</th><th>✕</th></tr></thead><tbody id="tbPending"></tbody></table></div>
+    </div>
+
+    <div class="sub-tab-content" id="rsub-sd">
+      <div class="filter-bar"><div class="search-box"><span>🔍</span><input placeholder="Search..." onkeyup="fTbl('tblSD',this.value)"></div><button class="btn btn-primary btn-sm" onclick="addModal('sd')">+ Add</button></div>
+      <div class="tbl-wrap"><table id="tblSD"><thead><tr><th>#</th><th>Site</th><th>Party</th><th>Date</th><th>Amount</th><th>Days</th><th>Status</th><th>✕</th></tr></thead><tbody id="tbSD"></tbody></table></div>
+    </div>
+
+    <div class="sub-tab-content" id="rsub-ld">
+      <div class="filter-bar"><div class="search-box"><span>🔍</span><input placeholder="Search..." onkeyup="fTbl('tblLD',this.value)"></div><button class="btn btn-primary btn-sm" onclick="addModal('ld')">+ Add</button></div>
+      <div class="tbl-wrap"><table id="tblLD"><thead><tr><th>#</th><th>Site</th><th>Party</th><th>Date</th><th>Amount</th><th>Days</th><th>Reason</th><th>✕</th></tr></thead><tbody id="tbLD"></tbody></table></div>
+    </div>
+
+    <div class="sub-tab-content" id="rsub-hold">
+      <div class="filter-bar"><div class="search-box"><span>🔍</span><input placeholder="Search..." onkeyup="fTbl('tblHold',this.value)"></div><button class="btn btn-primary btn-sm" onclick="addModal('hold')">+ Add</button></div>
+      <div class="tbl-wrap"><table id="tblHold"><thead><tr><th>#</th><th>Site</th><th>Party</th><th>Date</th><th>Amount</th><th>Days</th><th>Reason</th><th>✕</th></tr></thead><tbody id="tbHold"></tbody></table></div>
+    </div>
+
+    <div class="sub-tab-content" id="rsub-otherDed">
+      <div class="filter-bar"><div class="search-box"><span>🔍</span><input placeholder="Search..." onkeyup="fTbl('tblOD',this.value)"></div><button class="btn btn-primary btn-sm" onclick="addModal('otherDed')">+ Add</button></div>
+      <div class="tbl-wrap"><table id="tblOD"><thead><tr><th>#</th><th>Site</th><th>Party</th><th>Date</th><th>Type</th><th>Amount</th><th>Remarks</th><th>✕</th></tr></thead><tbody id="tbOD"></tbody></table></div>
+    </div>
+
+    <div class="sub-tab-content" id="rsub-gst">
+      <div class="filter-bar"><div class="search-box"><span>🔍</span><input placeholder="Search..." onkeyup="fTbl('tblGST',this.value)"></div><button class="btn btn-primary btn-sm" onclick="addModal('gst')">+ Add</button></div>
+      <div class="tbl-wrap"><table id="tblGST"><thead><tr><th>#</th><th>Site</th><th>Party</th><th>Invoice</th><th>Date</th><th>GST Amt</th><th>%</th><th>Status</th><th>✕</th></tr></thead><tbody id="tbGST"></tbody></table></div>
+    </div>
+
+    <div class="sub-tab-content" id="rsub-withheld">
+      <div class="filter-bar"><div class="search-box"><span>🔍</span><input placeholder="Search..." onkeyup="fTbl('tblWH',this.value)"></div><button class="btn btn-primary btn-sm" onclick="addModal('withheld')">+ Add</button></div>
+      <div class="tbl-wrap"><table id="tblWH"><thead><tr><th>#</th><th>Site</th><th>Party</th><th>Date</th><th>Amount</th><th>Reason</th><th>Days</th><th>✕</th></tr></thead><tbody id="tbWH"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 2: SALES ==================== -->
+<div class="tab-content" id="tab-sales">
+  <h2 style="margin-bottom:4px">💰 Vishal Groups - Sales</h2>
+  <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">VE & VTPL - Month Wise with N/R Code</p>
+  
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon blue">🏢</div><div><div class="stat-value" id="sVE">₹0</div><div class="stat-label">VE Sales</div></div></div>
+    <div class="stat-card"><div class="stat-icon green">🏭</div><div><div class="stat-value" id="sVTPL">₹0</div><div class="stat-label">VTPL Sales</div></div></div>
+    <div class="stat-card"><div class="stat-icon purple">📈</div><div><div class="stat-value" id="sCombined">₹0</div><div class="stat-label">Combined</div></div></div>
+    <div class="stat-card"><div class="stat-icon orange">🆕</div><div><div class="stat-value" id="sNew">0</div><div class="stat-label">New (N)</div></div></div>
+    <div class="stat-card"><div class="stat-icon green">🔄</div><div><div class="stat-value" id="sRepeat">0</div><div class="stat-label">Repeat (R)</div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="sSub('ve')">🏢 VE</button>
+      <button class="sub-tab" onclick="sSub('vtpl')">🏭 VTPL</button>
+      <button class="sub-tab" onclick="sSub('mw')">📅 Month Wise</button>
+    </div>
+
+    <div class="sub-tab-content active" id="ssub-ve">
+      <div class="filter-bar">
+        <div class="search-box"><span>🔍</span><input placeholder="Search..." onkeyup="fTbl('tblVE',this.value)"></div>
+        <select class="btn btn-outline btn-sm" onchange="fMonth('tblVE',this.value)"><option value="">All Months</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option><option>January</option><option>February</option><option>March</option></select>
+        <select class="btn btn-outline btn-sm" onchange="fCode('tblVE',this.value)"><option value="">All</option><option value="N">New(N)</option><option value="R">Repeat(R)</option></select>
+        <button class="btn btn-primary btn-sm" onclick="saleModal('VE')">+ Add VE Sale</button>
+      </div>
+      <div class="tbl-wrap"><table id="tblVE"><thead><tr><th>#</th><th>Month</th><th>Party</th><th>Site</th><th>Invoice</th><th>Date</th><th>Amount</th><th>N/R</th><th>✕</th></tr></thead><tbody id="tbVE"></tbody></table></div>
+      <div style="margin-top:10px;font-weight:600">VE Total: <span id="veTotal" class="amount" style="color:var(--success)">₹0</span></div>
+    </div>
+
+    <div class="sub-tab-content" id="ssub-vtpl">
+      <div class="filter-bar">
+        <div class="search-box"><span>🔍</span><input placeholder="Search..." onkeyup="fTbl('tblVTPL',this.value)"></div>
+        <select class="btn btn-outline btn-sm" onchange="fMonth('tblVTPL',this.value)"><option value="">All Months</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option><option>January</option><option>February</option><option>March</option></select>
+        <select class="btn btn-outline btn-sm" onchange="fCode('tblVTPL',this.value)"><option value="">All</option><option value="N">New(N)</option><option value="R">Repeat(R)</option></select>
+        <button class="btn btn-primary btn-sm" onclick="saleModal('VTPL')">+ Add VTPL Sale</button>
+      </div>
+      <div class="tbl-wrap"><table id="tblVTPL"><thead><tr><th>#</th><th>Month</th><th>Party</th><th>Site</th><th>Invoice</th><th>Date</th><th>Amount</th><th>N/R</th><th>✕</th></tr></thead><tbody id="tbVTPL"></tbody></table></div>
+      <div style="margin-top:10px;font-weight:600">VTPL Total: <span id="vtplTotal" class="amount" style="color:var(--success)">₹0</span></div>
+    </div>
+
+    <div class="sub-tab-content" id="ssub-mw">
+      <div class="tbl-wrap"><table id="tblMW"><thead><tr><th>Month</th><th>VE Sales</th><th>VE(N)</th><th>VE(R)</th><th>VTPL Sales</th><th>VTPL(N)</th><th>VTPL(R)</th><th>Combined</th></tr></thead><tbody id="tbMW"></tbody>
+      <tfoot><tr style="font-weight:700;background:#f0f9ff"><td>TOTAL</td><td id="mwVE">₹0</td><td id="mwVN">0</td><td id="mwVR">0</td><td id="mwVTPL">₹0</td><td id="mwTN">0</td><td id="mwTR">0</td><td id="mwC">₹0</td></tr></tfoot></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 3: DATA ENTRY ==================== -->
+<div class="tab-content" id="tab-dataentry">
+  <h2 style="margin-bottom:4px">📝 Data Entry - Sale</h2>
+  <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">Party, Site, BOQ from Excel auto-add</p>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:14px">📄 Sale Entry Form</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Company</label><select id="de_co"><option value="VE">VE</option><option value="VTPL">VTPL</option></select></div>
+      <div class="form-group dd-search"><label>Party Name</label><input id="de_party" placeholder="Type party..." oninput="ddSearch(this,'ddParty',allParties())" onfocus="ddSearch(this,'ddParty',allParties())"><div class="dd-list" id="ddParty"></div></div>
+      <div class="form-group dd-search"><label>Site Name</label><input id="de_site" placeholder="Type site..." oninput="ddSearch(this,'ddSite',allSites())" onfocus="ddSearch(this,'ddSite',allSites())"><div class="dd-list" id="ddSite"></div></div>
+      <div class="form-group"><label>Invoice No</label><input id="de_inv" placeholder="INV-2025-XXX"></div>
+      <div class="form-group"><label>Date</label><input type="date" id="de_date"></div>
+      <div class="form-group"><label>Amount (₹)</label><input type="number" id="de_amt" placeholder="0"></div>
+      <div class="form-group"><label>Code</label><select id="de_code"><option value="N">N - New</option><option value="R">R - Repeat</option></select></div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="section-title">📎 BOQ - Upload Excel</div>
+    <div class="file-drop" onclick="document.getElementById('boqFile').click()">
+      <div style="font-size:30px">📎</div><div style="font-weight:600">Click to Upload BOQ Excel</div>
+      <div style="font-size:11px;color:var(--text-light)">.xlsx, .xls, .csv</div>
+      <input type="file" id="boqFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="readBOQ(this)">
+    </div>
+    <div id="boqArea" style="display:none;margin-top:14px">
+      <div class="section-title">📋 BOQ Items</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Sr</th><th>Description</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Amount</th><th>✕</th></tr></thead><tbody id="tbBOQ"></tbody></table></div>
+      <div style="margin-top:6px;font-weight:600">BOQ Total: <span id="boqTot" class="amount">₹0</span></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="saveSaleEntry()">💾 Save</button>
+      <button class="btn btn-outline" onclick="clearDE()">🔄 Clear</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">📃 All Sale Entries</div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Co</th><th>Party</th><th>Site</th><th>Invoice</th><th>Date</th><th>Amount</th><th>N/R</th><th>BOQ</th><th>✕</th></tr></thead><tbody id="tbEntries"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ==================== TAB 4: PAYMENT RECEIVED ==================== -->
+<div class="tab-content" id="tab-payment">
+  <h2 style="margin-bottom:4px">💳 Payment Received</h2>
+  <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">Entry with Deductions, Hold, Recovery</p>
+  
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon green">💰</div><div><div class="stat-value" id="pRec">₹0</div><div class="stat-label">Total Received</div></div></div>
+    <div class="stat-card"><div class="stat-icon red">📉</div><div><div class="stat-value" id="pDed">₹0</div><div class="stat-label">Total Deductions</div></div></div>
+    <div class="stat-card"><div class="stat-icon purple">✋</div><div><div class="stat-value" id="pHold">₹0</div><div class="stat-label">Total Hold</div></div></div>
+    <div class="stat-card"><div class="stat-icon blue">✅</div><div><div class="stat-value" id="pNet">₹0</div><div class="stat-label">Net Received</div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="margin-bottom:14px">➕ New Payment Entry</div>
+    <div class="section-title">🔎 Select Party & Invoice</div>
+    <div class="form-grid">
+      <div class="form-group dd-search"><label>Party Name</label><input id="p_party" placeholder="Search party..." oninput="ddSearch(this,'ddPParty',allParties())" onfocus="ddSearch(this,'ddPParty',allParties())"><div class="dd-list" id="ddPParty"></div></div>
+      <div class="form-group dd-search"><label>Site Name</label><input id="p_site" placeholder="Search site..." oninput="ddSearch(this,'ddPSite',allSites())" onfocus="ddSearch(this,'ddPSite',allSites())"><div class="dd-list" id="ddPSite"></div></div>
+      <div class="form-group"><label>Invoice (Site wise)</label><select id="p_inv" onchange="fillInv()"><option value="">--Select--</option></select></div>
+      <div class="form-group"><label>Invoice Amount</label><input id="p_invAmt" readonly style="background:#f8fafc"></div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="section-title">💰 Receive Amount</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Payment Date</label><input type="date" id="p_date"></div>
+      <div class="form-group"><label>Received Amount (₹)</label><input type="number" id="p_amt" placeholder="0" oninput="calcPay()"></div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="section-title">📉 Deductions</div>
+    <div class="form-grid">
+      <div class="form-group"><label>IT TDS</label><input type="number" id="d_it" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>GST TDS</label><input type="number" id="d_gst" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>Labour Cess</label><input type="number" id="d_lc" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>Bill Discounting</label><input type="number" id="d_bd" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>Other Deduction</label><input type="number" id="d_oth" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>Total Deduction</label><input id="d_tot" readonly style="background:#fef3c7;font-weight:700"></div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="section-title">✋ Hold Amounts</div>
+    <div class="form-grid">
+      <div class="form-group"><label>SD Hold</label><input type="number" id="h_sd" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>LD Hold</label><input type="number" id="h_ld" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>GST Hold</label><input type="number" id="h_gst" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>Withheld</label><input type="number" id="h_wh" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>Other Hold</label><input type="number" id="h_oth" placeholder="0" oninput="calcPay()"></div>
+      <div class="form-group"><label>Total Hold</label><input id="h_tot" readonly style="background:#e0e7ff;font-weight:700"></div>
+    </div>
+    <div class="section-divider"></div>
+    <div style="background:#f0fdf4;border-radius:8px;padding:14px;margin-bottom:14px">
+      <div class="section-title">📊 Summary</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;font-size:13px">
+        <div>Invoice: <strong id="ps_inv">₹0</strong></div>
+        <div>Received: <strong id="ps_rec" style="color:var(--success)">₹0</strong></div>
+        <div>Deductions: <strong id="ps_ded" style="color:var(--danger)">₹0</strong></div>
+        <div>Hold: <strong id="ps_hold" style="color:#7c3aed">₹0</strong></div>
+        <div>Net: <strong id="ps_net" style="color:var(--success)">₹0</strong></div>
+        <div>Balance: <strong id="ps_bal" style="color:var(--danger)">₹0</strong></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="savePayment()">💾 Save Payment</button>
+    <button class="btn btn-outline" onclick="clearPay()">🔄 Clear</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="margin-bottom:14px">🔓 Hold Recovery</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Vendor</label><input id="rc_vendor"></div>
+      <div class="form-group"><label>Invoice</label><input id="rc_inv"></div>
+      <div class="form-group"><label>Date</label><input type="date" id="rc_date"></div>
+      <div class="form-group"><label>Amount</label><input type="number" id="rc_amt" placeholder="0"></div>
+      <div class="form-group"><label>Type</label><select id="rc_type"><option>SD Recovery</option><option>LD Recovery</option><option>GST Recovery</option><option>Withheld Recovery</option><option>Other</option></select></div>
+    </div>
+    <button class="btn btn-success btn-sm" onclick="saveRecovery()">💾 Save Recovery</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">📃 All Payments</div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Date</th><th>Party</th><th>Site</th><th>Invoice</th><th>Inv Amt</th><th>Received</th><th>Deductions</th><th>Hold</th><th>Net</th><th>✕</th></tr></thead><tbody id="tbPay"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ==================== TAB 5: STOCK (LIVE) ==================== -->
+<div class="tab-content" id="tab-stock">
+  <h2 style="margin-bottom:4px">📦 Stock - LIVE from Google Sheets</h2>
+  <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">Auto-fetched • Auto-refresh every 5 min</p>
+  
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon blue">🏢</div><div><div class="stat-value" id="stSites">0</div><div class="stat-label">Total Sites</div></div></div>
+    <div class="stat-card"><div class="stat-icon green">💰</div><div><div class="stat-value" id="stValue">₹0</div><div class="stat-label">Stock Value</div></div></div>
+    <div class="stat-card"><div class="stat-icon orange">📊</div><div><div class="stat-value" id="stWIP">₹0</div><div class="stat-label">Net WIP</div></div></div>
+    <div class="stat-card"><div class="stat-icon red">⚠️</div><div><div class="stat-value" id="stAge">0</div><div class="stat-label">High Ageing(>180d)</div></div></div>
+  </div>
+
+  <div id="wipContainer"></div>
 
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📋 Stock Details (Live from Google Sheets)</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-primary btn-sm" onclick="liveSync()">🔄 Sync Now</button>
+      <div class="card-title">📋 Stock Details</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-primary btn-sm" onclick="liveSync()">🔄 Sync</button>
         <button class="btn btn-outline btn-sm" onclick="exportStock()">📥 Export</button>
       </div>
     </div>
     <div class="filter-bar">
-      <div class="search-box">
-        <span>🔍</span>
-        <input type="text" placeholder="Search site name..." onkeyup="filterStock(this.value)">
-      </div>
-      <select class="btn btn-outline btn-sm" onchange="filterByCompany(this.value)">
-        <option value="">All Companies</option>
-        <option value="VE">VE Only</option>
-        <option value="VTPL">VTPL Only</option>
-      </select>
+      <div class="search-box"><span>🔍</span><input placeholder="Search site..." onkeyup="fTbl('tblStock',this.value)"></div>
+      <select class="btn btn-outline btn-sm" onchange="DB.fc=this.value;renderStock()"><option value="">All</option><option value="VE">VE</option><option value="VTPL">VTPL</option></select>
     </div>
-    <div class="table-container">
-      <table id="stockTable">
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Site Name</th>
-            <th>Tab Link</th>
-            <th>Stock Value</th>
-            <th>Site Expenses</th>
-            <th>Net WIP</th>
-            <th>Remarks</th>
-            <th>Drive</th>
-            <th>Day Ageing</th>
-            <th>Cell</th>
-          </tr>
-        </thead>
-        <tbody id="stockBody">
-          <tr><td colspan="10" class="loading">🔄 Loading data from Google Sheets...</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="tbl-wrap"><table id="tblStock"><thead><tr><th>S.No</th><th>Site Name</th><th>Tab</th><th>Stock Value</th><th>Site Expenses</th><th>Net WIP</th><th>Remarks</th><th>Drive</th><th>Ageing</th><th>Cell</th></tr></thead><tbody id="tbStock"><tr><td colspan="10" style="text-align:center;padding:30px;color:var(--text-light)">🔄 Loading...</td></tr></tbody></table></div>
   </div>
 </div>
 
-<!-- OTHER TABS PLACEHOLDER -->
-<div class="tab-content" id="tab-report">
-  <div class="card"><h2>📊 Report Dashboard</h2><p style="color:var(--text-light)">Coming with payment sheet integration</p></div>
-</div>
-<div class="tab-content" id="tab-sales">
-  <div class="card"><h2>💰 Sales</h2><p style="color:var(--text-light)">VE & VTPL sales tracking</p></div>
-</div>
-<div class="tab-content" id="tab-dataentry">
-  <div class="card"><h2>📝 Data Entry</h2><p style="color:var(--text-light)">Sale entry with BOQ</p></div>
-</div>
-<div class="tab-content" id="tab-payment">
-  <div class="card"><h2>💳 Payment</h2><p style="color:var(--text-light)">Payment received tracking</p></div>
+</div><!-- main end -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal1">
+  <div class="modal">
+    <div class="modal-header"><h3 id="m1Title">Add</h3><button class="modal-close" onclick="closeM('modal1')">✕</button></div>
+    <div id="m1Body"></div>
+    <div style="margin-top:16px"><button class="btn btn-primary" onclick="saveModal()">💾 Save</button><button class="btn btn-outline" onclick="closeM('modal1')" style="margin-left:6px">Cancel</button></div>
+  </div>
 </div>
 
+<div class="modal-overlay" id="modal2">
+  <div class="modal">
+    <div class="modal-header"><h3 id="m2Title">Add Sale</h3><button class="modal-close" onclick="closeM('modal2')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-group"><label>Company</label><input id="sm_co" readonly></div>
+      <div class="form-group"><label>Party</label><input id="sm_party"></div>
+      <div class="form-group"><label>Site</label><input id="sm_site"></div>
+      <div class="form-group"><label>Invoice</label><input id="sm_inv"></div>
+      <div class="form-group"><label>Date</label><input type="date" id="sm_date"></div>
+      <div class="form-group"><label>Amount</label><input type="number" id="sm_amt"></div>
+      <div class="form-group"><label>Code</label><select id="sm_code"><option value="N">N</option><option value="R">R</option></select></div>
+    </div>
+    <button class="btn btn-primary" onclick="saveSaleM()">💾 Save</button>
+  </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// ==========================================
-// VISHAL ELECTRICALS - LIVE DATA SYSTEM
-// ==========================================
-
-// 🔗 APPS SCRIPT URL - YE AAPKA URL HAI
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
-
-// Direct CSV URL as backup
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
-
-// Data Store
-const DB = {
-  veStock: [],
-  vtplStock: [],
-  stockSummary: {},
-  filteredCompany: ''
+// ==================== DATA ====================
+const D={
+  pending:[],sd:[],ld:[],hold:[],otherDed:[],gst:[],withheld:[],
+  salesVE:[],salesVTPL:[],entries:[],boq:[],payments:[],recoveries:[],
+  veStock:[],vtplStock:[],stockSum:{},fc:'',
+  parties:['ABC Infra','XYZ Constructions','Metro Rail Corp','Power Grid Corp','Tata Projects','L&T'],
+  sites:['IOCL Jatni','IOCL Paradeep','IOCL Trichy','Metro Station','Power System','Highway Work']
 };
+const DB=D;
+
+const APPS_URL='https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
+const CSV_URL='https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
+
+function load(){const s=localStorage.getItem('veDB');if(s){const d=JSON.parse(s);Object.keys(d).forEach(k=>{if(D[k]!==undefined)D[k]=d[k]})}}
+function save(){localStorage.setItem('veDB',JSON.stringify(D))}
+function fc(n){return n?'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:2}):'₹0'}
+function pn(v){if(!v&&v!==0)return 0;if(typeof v==='number')return v;return Number(String(v).replace(/[₹,\s]/g,'').replace(/[^\d.-]/g,''))||0}
+function cd(d){if(!d)return 0;return Math.floor((new Date()-new Date(d))/(864e5))}
+function gm(d){if(!d)return'';const m=['January','February','March','April','May','June','July','August','September','October','November','December'];return m[new Date(d).getMonth()]}
+function nid(){return Date.now()+Math.floor(Math.random()*1000)}
+function allParties(){return[...new Set([...D.parties,...D.entries.map(e=>e.party),...D.pending.map(p=>p.party)])].filter(Boolean)}
+function allSites(){return[...new Set([...D.sites,...D.entries.map(e=>e.site),...D.pending.map(p=>p.site)])].filter(Boolean)}
+function ageCol(d){return d>365?'#dc2626':d>180?'#f59e0b':d>90?'#3b82f6':'#22c55e'}
 
 // ==================== TAB SWITCHING ====================
-function switchTab(tabId, el) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
-  document.getElementById('tab-' + tabId).classList.add('active');
-  if (el) el.classList.add('active');
-}
+function switchTab(id,el){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.s-item').forEach(s=>s.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(el)el.classList.add('active');refreshAll()}
+function rSub(id){const p=document.getElementById('tab-report');p.querySelectorAll('.sub-tab-content').forEach(s=>s.classList.remove('active'));p.querySelectorAll('.sub-tab').forEach(s=>s.classList.remove('active'));document.getElementById('rsub-'+id).classList.add('active');event.target.classList.add('active')}
+function sSub(id){const p=document.getElementById('tab-sales');p.querySelectorAll('.sub-tab-content').forEach(s=>s.classList.remove('active'));p.querySelectorAll('.sub-tab').forEach(s=>s.classList.remove('active'));document.getElementById('ssub-'+id).classList.add('active');event.target.classList.add('active');if(id==='mw')renderMW()}
 
-// ==================== MAIN LIVE SYNC ====================
-async function liveSync() {
-  showStatus('🔄 Fetching live data...', 'blue');
-  
-  // Try Apps Script first, fallback to CSV
-  let success = await tryAppsScript();
-  
-  if (!success) {
-    console.log('⚠️ Apps Script failed, trying CSV...');
-    success = await tryCSV();
-  }
-  
-  if (success) {
-    renderStock();
-    const time = new Date().toLocaleTimeString();
-    showStatus(`✅ Synced at ${time}`, 'green');
-  } else {
-    showStatus('❌ Sync failed', 'red');
-    document.getElementById('stockBody').innerHTML = `
-      <tr><td colspan="10" style="text-align:center;padding:30px;color:#dc2626">
-        ❌ Could not load data. Please check:<br>
-        1. Sheet is shared as "Anyone with link"<br>
-        2. Apps Script is deployed correctly
-      </td></tr>
-    `;
-  }
-}
+// ==================== DROPDOWN ====================
+function ddSearch(inp,ddId,items){const dd=document.getElementById(ddId);const v=inp.value.toLowerCase();const f=items.filter(i=>i.toLowerCase().includes(v));dd.innerHTML=f.map(i=>`<div class="dd-item" onclick="ddSel('${inp.id}','${ddId}','${i.replace(/'/g,"\\'")}')">${i}</div>`).join('');dd.classList.add('show')}
+function ddSel(iId,dId,v){document.getElementById(iId).value=v;document.getElementById(dId).classList.remove('show');if(iId==='p_party'||iId==='p_site')updInv()}
+document.addEventListener('click',e=>{if(!e.target.closest('.dd-search'))document.querySelectorAll('.dd-list').forEach(d=>d.classList.remove('show'))});
 
-// ==================== APPS SCRIPT METHOD ====================
-async function tryAppsScript() {
-  try {
-    const response = await fetch(APPS_SCRIPT_URL + '?t=' + Date.now());
-    const data = await response.json();
-    
-    console.log('📊 Apps Script Response:', data);
-    
-    if (data.error) {
-      console.error('Apps Script error:', data.error);
-      return false;
-    }
-    
-    // Handle different response structures
-    let rawData = data.data || data.stock || data;
-    
-    if (Array.isArray(rawData) && rawData.length > 0) {
-      // If it's array of arrays (raw sheet data)
-      if (Array.isArray(rawData[0])) {
-        processRawSheetData(rawData);
-        return true;
-      }
-      // If it's array of objects
-      if (typeof rawData[0] === 'object') {
-        processObjectData(rawData);
-        return true;
-      }
-    }
-    
-    return false;
-  } catch (err) {
-    console.error('Apps Script fetch failed:', err);
-    return false;
-  }
-}
+// ==================== FILTER ====================
+function fTbl(tId,v){const t=document.getElementById(tId);if(!t)return;t.querySelectorAll('tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(v.toLowerCase())?'':'none'})}
+function fMonth(tId,m){document.getElementById(tId).querySelectorAll('tbody tr').forEach(r=>{if(!m){r.style.display='';return}r.style.display=r.dataset.month===m?'':'none'})}
+function fCode(tId,c){document.getElementById(tId).querySelectorAll('tbody tr').forEach(r=>{if(!c){r.style.display='';return}r.style.display=r.dataset.code===c?'':'none'})}
 
-// ==================== CSV METHOD (FALLBACK) ====================
-async function tryCSV() {
-  try {
-    const response = await fetch(CSV_URL + '&t=' + Date.now());
-    const text = await response.text();
-    
-    const lines = text.split('\n').map(parseCSVLine);
-    console.log('📋 CSV loaded:', lines.length, 'rows');
-    
-    processRawSheetData(lines);
-    return true;
-  } catch (err) {
-    console.error('CSV fetch failed:', err);
-    return false;
-  }
-}
+// ==================== RENDER ALL ====================
+function refreshAll(){renderPending();renderSD();renderLD();renderHold();renderOD();renderGST();renderWH();renderVE();renderVTPL();renderEntries();renderPays();renderStock();updateStats()}
 
-// ==================== PROCESS RAW SHEET DATA ====================
-function processRawSheetData(rows) {
-  const veStock = [];
-  const vtplStock = [];
-  let stockDate = '';
-  let currentSection = '';
-  
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    if (!row || row.length === 0) continue;
-    
-    const rowText = row.join(' ').toUpperCase();
-    
-    // Detect date
-    if (rowText.includes('STOCK AS ON')) {
-      for (let j = 0; j < row.length; j++) {
-        const val = String(row[j] || '');
-        if (val.match(/\d+\/\d+\/\d+/) || val.match(/\d{4}-\d{2}-\d{2}/)) {
-          stockDate = val;
-          break;
-        }
-      }
-      continue;
-    }
-    
-    // Section detection
-    if (rowText.includes('VE STOCK') && !rowText.includes('VTPL')) {
-      currentSection = 'VE';
-      continue;
-    }
-    if (rowText.includes('VTPL STOCK')) {
-      currentSection = 'VTPL';
-      continue;
-    }
-    
-    // Skip headers
-    if (rowText.includes('S.NO') && rowText.includes('SITE NAME')) continue;
-    if (rowText.includes('NET STOCK') || rowText.includes('TOTAL BOTH')) continue;
-    
-    // Skip total rows
-    if (row[1] && String(row[1]).toUpperCase().trim() === 'TOTAL') continue;
-    
-    // Process data row
-    const sno = parseNum(row[0]);
-    const siteName = row[1] ? String(row[1]).trim() : '';
-    
-    if (sno > 0 && siteName && siteName.length > 2 && currentSection) {
-      const item = {
-        id: sno,
-        sno: sno,
-        siteName: siteName,
-        tabLink: String(row[2] || '').trim(),
-        stockValue: parseNum(row[3]),
-        siteExpenses: parseNum(row[4]),
-        netWIP: parseNum(row[5]),
-        remarks: String(row[6] || '').trim(),
-        driveLink: String(row[7] || '').trim(),
-        dayAgeing: parseNum(row[8]),
-        cell: String(row[9] || '').trim(),
-        company: currentSection
-      };
-      
-      if (currentSection === 'VE') veStock.push(item);
-      else if (currentSection === 'VTPL') vtplStock.push(item);
-    }
-  }
-  
-  saveData(veStock, vtplStock, stockDate);
-}
+function renderPending(){const tb=document.getElementById('tbPending');tb.innerHTML=D.pending.map((b,i)=>{const d=cd(b.date);const st=d>60?'badge-overdue':d>30?'badge-pending':'badge-paid';return`<tr><td>${i+1}</td><td>${b.site}</td><td>${b.party}</td><td>${b.invoice||'-'}</td><td>${b.date}</td><td class="amount">${fc(b.amount)}</td><td><strong>${d}d</strong></td><td><span class="badge ${st}">${d>60?'Overdue':d>30?'Due':'Current'}</span></td><td><button class="del-btn" onclick="del('pending',${b.id})">🗑</button></td></tr>`}).join('')}
 
-// ==================== PROCESS OBJECT DATA ====================
-function processObjectData(rows) {
-  const veStock = [];
-  const vtplStock = [];
-  let stockDate = '';
-  let currentSection = '';
-  
-  for (let row of rows) {
-    const values = Object.values(row);
-    const rowText = values.join(' ').toUpperCase();
-    
-    if (rowText.includes('STOCK AS ON')) {
-      for (let v of values) {
-        if (v && String(v).match(/\d+\/\d+\/\d+/)) { stockDate = v; break; }
-      }
-      continue;
-    }
-    
-    if (rowText.includes('VE STOCK') && !rowText.includes('VTPL')) { currentSection = 'VE'; continue; }
-    if (rowText.includes('VTPL STOCK')) { currentSection = 'VTPL'; continue; }
-    
-    const sno = parseNum(values[0]);
-    const siteName = values[1] ? String(values[1]).trim() : '';
-    
-    if (sno > 0 && siteName.length > 2 && currentSection) {
-      const item = {
-        id: sno, sno: sno, siteName,
-        tabLink: String(values[2] || ''),
-        stockValue: parseNum(values[3]),
-        siteExpenses: parseNum(values[4]),
-        netWIP: parseNum(values[5]),
-        remarks: String(values[6] || ''),
-        driveLink: String(values[7] || ''),
-        dayAgeing: parseNum(values[8]),
-        cell: String(values[9] || ''),
-        company: currentSection
-      };
-      
-      if (currentSection === 'VE') veStock.push(item);
-      else if (currentSection === 'VTPL') vtplStock.push(item);
-    }
-  }
-  
-  saveData(veStock, vtplStock, stockDate);
-}
+function renderSD(){document.getElementById('tbSD').innerHTML=D.sd.map((s,i)=>`<tr><td>${i+1}</td><td>${s.site}</td><td>${s.party}</td><td>${s.date}</td><td class="amount">${fc(s.amount)}</td><td><strong>${cd(s.date)}d</strong></td><td><span class="badge badge-hold">Active</span></td><td><button class="del-btn" onclick="del('sd',${s.id})">🗑</button></td></tr>`).join('')}
 
-// ==================== SAVE DATA ====================
-function saveData(veStock, vtplStock, stockDate) {
-  const veTotal = veStock.reduce((s, x) => s + x.stockValue, 0);
-  const veExpenses = veStock.reduce((s, x) => s + x.siteExpenses, 0);
-  const veNetWIP = veStock.reduce((s, x) => s + x.netWIP, 0);
-  
-  const vtplTotal = vtplStock.reduce((s, x) => s + x.stockValue, 0);
-  const vtplExpenses = vtplStock.reduce((s, x) => s + x.siteExpenses, 0);
-  const vtplNetWIP = vtplStock.reduce((s, x) => s + x.netWIP, 0);
-  
-  DB.veStock = veStock;
-  DB.vtplStock = vtplStock;
-  DB.stockSummary = {
-    date: stockDate,
-    veTotal, veExpenses, veNetWIP,
-    vtplTotal, vtplExpenses, vtplNetWIP,
-    netStockTotal: veTotal + vtplTotal,
-    combinedNetWIP: veNetWIP + vtplNetWIP
-  };
-  
-  console.log('✅ Data saved:', {
-    VE: veStock.length,
-    VTPL: vtplStock.length,
-    Total: DB.stockSummary.netStockTotal
-  });
-  
-  localStorage.setItem('vishalStock', JSON.stringify(DB));
-}
+function renderLD(){document.getElementById('tbLD').innerHTML=D.ld.map((l,i)=>`<tr><td>${i+1}</td><td>${l.site}</td><td>${l.party}</td><td>${l.date}</td><td class="amount" style="color:var(--danger)">${fc(l.amount)}</td><td><strong>${cd(l.date)}d</strong></td><td>${l.reason||'-'}</td><td><button class="del-btn" onclick="del('ld',${l.id})">🗑</button></td></tr>`).join('')}
 
-// ==================== RENDER STOCK TABLE ====================
-function renderStock() {
-  const tbody = document.getElementById('stockBody');
-  const summary = DB.stockSummary || {};
-  
-  // Update stat cards
-  const totalSites = DB.veStock.length + DB.vtplStock.length;
-  document.getElementById('totalSites').textContent = totalSites;
-  document.getElementById('totalStockValue').textContent = formatCurrency(summary.netStockTotal || 0);
-  document.getElementById('totalNetWIP').textContent = formatCurrency(summary.combinedNetWIP || 0);
-  
-  const highAgeing = [...DB.veStock, ...DB.vtplStock].filter(s => s.dayAgeing > 180).length;
-  document.getElementById('highAgeingCount').textContent = highAgeing;
-  
-  // Render summary card
-  renderSummaryCard();
-  
-  // Render table
-  let html = '';
-  
-  if (totalSites === 0) {
-    html = `<tr><td colspan="10" class="loading">No data found. Click "Sync Now" to refresh.</td></tr>`;
-    tbody.innerHTML = html;
-    return;
-  }
-  
-  // Date header
-  if (summary.date) {
-    html += `<tr style="background:#fef3c7"><td colspan="10" style="padding:10px;font-weight:700;text-align:center">📅 Stock as on: ${summary.date}</td></tr>`;
-  }
-  
-  // VE Section
-  const showVE = !DB.filteredCompany || DB.filteredCompany === 'VE';
-  if (showVE && DB.veStock.length > 0) {
-    html += `<tr class="section-row"><td colspan="10">🏢 VE STOCK (${DB.veStock.length} sites)</td></tr>`;
-    
-    DB.veStock.forEach(s => {
-      html += renderStockRow(s);
-    });
-    
-    html += `<tr class="total-row ve">
-      <td colspan="3" style="text-align:right;padding:10px">VE TOTAL ➤</td>
-      <td class="amount">${formatCurrency(summary.veTotal)}</td>
-      <td class="amount">${formatCurrency(summary.veExpenses)}</td>
-      <td class="amount" style="color:#059669;font-size:14px">${formatCurrency(summary.veNetWIP)}</td>
-      <td colspan="4"></td>
-    </tr>`;
-  }
-  
-  // VTPL Section
-  const showVTPL = !DB.filteredCompany || DB.filteredCompany === 'VTPL';
-  if (showVTPL && DB.vtplStock.length > 0) {
-    html += `<tr class="section-row vtpl"><td colspan="10">🏭 VTPL STOCK (${DB.vtplStock.length} sites)</td></tr>`;
-    
-    DB.vtplStock.forEach(s => {
-      html += renderStockRow(s);
-    });
-    
-    html += `<tr class="total-row vtpl">
-      <td colspan="3" style="text-align:right;padding:10px">VTPL TOTAL ➤</td>
-      <td class="amount">${formatCurrency(summary.vtplTotal)}</td>
-      <td class="amount">${formatCurrency(summary.vtplExpenses)}</td>
-      <td class="amount" style="color:#059669;font-size:14px">${formatCurrency(summary.vtplNetWIP)}</td>
-      <td colspan="4"></td>
-    </tr>`;
-  }
-  
-  // Grand Total
-  if (!DB.filteredCompany) {
-    html += `<tr class="grand-total">
-      <td colspan="5" style="text-align:right">🏆 NET STOCK (BOTH COMPANIES) ➤</td>
-      <td class="amount" style="font-size:17px">${formatCurrency(summary.netStockTotal)}</td>
-      <td colspan="4"></td>
-    </tr>`;
-  }
-  
-  tbody.innerHTML = html;
-}
+function renderHold(){document.getElementById('tbHold').innerHTML=D.hold.map((h,i)=>`<tr><td>${i+1}</td><td>${h.site}</td><td>${h.party}</td><td>${h.date}</td><td class="amount">${fc(h.amount)}</td><td><strong>${cd(h.date)}d</strong></td><td>${h.reason||'-'}</td><td><button class="del-btn" onclick="del('hold',${h.id})">🗑</button></td></tr>`).join('')}
 
-function renderStockRow(s) {
-  const ageColor = getAgeColor(s.dayAgeing);
-  return `<tr>
-    <td><strong>${s.sno}</strong></td>
-    <td><strong>${s.siteName}</strong></td>
-    <td style="color:#3b82f6;font-size:12px">${s.tabLink || '-'}</td>
-    <td class="amount">${formatCurrency(s.stockValue)}</td>
-    <td class="amount">${formatCurrency(s.siteExpenses)}</td>
-    <td class="amount" style="font-weight:700;color:#059669">${formatCurrency(s.netWIP)}</td>
-    <td style="font-size:12px">${s.remarks || '-'}</td>
-    <td>${s.driveLink && s.driveLink.startsWith('http') ? `<a href="${s.driveLink}" target="_blank" title="${s.driveLink}">📎</a>` : '-'}</td>
-    <td><span class="age-badge" style="background:${ageColor}">${s.dayAgeing}d</span></td>
-    <td style="font-size:11px;color:#64748b">${s.cell}</td>
-  </tr>`;
-}
+function renderOD(){document.getElementById('tbOD').innerHTML=D.otherDed.map((d,i)=>`<tr><td>${i+1}</td><td>${d.site}</td><td>${d.party}</td><td>${d.date}</td><td>${d.type||'-'}</td><td class="amount">${fc(d.amount)}</td><td>${d.remarks||'-'}</td><td><button class="del-btn" onclick="del('otherDed',${d.id})">🗑</button></td></tr>`).join('')}
 
-// ==================== SUMMARY CARD ====================
-function renderSummaryCard() {
-  const summary = DB.stockSummary || {};
-  const container = document.getElementById('wipSummaryContainer');
-  
-  container.innerHTML = `
-    <div id="wipSummaryCard">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h3 style="margin:0;font-size:18px">📊 WIP Stock Summary - Vishal Groups</h3>
-        <span style="font-size:13px;background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:12px">📅 ${summary.date || '-'}</span>
-      </div>
-      <div class="summary-grid">
-        <div class="summary-box">
-          <div class="label">🏢 VE Stock Value</div>
-          <div class="value">${formatCurrency(summary.veTotal||0)}</div>
-          <div class="sub">${DB.veStock.length} sites • Net WIP: ${formatCurrency(summary.veNetWIP||0)}</div>
-        </div>
-        <div class="summary-box">
-          <div class="label">🏭 VTPL Stock Value</div>
-          <div class="value">${formatCurrency(summary.vtplTotal||0)}</div>
-          <div class="sub">${DB.vtplStock.length} sites • Net WIP: ${formatCurrency(summary.vtplNetWIP||0)}</div>
-        </div>
-        <div class="summary-box">
-          <div class="label">💰 Combined Net WIP</div>
-          <div class="value">${formatCurrency(summary.combinedNetWIP||0)}</div>
-        </div>
-        <div class="summary-box highlight">
-          <div class="label">🏆 NET STOCK TOTAL</div>
-          <div class="value">${formatCurrency(summary.netStockTotal||0)}</div>
-        </div>
-      </div>
-    </div>
-  `;
-}
+function renderGST(){document.getElementById('tbGST').innerHTML=D.gst.map((g,i)=>`<tr><td>${i+1}</td><td>${g.site}</td><td>${g.party}</td><td>${g.invoice||'-'}</td><td>${g.date}</td><td class="amount">${fc(g.amount)}</td><td>${g.pct||18}%</td><td><span class="badge badge-pending">Pending</span></td><td><button class="del-btn" onclick="del('gst',${g.id})">🗑</button></td></tr>`).join('')}
 
-// ==================== UTILITY FUNCTIONS ====================
-function parseCSVLine(line) {
-  if (!line) return [];
-  const result = [];
-  let current = '';
-  let inQuotes = false;
-  
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') { current += '"'; i++; }
-      else { inQuotes = !inQuotes; }
-    } else if (char === ',' && !inQuotes) {
-      result.push(current.trim());
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  result.push(current.trim());
-  return result.map(v => v.replace(/^"|"$/g, ''));
-}
+function renderWH(){document.getElementById('tbWH').innerHTML=D.withheld.map((w,i)=>`<tr><td>${i+1}</td><td>${w.site}</td><td>${w.party}</td><td>${w.date}</td><td class="amount">${fc(w.amount)}</td><td>${w.reason||'-'}</td><td><strong>${cd(w.date)}d</strong></td><td><button class="del-btn" onclick="del('withheld',${w.id})">🗑</button></td></tr>`).join('')}
 
-function parseNum(val) {
-  if (val === null || val === undefined || val === '') return 0;
-  if (typeof val === 'number') return val;
-  const cleaned = String(val).replace(/[₹,\s]/g, '').replace(/[^\d.-]/g, '');
-  return Number(cleaned) || 0;
-}
+function renderVE(){const tb=document.getElementById('tbVE');let t=0;tb.innerHTML=D.salesVE.map((s,i)=>{t+=pn(s.amount);return`<tr data-month="${s.month}" data-code="${s.code}"><td>${i+1}</td><td>${s.month}</td><td>${s.party}</td><td>${s.site}</td><td>${s.invoice}</td><td>${s.date}</td><td class="amount">${fc(s.amount)}</td><td><span class="badge ${s.code==='N'?'badge-new':'badge-repeat'}">${s.code}</span></td><td><button class="del-btn" onclick="delS('salesVE',${s.id})">🗑</button></td></tr>`}).join('');document.getElementById('veTotal').textContent=fc(t)}
 
-function formatCurrency(num) {
-  if (!num) return '₹ 0';
-  return '₹ ' + Number(num).toLocaleString('en-IN', { maximumFractionDigits: 2 });
-}
+function renderVTPL(){const tb=document.getElementById('tbVTPL');let t=0;tb.innerHTML=D.salesVTPL.map((s,i)=>{t+=pn(s.amount);return`<tr data-month="${s.month}" data-code="${s.code}"><td>${i+1}</td><td>${s.month}</td><td>${s.party}</td><td>${s.site}</td><td>${s.invoice}</td><td>${s.date}</td><td class="amount">${fc(s.amount)}</td><td><span class="badge ${s.code==='N'?'badge-new':'badge-repeat'}">${s.code}</span></td><td><button class="del-btn" onclick="delS('salesVTPL',${s.id})">🗑</button></td></tr>`}).join('');document.getElementById('vtplTotal').textContent=fc(t)}
 
-function getAgeColor(days) {
-  if (days > 365) return '#dc2626';
-  if (days > 180) return '#f59e0b';
-  if (days > 90) return '#3b82f6';
-  return '#22c55e';
-}
+function renderMW(){const months=['April','May','June','July','August','September','October','November','December','January','February','March'];const tb=document.getElementById('tbMW');let tv=0,tn=0,tr=0,tt=0,ttn=0,ttr=0;tb.innerHTML=months.map(m=>{const ve=D.salesVE.filter(s=>s.month===m);const vt=D.salesVTPL.filter(s=>s.month===m);const vs=ve.reduce((a,x)=>a+pn(x.amount),0);const vn=ve.filter(x=>x.code==='N').length;const vr=ve.filter(x=>x.code==='R').length;const ts=vt.reduce((a,x)=>a+pn(x.amount),0);const tn2=vt.filter(x=>x.code==='N').length;const tr2=vt.filter(x=>x.code==='R').length;tv+=vs;tn+=vn;tr+=vr;tt+=ts;ttn+=tn2;ttr+=tr2;return`<tr><td><strong>${m}</strong></td><td class="amount">${fc(vs)}</td><td>${vn}</td><td>${vr}</td><td class="amount">${fc(ts)}</td><td>${tn2}</td><td>${tr2}</td><td class="amount" style="font-weight:700">${fc(vs+ts)}</td></tr>`}).join('');document.getElementById('mwVE').textContent=fc(tv);document.getElementById('mwVN').textContent=tn;document.getElementById('mwVR').textContent=tr;document.getElementById('mwVTPL').textContent=fc(tt);document.getElementById('mwTN').textContent=ttn;document.getElementById('mwTR').textContent=ttr;document.getElementById('mwC').textContent=fc(tv+tt)}
 
-function showStatus(text, color) {
-  const el = document.getElementById('lastSync');
-  if (el) {
-    el.textContent = text;
-    const colors = { green: '#22c55e', red: '#ef4444', blue: '#3b82f6', orange: '#f59e0b' };
-    el.style.color = colors[color] || '#94a3b8';
-  }
-  const dot = document.querySelector('.sync-dot');
-  if (dot) {
-    const colors = { green: '#22c55e', red: '#ef4444', blue: '#3b82f6', orange: '#f59e0b' };
-    dot.style.background = colors[color] || '#94a3b8';
-  }
-}
+function renderEntries(){document.getElementById('tbEntries').innerHTML=D.entries.map((s,i)=>`<tr><td>${i+1}</td><td><span class="badge ${s.company==='VE'?'badge-new':'badge-repeat'}">${s.company}</span></td><td>${s.party}</td><td>${s.site}</td><td>${s.invoice}</td><td>${s.date}</td><td class="amount">${fc(s.amount)}</td><td><span class="badge ${s.code==='N'?'badge-new':'badge-repeat'}">${s.code}</span></td><td>${s.boqCount||0}</td><td><button class="del-btn" onclick="D.entries=D.entries.filter(x=>x.id!==${s.id});save();refreshAll()">🗑</button></td></tr>`).join('')}
 
-// ==================== FILTERS ====================
-function filterStock(searchVal) {
-  const rows = document.querySelectorAll('#stockTable tbody tr');
-  const val = searchVal.toLowerCase();
-  rows.forEach(row => {
-    if (row.classList.contains('section-row') || row.classList.contains('total-row') || row.classList.contains('grand-total')) return;
-    row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
-  });
-}
+function renderPays(){document.getElementById('tbPay').innerHTML=D.payments.map((p,i)=>`<tr><td>${i+1}</td><td>${p.date}</td><td>${p.party}</td><td>${p.site}</td><td>${p.invoice}</td><td class="amount">${fc(p.invAmt)}</td><td class="amount" style="color:var(--success)">${fc(p.received)}</td><td class="amount" style="color:var(--danger)">${fc(p.totalDed)}</td><td class="amount" style="color:#7c3aed">${fc(p.totalHold)}</td><td class="amount" style="font-weight:700;color:var(--success)">${fc(p.net)}</td><td><button class="del-btn" onclick="D.payments=D.payments.filter(x=>x.id!==${p.id});save();refreshAll()">🗑</button></td></tr>`).join('')}
 
-function filterByCompany(company) {
-  DB.filteredCompany = company;
-  renderStock();
-}
+function updateStats(){
+document.getElementById('rPending').textContent=fc(D.pending.reduce((s,b)=>s+pn(b.amount),0));
+document.getElementById('rSD').textContent=fc(D.sd.reduce((s,b)=>s+pn(b.amount),0));
+document.getElementById('rLD').textContent=fc(D.ld.reduce((s,b)=>s+pn(b.amount),0));
+document.getElementById('rHold').textContent=fc(D.hold.reduce((s,b)=>s+pn(b.amount),0));
+document.getElementById('rGST').textContent=fc(D.gst.reduce((s,b)=>s+pn(b.amount),0));
+const vet=D.salesVE.reduce((s,x)=>s+pn(x.amount),0);const vtt=D.salesVTPL.reduce((s,x)=>s+pn(x.amount),0);
+document.getElementById('sVE').textContent=fc(vet);document.getElementById('sVTPL').textContent=fc(vtt);
+document.getElementById('sCombined').textContent=fc(vet+vtt);
+document.getElementById('sNew').textContent=D.salesVE.filter(x=>x.code==='N').length+D.salesVTPL.filter(x=>x.code==='N').length;
+document.getElementById('sRepeat').textContent=D.salesVE.filter(x=>x.code==='R').length+D.salesVTPL.filter(x=>x.code==='R').length;
+const pr=D.payments.reduce((s,p)=>s+pn(p.received),0);const pd=D.payments.reduce((s,p)=>s+pn(p.totalDed),0);const ph=D.payments.reduce((s,p)=>s+pn(p.totalHold),0);
+document.getElementById('pRec').textContent=fc(pr);document.getElementById('pDed').textContent=fc(pd);
+document.getElementById('pHold').textContent=fc(ph);document.getElementById('pNet').textContent=fc(pr-pd-ph)}
+
+// ==================== MODAL ADD (REPORT) ====================
+let mType='';
+function addModal(type){mType=type;const titles={pending:'Pending Bill',sd:'SD',ld:'LD',hold:'Hold',otherDed:'Other Deduction',gst:'GST',withheld:'Withheld'};document.getElementById('m1Title').textContent='Add '+titles[type];let h='<div class="form-grid">';h+='<div class="form-group"><label>Site</label><input id="m_site"></div>';h+='<div class="form-group"><label>Party</label><input id="m_party"></div>';h+='<div class="form-group"><label>Date</label><input type="date" id="m_date"></div>';h+='<div class="form-group"><label>Amount</label><input type="number" id="m_amt"></div>';if(type==='pending'||type==='gst')h+='<div class="form-group"><label>Invoice</label><input id="m_inv"></div>';if(type==='ld'||type==='hold'||type==='withheld')h+='<div class="form-group"><label>Reason</label><input id="m_reason"></div>';if(type==='otherDed'){h+='<div class="form-group"><label>Type</label><input id="m_dtype"></div>';h+='<div class="form-group"><label>Remarks</label><input id="m_remarks"></div>'}if(type==='gst')h+='<div class="form-group"><label>GST%</label><input type="number" id="m_pct" value="18"></div>';h+='</div>';document.getElementById('m1Body').innerHTML=h;document.getElementById('modal1').classList.add('active')}
+
+function saveModal(){const s=document.getElementById('m_site')?.value||'';const p=document.getElementById('m_party')?.value||'';const d=document.getElementById('m_date')?.value||'';const a=pn(document.getElementById('m_amt')?.value);if(!s||!a){alert('Fill Site & Amount');return}const e={id:nid(),site:s,party:p,date:d,amount:a};switch(mType){case'pending':e.invoice=document.getElementById('m_inv')?.value||'';e.status='Pending';D.pending.push(e);break;case'sd':D.sd.push(e);break;case'ld':e.reason=document.getElementById('m_reason')?.value||'';D.ld.push(e);break;case'hold':e.reason=document.getElementById('m_reason')?.value||'';D.hold.push(e);break;case'otherDed':e.type=document.getElementById('m_dtype')?.value||'';e.remarks=document.getElementById('m_remarks')?.value||'';D.otherDed.push(e);break;case'gst':e.invoice=document.getElementById('m_inv')?.value||'';e.pct=pn(document.getElementById('m_pct')?.value)||18;D.gst.push(e);break;case'withheld':e.reason=document.getElementById('m_reason')?.value||'';D.withheld.push(e);break}save();refreshAll();closeM('modal1')}
+
+function del(type,id){if(!confirm('Delete?'))return;D[type]=D[type].filter(x=>x.id!==id);save();refreshAll()}
+function delS(type,id){if(!confirm('Delete?'))return;D[type]=D[type].filter(x=>x.id!==id);save();refreshAll()}
+function closeM(id){document.getElementById(id).classList.remove('active')}
+
+// ==================== SALE MODAL ====================
+function saleModal(co){document.getElementById('sm_co').value=co;document.getElementById('m2Title').textContent='Add '+co+' Sale';['sm_party','sm_site','sm_inv','sm_amt'].forEach(i=>document.getElementById(i).value='');document.getElementById('modal2').classList.add('active')}
+function saveSaleM(){const co=document.getElementById('sm_co').value;const e={id:nid(),month:gm(document.getElementById('sm_date').value),party:document.getElementById('sm_party').value,site:document.getElementById('sm_site').value,invoice:document.getElementById('sm_inv').value,date:document.getElementById('sm_date').value,amount:pn(document.getElementById('sm_amt').value),code:document.getElementById('sm_code').value};if(!e.party||!e.amount){alert('Fill fields');return}if(co==='VE')D.salesVE.push(e);else D.salesVTPL.push(e);save();refreshAll();closeM('modal2')}
+
+// ==================== DATA ENTRY ====================
+function readBOQ(inp){if(!inp.files[0])return;const reader=new FileReader();reader.onload=function(e){try{const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const json=XLSX.utils.sheet_to_json(ws,{header:1});D.boq=[];for(let i=1;i<json.length;i++){const r=json[i];if(r&&r.length>=3)D.boq.push({sr:r[0]||i,desc:r[1]||'',unit:r[2]||'Nos',qty:pn(r[3]),rate:pn(r[4]),amt:pn(r[5])||(pn(r[3])*pn(r[4]))})}renderBOQ();document.getElementById('boqArea').style.display='block'}catch(er){alert('Error: '+er.message)}};reader.readAsArrayBuffer(inp.files[0])}
+
+function renderBOQ(){let t=0;document.getElementById('tbBOQ').innerHTML=D.boq.map((b,i)=>{const a=b.qty*b.rate;t+=a;return`<tr><td>${b.sr}</td><td>${b.desc}</td><td>${b.unit}</td><td>${b.qty}</td><td class="amount">${fc(b.rate)}</td><td class="amount">${fc(a)}</td><td><button class="del-btn" onclick="D.boq.splice(${i},1);renderBOQ()">🗑</button></td></tr>`}).join('');document.getElementById('boqTot').textContent=fc(t)}
+
+function saveSaleEntry(){const co=document.getElementById('de_co').value;const party=document.getElementById('de_party').value;const site=document.getElementById('de_site').value;const inv=document.getElementById('de_inv').value;const date=document.getElementById('de_date').value;const amt=pn(document.getElementById('de_amt').value);const code=document.getElementById('de_code').value;if(!party||!site||!amt){alert('Fill Party, Site, Amount');return}const e={id:nid(),company:co,party,site,invoice:inv,date,amount:amt,code,month:gm(date),boqCount:D.boq.length,boqItems:[...D.boq]};D.entries.push(e);const se={id:e.id,month:e.month,party,site,invoice:inv,date,amount:amt,code};if(co==='VE')D.salesVE.push(se);else D.salesVTPL.push(se);D.pending.push({id:nid(),site,party,invoice:inv,date,amount:amt,status:'Pending'});if(!D.parties.includes(party))D.parties.push(party);if(!D.sites.includes(site))D.sites.push(site);D.boq=[];save();refreshAll();clearDE();alert('Saved!')}
+
+function clearDE(){['de_party','de_site','de_inv','de_amt'].forEach(i=>document.getElementById(i).value='');document.getElementById('de_date').value='';document.getElementById('boqArea').style.display='none';D.boq=[]}
+
+// ==================== PAYMENT ====================
+function updInv(){const party=document.getElementById('p_party').value;const site=document.getElementById('p_site').value;const sel=document.getElementById('p_inv');const invs=[...D.entries,...D.pending].filter(e=>(!party||e.party===party)&&(!site||e.site===site));const unique=[...new Map(invs.map(i=>[i.invoice,i])).values()];sel.innerHTML='<option value="">--Select--</option>'+unique.map(i=>`<option value="${i.invoice}" data-amt="${i.amount}">${i.invoice} (${fc(i.amount)})</option>`).join('')}
+
+function fillInv(){const sel=document.getElementById('p_inv');const opt=sel.options[sel.selectedIndex];const amt=opt?.dataset?.amt||0;document.getElementById('p_invAmt').value=fc(amt);document.getElementById('ps_inv').textContent=fc(amt)}
+
+function calcPay(){const rec=pn(document.getElementById('p_amt').value);const it=pn(document.getElementById('d_it').value);const gst=pn(document.getElementById('d_gst').value);const lc=pn(document.getElementById('d_lc').value);const bd=pn(document.getElementById('d_bd').value);const oth=pn(document.getElementById('d_oth').value);const td=it+gst+lc+bd+oth;const hsd=pn(document.getElementById('h_sd').value);const hld=pn(document.getElementById('h_ld').value);const hg=pn(document.getElementById('h_gst').value);const hw=pn(document.getElementById('h_wh').value);const ho=pn(document.getElementById('h_oth').value);const th=hsd+hld+hg+hw+ho;const net=rec-td-th;const invAmt=pn(document.getElementById('p_inv').options[document.getElementById('p_inv').selectedIndex]?.dataset?.amt);document.getElementById('d_tot').value=fc(td);document.getElementById('h_tot').value=fc(th);document.getElementById('ps_rec').textContent=fc(rec);document.getElementById('ps_ded').textContent=fc(td);document.getElementById('ps_hold').textContent=fc(th);document.getElementById('ps_net').textContent=fc(net);document.getElementById('ps_bal').textContent=fc(invAmt-rec)}
+
+function savePayment(){const party=document.getElementById('p_party').value;const site=document.getElementById('p_site').value;const inv=document.getElementById('p_inv').value;const date=document.getElementById('p_date').value;const rec=pn(document.getElementById('p_amt').value);if(!party||!rec){alert('Fill fields');return}const invOpt=document.getElementById('p_inv').options[document.getElementById('p_inv').selectedIndex];const invAmt=pn(invOpt?.dataset?.amt);const it=pn(document.getElementById('d_it').value);const gst=pn(document.getElementById('d_gst').value);const lc=pn(document.getElementById('d_lc').value);const bd=pn(document.getElementById('d_bd').value);const oth=pn(document.getElementById('d_oth').value);const td=it+gst+lc+bd+oth;const hsd=pn(document.getElementById('h_sd').value);const hld=pn(document.getElementById('h_ld').value);const hg=pn(document.getElementById('h_gst').value);const hw=pn(document.getElementById('h_wh').value);const ho=pn(document.getElementById('h_oth').value);const th=hsd+hld+hg+hw+ho;D.payments.push({id:nid(),party,site,invoice:inv,date,invAmt,received:rec,itTds:it,gstTds:gst,labourCess:lc,billDisc:bd,otherDed:oth,totalDed:td,holdSD:hsd,holdLD:hld,holdGST:hg,holdWH:hw,holdOth:ho,totalHold:th,net:rec-td-th});if(hsd>0)D.sd.push({id:nid(),site,party,date,amount:hsd});if(hld>0)D.ld.push({id:nid(),site,party,date,amount:hld,reason:'Payment'});if(hg>0)D.gst.push({id:nid(),site,party,invoice:inv,date,amount:hg,pct:18});if(hw>0)D.withheld.push({id:nid(),site,party,date,amount:hw,reason:'Payment hold'});save();refreshAll();clearPay();alert('Payment saved!')}
+
+function clearPay(){['p_party','p_site','p_amt','p_invAmt','d_it','d_gst','d_lc','d_bd','d_oth','h_sd','h_ld','h_gst','h_wh','h_oth','d_tot','h_tot'].forEach(i=>{const el=document.getElementById(i);if(el)el.value=''});document.getElementById('p_date').value='';document.getElementById('p_inv').innerHTML='<option value="">--Select--</option>';calcPay()}
+
+function saveRecovery(){const v=document.getElementById('rc_vendor').value;const a=pn(document.getElementById('rc_amt').value);if(!v||!a){alert('Fill fields');return}D.recoveries.push({id:nid(),vendor:v,invoice:document.getElementById('rc_inv').value,date:document.getElementById('rc_date').value,amount:a,type:document.getElementById('rc_type').value});save();alert('Recovery saved!');['rc_vendor','rc_inv','rc_amt'].forEach(i=>document.getElementById(i).value='')}
+
+// ==================== STOCK LIVE SYNC ====================
+async function liveSync(){showStatus('🔄 Syncing...','blue');let ok=false;try{const r=await fetch(APPS_URL+'?t='+Date.now());const d=await r.json();console.log('Apps Script:',d);if(d.data&&Array.isArray(d.data)&&d.data.length>0){if(Array.isArray(d.data[0]))processRaw(d.data);else processObj(d.data);ok=true}else if(d.error){console.error(d.error)}}catch(e){console.error('Apps Script fail:',e)}if(!ok){try{const r=await fetch(CSV_URL+'&t='+Date.now());const t=await r.text();processRaw(t.split('\n').map(csvParse));ok=true}catch(e){console.error('CSV fail:',e)}}if(ok){save();renderStock();showStatus('✅ '+new Date().toLocaleTimeString(),'green')}else{showStatus('❌ Failed','red')}}
+
+function processRaw(rows){const ve=[];const vt=[];let dt='';let sec='';for(let i=0;i<rows.length;i++){const r=rows[i];if(!r||!r.length)continue;const txt=r.join(' ').toUpperCase();if(txt.includes('STOCK AS ON')){for(let v of r)if(v&&String(v).match(/\d+\/\d+\/\d+/)){dt=v;break}continue}if(txt.includes('VE STOCK')&&!txt.includes('VTPL')){sec='VE';continue}if(txt.includes('VTPL STOCK')){sec='VTPL';continue}if(txt.includes('S.NO')&&txt.includes('SITE'))continue;if(txt.includes('NET STOCK')||txt.includes('TOTAL BOTH'))continue;if(r[1]&&String(r[1]).toUpperCase().trim()==='TOTAL')continue;const sno=pn(r[0]);const site=r[1]?String(r[1]).trim():'';if(sno>0&&site.length>2&&sec){const item={id:sno,sno,siteName:site,tabLink:String(r[2]||''),stockValue:pn(r[3]),siteExpenses:pn(r[4]),netWIP:pn(r[5]),remarks:String(r[6]||''),driveLink:String(r[7]||''),dayAgeing:pn(r[8]),cell:String(r[9]||''),company:sec};if(sec==='VE')ve.push(item);else vt.push(item)}}saveStock(ve,vt,dt)}
+
+function processObj(rows){const ve=[];const vt=[];let dt='';let sec='';for(let r of rows){const vals=Object.values(r);const txt=vals.join(' ').toUpperCase();if(txt.includes('STOCK AS ON')){for(let v of vals)if(v&&String(v).match(/\d+\/\d+\/\d+/)){dt=v;break}continue}if(txt.includes('VE STOCK')&&!txt.includes('VTPL')){sec='VE';continue}if(txt.includes('VTPL STOCK')){sec='VTPL';continue}const sno=pn(vals[0]);const site=vals[1]?String(vals[1]).trim():'';if(sno>0&&site.length>2&&sec){const item={id:sno,sno,siteName:site,tabLink:String(vals[2]||''),stockValue:pn(vals[3]),siteExpenses:pn(vals[4]),netWIP:pn(vals[5]),remarks:String(vals[6]||''),driveLink:String(vals[7]||''),dayAgeing:pn(vals[8]),cell:String(vals[9]||''),company:sec};if(sec==='VE')ve.push(item);else vt.push(item)}}saveStock(ve,vt,dt)}
+
+function saveStock(ve,vt,dt){D.veStock=ve;D.vtplStock=vt;const vet=ve.reduce((s,x)=>s+x.stockValue,0);const vee=ve.reduce((s,x)=>s+x.siteExpenses,0);const vew=ve.reduce((s,x)=>s+x.netWIP,0);const vtt=vt.reduce((s,x)=>s+x.stockValue,0);const vte=vt.reduce((s,x)=>s+x.siteExpenses,0);const vtw=vt.reduce((s,x)=>s+x.netWIP,0);D.stockSum={date:dt,veTotal:vet,veExp:vee,veWIP:vew,vtplTotal:vtt,vtplExp:vte,vtplWIP:vtw,netTotal:vet+vtt,netWIP:vew+vtw};console.log('VE:',ve.length,'VTPL:',vt.length,'Total:',fc(vet+vtt))}
+
+function renderStock(){const tb=document.getElementById('tbStock');const sm=D.stockSum||{};const totalSites=D.veStock.length+D.vtplStock.length;document.getElementById('stSites').textContent=totalSites;document.getElementById('stValue').textContent=fc(sm.netTotal);document.getElementById('stWIP').textContent=fc(sm.netWIP);document.getElementById('stAge').textContent=[...D.veStock,...D.vtplStock].filter(s=>s.dayAgeing>180).length;
+// WIP Card
+document.getElementById('wipContainer').innerHTML=totalSites>0?`<div id="wipCard"><div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0;font-size:16px">📊 WIP Stock - Vishal Groups</h3><span style="font-size:12px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px">📅 ${sm.date||'-'}</span></div><div class="wg"><div class="wb"><div class="wl">🏢 VE Stock</div><div class="wv">${fc(sm.veTotal)}</div><div class="ws">${D.veStock.length} sites • WIP: ${fc(sm.veWIP)}</div></div><div class="wb"><div class="wl">🏭 VTPL Stock</div><div class="wv">${fc(sm.vtplTotal)}</div><div class="ws">${D.vtplStock.length} sites • WIP: ${fc(sm.vtplWIP)}</div></div><div class="wb"><div class="wl">💰 Combined WIP</div><div class="wv">${fc(sm.netWIP)}</div></div><div class="wb hl"><div class="wl">🏆 NET STOCK</div><div class="wv">${fc(sm.netTotal)}</div></div></div></div>`:'';
+if(totalSites===0){tb.innerHTML='<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--text-light)">🔄 Loading data...</td></tr>';return}
+let h='';if(sm.date)h+=`<tr style="background:#fef3c7"><td colspan="10" style="padding:8px;font-weight:700;text-align:center">📅 ${sm.date}</td></tr>`;
+const showVE=!DB.fc||DB.fc==='VE';const showVT=!DB.fc||DB.fc==='VTPL';
+if(showVE&&D.veStock.length){h+=`<tr class="section-row ve"><td colspan="10">🏢 VE STOCK (${D.veStock.length})</td></tr>`;D.veStock.forEach(s=>{h+=stockRow(s)});h+=`<tr class="total-row ve"><td colspan="3" style="text-align:right">VE TOTAL ➤</td><td class="amount">${fc(sm.veTotal)}</td><td class="amount">${fc(sm.veExp)}</td><td class="amount" style="color:var(--success)">${fc(sm.veWIP)}</td><td colspan="4"></td></tr>`}
+if(showVT&&D.vtplStock.length){h+=`<tr class="section-row vtpl"><td colspan="10">🏭 VTPL STOCK (${D.vtplStock.length})</td></tr>`;D.vtplStock.forEach(s=>{h+=stockRow(s)});h+=`<tr class="total-row vtpl"><td colspan="3" style="text-align:right">VTPL TOTAL ➤</td><td class="amount">${fc(sm.vtplTotal)}</td><td class="amount">${fc(sm.vtplExp)}</td><td class="amount" style="color:var(--success)">${fc(sm.vtplWIP)}</td><td colspan="4"></td></tr>`}
+if(!DB.fc)h+=`<tr class="grand-total"><td colspan="5" style="text-align:right">🏆 NET STOCK ➤</td><td class="amount" style="font-size:16px">${fc(sm.netTotal)}</td><td colspan="4"></td></tr>`;
+tb.innerHTML=h}
+
+function stockRow(s){return`<tr><td><strong>${s.sno}</strong></td><td><strong>${s.siteName}</strong></td><td style="color:#3b82f6;font-size:11px">${s.tabLink||'-'}</td><td class="amount">${fc(s.stockValue)}</td><td class="amount">${fc(s.siteExpenses)}</td><td class="amount" style="font-weight:700;color:var(--success)">${fc(s.netWIP)}</td><td style="font-size:11px">${s.remarks||'-'}</td><td>${s.driveLink&&s.driveLink.startsWith('http')?`<a href="${s.driveLink}" target="_blank">📎</a>`:'-'}</td><td><span class="age-badge" style="background:${ageCol(s.dayAgeing)}">${s.dayAgeing}d</span></td><td style="font-size:10px;color:var(--text-light)">${s.cell}</td></tr>`}
+
+function csvParse(line){if(!line)return[];const r=[];let c='';let q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){c+='"';i++}else q=!q}else if(ch===','&&!q){r.push(c.trim());c=''}else c+=ch}r.push(c.trim());return r.map(v=>v.replace(/^"|"$/g,''))}
+
+function showStatus(t,c){const el=document.getElementById('lastSync');if(el){el.textContent=t;el.style.color={green:'#22c55e',red:'#ef4444',blue:'#3b82f6',orange:'#f59e0b'}[c]||'#94a3b8'}const dot=document.getElementById('syncDot');if(dot)dot.style.background={green:'#22c55e',red:'#ef4444',blue:'#3b82f6'}[c]||'#22c55e'}
 
 // ==================== EXPORT ====================
-function exportStock() {
-  let csv = 'S.No,Site Name,Stock Value,Site Expenses,Net WIP,Day Ageing,Company\n';
-  
-  [...DB.veStock, ...DB.vtplStock].forEach(s => {
-    csv += `${s.sno},"${s.siteName}",${s.stockValue},${s.siteExpenses},${s.netWIP},${s.dayAgeing},${s.company}\n`;
-  });
-  
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `vishal_stock_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-}
+function exportStock(){let csv='S.No,Site,Stock Value,Site Expenses,Net WIP,Ageing,Company\n';[...D.veStock,...D.vtplStock].forEach(s=>{csv+=`${s.sno},"${s.siteName}",${s.stockValue},${s.siteExpenses},${s.netWIP},${s.dayAgeing},${s.company}\n`});const b=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='stock_'+new Date().toISOString().slice(0,10)+'.csv';a.click()}
+function exportAll(){alert('Exporting all data...');exportStock()}
 
-// ==================== INITIALIZATION ====================
-window.addEventListener('load', () => {
-  // Try loading cached data first
-  const cached = localStorage.getItem('vishalStock');
-  if (cached) {
-    try {
-      const data = JSON.parse(cached);
-      DB.veStock = data.veStock || [];
-      DB.vtplStock = data.vtplStock || [];
-      DB.stockSummary = data.stockSummary || {};
-      renderStock();
-    } catch(e) {}
-  }
-  
-  // Then fetch live data
-  setTimeout(liveSync, 500);
-  
-  // Auto refresh every 5 minutes
-  setInterval(liveSync, 5 * 60 * 1000);
-});
-
-console.log('🔥 Vishal Electricals Live Dashboard Loaded');
-console.log('🔗 Apps Script:', APPS_SCRIPT_URL);
-console.log('📋 CSV Backup:', CSV_URL);
+// ==================== INIT ====================
+load();
+window.addEventListener('load',()=>{refreshAll();setTimeout(liveSync,500);setInterval(liveSync,5*60*1000)});
+console.log('🔥 Vishal Electricals ERP Loaded');
 </script>
-
 </body>
 </html>
