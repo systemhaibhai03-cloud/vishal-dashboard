@@ -55,6 +55,7 @@ tr:hover{background:#f8fafc}
 .badge-pending{background:#fef3c7;color:#92400e}.badge-paid{background:#d1fae5;color:#065f46}
 .badge-overdue{background:#fee2e2;color:#991b1b}.badge-hold{background:#e0e7ff;color:#3730a3}
 .badge-new{background:#dbeafe;color:#1e40af}.badge-repeat{background:#d1fae5;color:#065f46}
+.badge-live{background:#fce7f3;color:#9f1239}
 .search-box{display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:6px;padding:5px 10px;background:#fff;max-width:260px}
 .search-box input{border:none;outline:none;font-size:12px;width:100%}
 .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
@@ -87,6 +88,12 @@ tr:hover{background:#f8fafc}
 #wipCard .wl{font-size:10px;opacity:.9;text-transform:uppercase;letter-spacing:.5px}
 #wipCard .wv{font-size:20px;font-weight:700;margin-top:4px}
 #wipCard .ws{font-size:10px;opacity:.8;margin-top:3px}
+#outCard{background:linear-gradient(135deg,#dc2626,#f59e0b);color:#fff;border-radius:12px;padding:18px;margin-bottom:16px}
+#outCard .wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:14px}
+#outCard .wb{background:rgba(255,255,255,.15);padding:12px;border-radius:8px}
+#outCard .wb.hl{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.5)}
+#outCard .wl{font-size:10px;opacity:.9;text-transform:uppercase;letter-spacing:.5px}
+#outCard .wv{font-size:18px;font-weight:700;margin-top:4px}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
 @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.topbar{left:0}.stats-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
 </style>
@@ -106,7 +113,7 @@ tr:hover{background:#f8fafc}
   </div>
   <div style="padding:12px 0">
     <div class="s-title">SYNC</div>
-    <div class="s-item" onclick="liveSync()"><span>🔄</span> Sync Google Sheet</div>
+    <div class="s-item" onclick="liveSync()"><span>🔄</span> Sync All Sheets</div>
   </div>
   <div class="sync-status">
     <span class="sync-dot" id="syncDot"></span>
@@ -128,26 +135,29 @@ tr:hover{background:#f8fafc}
 
 <!-- ==================== TAB 1: REPORT ==================== -->
 <div class="tab-content active" id="tab-report">
-  <h2 style="margin-bottom:4px">📊 Report Dashboard</h2>
-  <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">Pending Bills, SD, LD, Hold, Deductions, GST, Withheld</p>
-  
+  <h2 style="margin-bottom:4px">📊 Report Dashboard <span class="badge badge-live">🔴 LIVE</span></h2>
+  <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">Auto-fetched from Payment Sheet • Pending, SD, LD, Hold, GST, Withheld</p>
+
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-icon orange">📋</div><div><div class="stat-value" id="rPending">₹0</div><div class="stat-label">Pending Bills</div></div></div>
     <div class="stat-card"><div class="stat-icon blue">🔒</div><div><div class="stat-value" id="rSD">₹0</div><div class="stat-label">SD Amount</div></div></div>
     <div class="stat-card"><div class="stat-icon red">⚠️</div><div><div class="stat-value" id="rLD">₹0</div><div class="stat-label">LD Amount</div></div></div>
     <div class="stat-card"><div class="stat-icon purple">✋</div><div><div class="stat-value" id="rHold">₹0</div><div class="stat-label">Hold Amount</div></div></div>
     <div class="stat-card"><div class="stat-icon green">📄</div><div><div class="stat-value" id="rGST">₹0</div><div class="stat-label">GST Amount</div></div></div>
+    <div class="stat-card"><div class="stat-icon red">💼</div><div><div class="stat-value" id="rTotalOut">₹0</div><div class="stat-label">Total Outstanding</div></div></div>
   </div>
+
+  <div id="outContainer"></div>
 
   <div class="card">
     <div class="sub-tabs">
-      <button class="sub-tab active" onclick="rSub('pending')">📋 Pending Bills</button>
-      <button class="sub-tab" onclick="rSub('sd')">🔒 SD</button>
-      <button class="sub-tab" onclick="rSub('ld')">⚠️ LD</button>
-      <button class="sub-tab" onclick="rSub('hold')">✋ Hold</button>
-      <button class="sub-tab" onclick="rSub('otherDed')">📑 Other Deductions</button>
-      <button class="sub-tab" onclick="rSub('gst')">📄 GST</button>
-      <button class="sub-tab" onclick="rSub('withheld')">🔐 Withheld</button>
+      <button class="sub-tab active" onclick="rSub('pending',this)">📋 Pending Bills</button>
+      <button class="sub-tab" onclick="rSub('sd',this)">🔒 SD</button>
+      <button class="sub-tab" onclick="rSub('ld',this)">⚠️ LD</button>
+      <button class="sub-tab" onclick="rSub('hold',this)">✋ Hold</button>
+      <button class="sub-tab" onclick="rSub('otherDed',this)">📑 Other Deductions</button>
+      <button class="sub-tab" onclick="rSub('gst',this)">📄 GST</button>
+      <button class="sub-tab" onclick="rSub('withheld',this)">🔐 Withheld</button>
     </div>
 
     <div class="sub-tab-content active" id="rsub-pending">
@@ -194,7 +204,7 @@ tr:hover{background:#f8fafc}
 <div class="tab-content" id="tab-sales">
   <h2 style="margin-bottom:4px">💰 Vishal Groups - Sales</h2>
   <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">VE & VTPL - Month Wise with N/R Code</p>
-  
+
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-icon blue">🏢</div><div><div class="stat-value" id="sVE">₹0</div><div class="stat-label">VE Sales</div></div></div>
     <div class="stat-card"><div class="stat-icon green">🏭</div><div><div class="stat-value" id="sVTPL">₹0</div><div class="stat-label">VTPL Sales</div></div></div>
@@ -205,9 +215,9 @@ tr:hover{background:#f8fafc}
 
   <div class="card">
     <div class="sub-tabs">
-      <button class="sub-tab active" onclick="sSub('ve')">🏢 VE</button>
-      <button class="sub-tab" onclick="sSub('vtpl')">🏭 VTPL</button>
-      <button class="sub-tab" onclick="sSub('mw')">📅 Month Wise</button>
+      <button class="sub-tab active" onclick="sSub('ve',this)">🏢 VE</button>
+      <button class="sub-tab" onclick="sSub('vtpl',this)">🏭 VTPL</button>
+      <button class="sub-tab" onclick="sSub('mw',this)">📅 Month Wise</button>
     </div>
 
     <div class="sub-tab-content active" id="ssub-ve">
@@ -281,7 +291,7 @@ tr:hover{background:#f8fafc}
 <div class="tab-content" id="tab-payment">
   <h2 style="margin-bottom:4px">💳 Payment Received</h2>
   <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">Entry with Deductions, Hold, Recovery</p>
-  
+
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-icon green">💰</div><div><div class="stat-value" id="pRec">₹0</div><div class="stat-label">Total Received</div></div></div>
     <div class="stat-card"><div class="stat-icon red">📉</div><div><div class="stat-value" id="pDed">₹0</div><div class="stat-label">Total Deductions</div></div></div>
@@ -362,7 +372,7 @@ tr:hover{background:#f8fafc}
 <div class="tab-content" id="tab-stock">
   <h2 style="margin-bottom:4px">📦 Stock - LIVE from Google Sheets</h2>
   <p style="color:var(--text-light);font-size:12px;margin-bottom:16px">Auto-fetched • Auto-refresh every 5 min</p>
-  
+
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-icon blue">🏢</div><div><div class="stat-value" id="stSites">0</div><div class="stat-label">Total Sites</div></div></div>
     <div class="stat-card"><div class="stat-icon green">💰</div><div><div class="stat-value" id="stValue">₹0</div><div class="stat-label">Stock Value</div></div></div>
@@ -417,18 +427,27 @@ tr:hover{background:#f8fafc}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+// ==================== 🔴 URLs - LIVE GOOGLE SHEETS ====================
+
+// 1️⃣ STOCK Workbook URLs
+const APPS_URL = 'https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
+const CSV_URL  = 'https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
+
+// 2️⃣ PAYMENT Workbook URL (Published CSV - Public)
+const PAY_APPS_URL = '';
+const PAY_CSV_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv';
+
+// =====================================================================
+
 // ==================== DATA ====================
 const D={
   pending:[],sd:[],ld:[],hold:[],otherDed:[],gst:[],withheld:[],
   salesVE:[],salesVTPL:[],entries:[],boq:[],payments:[],recoveries:[],
-  veStock:[],vtplStock:[],stockSum:{},fc:'',
+  veStock:[],vtplStock:[],stockSum:{},outSum:{},fc:'',
   parties:['ABC Infra','XYZ Constructions','Metro Rail Corp','Power Grid Corp','Tata Projects','L&T'],
   sites:['IOCL Jatni','IOCL Paradeep','IOCL Trichy','Metro Station','Power System','Highway Work']
 };
 const DB=D;
-
-const APPS_URL='https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
-const CSV_URL='https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
 
 function load(){const s=localStorage.getItem('veDB');if(s){const d=JSON.parse(s);Object.keys(d).forEach(k=>{if(D[k]!==undefined)D[k]=d[k]})}}
 function save(){localStorage.setItem('veDB',JSON.stringify(D))}
@@ -443,8 +462,8 @@ function ageCol(d){return d>365?'#dc2626':d>180?'#f59e0b':d>90?'#3b82f6':'#22c55
 
 // ==================== TAB SWITCHING ====================
 function switchTab(id,el){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.s-item').forEach(s=>s.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(el)el.classList.add('active');refreshAll()}
-function rSub(id){const p=document.getElementById('tab-report');p.querySelectorAll('.sub-tab-content').forEach(s=>s.classList.remove('active'));p.querySelectorAll('.sub-tab').forEach(s=>s.classList.remove('active'));document.getElementById('rsub-'+id).classList.add('active');event.target.classList.add('active')}
-function sSub(id){const p=document.getElementById('tab-sales');p.querySelectorAll('.sub-tab-content').forEach(s=>s.classList.remove('active'));p.querySelectorAll('.sub-tab').forEach(s=>s.classList.remove('active'));document.getElementById('ssub-'+id).classList.add('active');event.target.classList.add('active');if(id==='mw')renderMW()}
+function rSub(id,el){const p=document.getElementById('tab-report');p.querySelectorAll('.sub-tab-content').forEach(s=>s.classList.remove('active'));p.querySelectorAll('.sub-tab').forEach(s=>s.classList.remove('active'));document.getElementById('rsub-'+id).classList.add('active');if(el)el.classList.add('active')}
+function sSub(id,el){const p=document.getElementById('tab-sales');p.querySelectorAll('.sub-tab-content').forEach(s=>s.classList.remove('active'));p.querySelectorAll('.sub-tab').forEach(s=>s.classList.remove('active'));document.getElementById('ssub-'+id).classList.add('active');if(el)el.classList.add('active');if(id==='mw')renderMW()}
 
 // ==================== DROPDOWN ====================
 function ddSearch(inp,ddId,items){const dd=document.getElementById(ddId);const v=inp.value.toLowerCase();const f=items.filter(i=>i.toLowerCase().includes(v));dd.innerHTML=f.map(i=>`<div class="dd-item" onclick="ddSel('${inp.id}','${ddId}','${i.replace(/'/g,"\\'")}')">${i}</div>`).join('');dd.classList.add('show')}
@@ -457,7 +476,7 @@ function fMonth(tId,m){document.getElementById(tId).querySelectorAll('tbody tr')
 function fCode(tId,c){document.getElementById(tId).querySelectorAll('tbody tr').forEach(r=>{if(!c){r.style.display='';return}r.style.display=r.dataset.code===c?'':'none'})}
 
 // ==================== RENDER ALL ====================
-function refreshAll(){renderPending();renderSD();renderLD();renderHold();renderOD();renderGST();renderWH();renderVE();renderVTPL();renderEntries();renderPays();renderStock();updateStats()}
+function refreshAll(){renderPending();renderSD();renderLD();renderHold();renderOD();renderGST();renderWH();renderVE();renderVTPL();renderEntries();renderPays();renderStock();renderOutCard();updateStats()}
 
 function renderPending(){const tb=document.getElementById('tbPending');tb.innerHTML=D.pending.map((b,i)=>{const d=cd(b.date);const st=d>60?'badge-overdue':d>30?'badge-pending':'badge-paid';return`<tr><td>${i+1}</td><td>${b.site}</td><td>${b.party}</td><td>${b.invoice||'-'}</td><td>${b.date}</td><td class="amount">${fc(b.amount)}</td><td><strong>${d}d</strong></td><td><span class="badge ${st}">${d>60?'Overdue':d>30?'Due':'Current'}</span></td><td><button class="del-btn" onclick="del('pending',${b.id})">🗑</button></td></tr>`}).join('')}
 
@@ -483,12 +502,53 @@ function renderEntries(){document.getElementById('tbEntries').innerHTML=D.entrie
 
 function renderPays(){document.getElementById('tbPay').innerHTML=D.payments.map((p,i)=>`<tr><td>${i+1}</td><td>${p.date}</td><td>${p.party}</td><td>${p.site}</td><td>${p.invoice}</td><td class="amount">${fc(p.invAmt)}</td><td class="amount" style="color:var(--success)">${fc(p.received)}</td><td class="amount" style="color:var(--danger)">${fc(p.totalDed)}</td><td class="amount" style="color:#7c3aed">${fc(p.totalHold)}</td><td class="amount" style="font-weight:700;color:var(--success)">${fc(p.net)}</td><td><button class="del-btn" onclick="D.payments=D.payments.filter(x=>x.id!==${p.id});save();refreshAll()">🗑</button></td></tr>`).join('')}
 
+// ==================== OUTSTANDING CARD ====================
+function renderOutCard(){
+  const totalPending=D.pending.reduce((s,b)=>s+pn(b.amount),0);
+  const totalSD=D.sd.reduce((s,b)=>s+pn(b.amount),0);
+  const totalLD=D.ld.reduce((s,b)=>s+pn(b.amount),0);
+  const totalGST=D.gst.reduce((s,b)=>s+pn(b.amount),0);
+  const totalOD=D.otherDed.reduce((s,b)=>s+pn(b.amount),0);
+  const totalWH=D.withheld.reduce((s,b)=>s+pn(b.amount),0);
+  const grandTotal=totalPending+totalSD+totalLD+totalGST+totalOD+totalWH;
+  const totalSites=D.pending.length+D.sd.length+D.ld.length+D.gst.length+D.withheld.length;
+  
+  const cont=document.getElementById('outContainer');
+  if(!cont)return;
+  if(grandTotal===0){cont.innerHTML='';return}
+  
+  cont.innerHTML=`<div id="outCard">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 style="margin:0;font-size:16px">💼 Outstanding Payment Break-up</h3>
+      <span style="font-size:12px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px">🔴 LIVE • ${totalSites} entries</span>
+    </div>
+    <div class="wg">
+      <div class="wb"><div class="wl">📋 Pending</div><div class="wv">${fc(totalPending)}</div></div>
+      <div class="wb"><div class="wl">🔒 SD</div><div class="wv">${fc(totalSD)}</div></div>
+      <div class="wb"><div class="wl">⚠️ LD</div><div class="wv">${fc(totalLD)}</div></div>
+      <div class="wb"><div class="wl">📄 GST Hold</div><div class="wv">${fc(totalGST)}</div></div>
+      <div class="wb"><div class="wl">📑 Other Ded</div><div class="wv">${fc(totalOD)}</div></div>
+      <div class="wb"><div class="wl">🔐 Withheld</div><div class="wv">${fc(totalWH)}</div></div>
+      <div class="wb hl"><div class="wl">🏆 GRAND TOTAL</div><div class="wv">${fc(grandTotal)}</div></div>
+    </div>
+  </div>`;
+}
+
 function updateStats(){
-document.getElementById('rPending').textContent=fc(D.pending.reduce((s,b)=>s+pn(b.amount),0));
-document.getElementById('rSD').textContent=fc(D.sd.reduce((s,b)=>s+pn(b.amount),0));
-document.getElementById('rLD').textContent=fc(D.ld.reduce((s,b)=>s+pn(b.amount),0));
-document.getElementById('rHold').textContent=fc(D.hold.reduce((s,b)=>s+pn(b.amount),0));
-document.getElementById('rGST').textContent=fc(D.gst.reduce((s,b)=>s+pn(b.amount),0));
+const totalPending=D.pending.reduce((s,b)=>s+pn(b.amount),0);
+const totalSD=D.sd.reduce((s,b)=>s+pn(b.amount),0);
+const totalLD=D.ld.reduce((s,b)=>s+pn(b.amount),0);
+const totalHold=D.hold.reduce((s,b)=>s+pn(b.amount),0);
+const totalGST=D.gst.reduce((s,b)=>s+pn(b.amount),0);
+const totalOD=D.otherDed.reduce((s,b)=>s+pn(b.amount),0);
+const totalWH=D.withheld.reduce((s,b)=>s+pn(b.amount),0);
+document.getElementById('rPending').textContent=fc(totalPending);
+document.getElementById('rSD').textContent=fc(totalSD);
+document.getElementById('rLD').textContent=fc(totalLD);
+document.getElementById('rHold').textContent=fc(totalHold);
+document.getElementById('rGST').textContent=fc(totalGST);
+const grandTotal=totalPending+totalSD+totalLD+totalGST+totalOD+totalWH;
+const elTot=document.getElementById('rTotalOut');if(elTot)elTot.textContent=fc(grandTotal);
 const vet=D.salesVE.reduce((s,x)=>s+pn(x.amount),0);const vtt=D.salesVTPL.reduce((s,x)=>s+pn(x.amount),0);
 document.getElementById('sVE').textContent=fc(vet);document.getElementById('sVTPL').textContent=fc(vtt);
 document.getElementById('sCombined').textContent=fc(vet+vtt);
@@ -534,9 +594,169 @@ function clearPay(){['p_party','p_site','p_amt','p_invAmt','d_it','d_gst','d_lc'
 
 function saveRecovery(){const v=document.getElementById('rc_vendor').value;const a=pn(document.getElementById('rc_amt').value);if(!v||!a){alert('Fill fields');return}D.recoveries.push({id:nid(),vendor:v,invoice:document.getElementById('rc_inv').value,date:document.getElementById('rc_date').value,amount:a,type:document.getElementById('rc_type').value});save();alert('Recovery saved!');['rc_vendor','rc_inv','rc_amt'].forEach(i=>document.getElementById(i).value='')}
 
-// ==================== STOCK LIVE SYNC ====================
-async function liveSync(){showStatus('🔄 Syncing...','blue');let ok=false;try{const r=await fetch(APPS_URL+'?t='+Date.now());const d=await r.json();console.log('Apps Script:',d);if(d.data&&Array.isArray(d.data)&&d.data.length>0){if(Array.isArray(d.data[0]))processRaw(d.data);else processObj(d.data);ok=true}else if(d.error){console.error(d.error)}}catch(e){console.error('Apps Script fail:',e)}if(!ok){try{const r=await fetch(CSV_URL+'&t='+Date.now());const t=await r.text();processRaw(t.split('\n').map(csvParse));ok=true}catch(e){console.error('CSV fail:',e)}}if(ok){save();renderStock();showStatus('✅ '+new Date().toLocaleTimeString(),'green')}else{showStatus('❌ Failed','red')}}
+// ==================== LIVE SYNC - STOCK + PAYMENT ====================
+async function liveSync(){
+  showStatus('🔄 Syncing All Sheets...','blue');
+  let stockOk=false;
+  let payOk=false;
+  
+  // ============ STOCK SYNC ============
+  try{
+    const r=await fetch(APPS_URL+'?t='+Date.now());
+    const d=await r.json();
+    console.log('📦 Stock Apps Script:',d);
+    if(d.data&&Array.isArray(d.data)&&d.data.length>0){
+      if(Array.isArray(d.data[0]))processRaw(d.data);
+      else processObj(d.data);
+      stockOk=true;
+    }else if(d.stock&&d.stock.length>0){
+      processRaw(d.stock);
+      stockOk=true;
+    }else if(d.error){console.error('Stock error:',d.error)}
+  }catch(e){console.error('Stock Apps Script fail:',e)}
+  
+  if(!stockOk){
+    try{
+      const r=await fetch(CSV_URL+'&t='+Date.now());
+      const t=await r.text();
+      processRaw(t.split('\n').map(csvParse));
+      stockOk=true;
+    }catch(e){console.error('Stock CSV fail:',e)}
+  }
+  
+  // ============ PAYMENT SYNC ============
+  if(PAY_APPS_URL&&PAY_APPS_URL.length>10){
+    try{
+      const r=await fetch(PAY_APPS_URL+'?t='+Date.now());
+      const d=await r.json();
+      console.log('💳 Payment Apps Script:',d);
+      if(d.outstanding&&Array.isArray(d.outstanding)&&d.outstanding.length>0){
+        processOutstanding(d.outstanding);
+        payOk=true;
+      }else if(d.data&&Array.isArray(d.data)&&d.data.length>0){
+        processOutstanding(d.data);
+        payOk=true;
+      }else if(d.error){console.error('Payment error:',d.error)}
+    }catch(e){console.error('Payment Apps Script fail:',e)}
+  }
+  
+  if(!payOk&&PAY_CSV_URL&&PAY_CSV_URL.length>10){
+    try{
+      const r=await fetch(PAY_CSV_URL+'&t='+Date.now());
+      const t=await r.text();
+      console.log('💳 Payment CSV received, length:',t.length);
+      const rows=t.split('\n').map(csvParse);
+      console.log('💳 Payment rows parsed:',rows.length);
+      processOutstanding(rows);
+      payOk=true;
+    }catch(e){console.error('Payment CSV fail:',e)}
+  }
+  
+  // ============ FINAL ============
+  save();
+  refreshAll();
+  
+  if(stockOk&&payOk){
+    showStatus('✅ Both Synced '+new Date().toLocaleTimeString(),'green');
+  }else if(stockOk){
+    showStatus('⚠️ Only Stock '+new Date().toLocaleTimeString(),'orange');
+  }else if(payOk){
+    showStatus('⚠️ Only Payment '+new Date().toLocaleTimeString(),'orange');
+  }else{
+    showStatus('❌ Sync Failed','red');
+  }
+}
 
+// ==================== PAYMENT OUTSTANDING PROCESS ====================
+function processOutstanding(rows){
+  if(!rows||rows.length<3){console.log('❌ No outstanding data, rows:',rows?.length);return}
+  
+  // Reset old live data
+  D.pending=[];
+  D.sd=[];
+  D.ld=[];
+  D.gst=[];
+  D.otherDed=[];
+  D.withheld=[];
+  
+  // Find header row (S.No / S No / Sno wala row)
+  let dataStart=0;
+  for(let i=0;i<Math.min(rows.length,10);i++){
+    const r=rows[i];
+    if(!r)continue;
+    const txt=r.join(' ').toUpperCase();
+    if((txt.includes('S.NO')||txt.includes('S NO')||txt.includes('SNO'))&&(txt.includes('PROJECT')||txt.includes('SITE'))){
+      dataStart=i+1;
+      console.log('📊 Header found at row:',i,'Data starts at:',dataStart);
+      break;
+    }
+  }
+  
+  // Agar header nahi mila to row 3 se start (typical)
+  if(dataStart===0)dataStart=3;
+  
+  console.log('📊 Processing payment data from row:',dataStart);
+  let processed=0;
+  
+  for(let i=dataStart;i<rows.length;i++){
+    const r=rows[i];
+    if(!r||!r.length)continue;
+    
+    const sno=pn(r[0]);
+    const project=String(r[1]||'').trim();
+    const sheetLink=String(r[2]||'').trim();
+    const pendingBill=pn(r[3]);
+    const sdAmt=pn(r[4]);
+    const ldAmt=pn(r[5]);
+    const gstHold=pn(r[6]);
+    const instantRelease=pn(r[7]);
+    const otherDed=pn(r[8]);
+    const withheld=pn(r[9]);
+    const totalOut=pn(r[10]);
+    
+    // Skip empty/total/header rows
+    if(!project||project.length<2)continue;
+    if(project.toUpperCase().includes('TOTAL'))continue;
+    if(project.toUpperCase().includes('PROJECT'))continue;
+    if(sno===0&&totalOut===0&&pendingBill===0)continue;
+    
+    const today=new Date().toISOString().slice(0,10);
+    const partyName=project.split(/[\s-]/)[0]||'Unknown';
+    
+    if(pendingBill>0){
+      D.pending.push({id:nid(),site:project,party:partyName,invoice:sheetLink||'-',date:today,amount:pendingBill,status:'Pending'});
+    }
+    if(sdAmt>0){
+      D.sd.push({id:nid(),site:project,party:partyName,date:today,amount:sdAmt});
+    }
+    if(ldAmt>0){
+      D.ld.push({id:nid(),site:project,party:partyName,date:today,amount:ldAmt,reason:'Live from Sheet'});
+    }
+    if(gstHold>0){
+      D.gst.push({id:nid(),site:project,party:partyName,invoice:sheetLink||'-',date:today,amount:gstHold,pct:18});
+    }
+    if(otherDed>0){
+      D.otherDed.push({id:nid(),site:project,party:partyName,date:today,type:'Other',amount:otherDed,remarks:'Live from Sheet'});
+    }
+    if(withheld>0){
+      D.withheld.push({id:nid(),site:project,party:partyName,date:today,amount:withheld,reason:'Comm. Work Withheld'});
+    }
+    
+    if(!D.parties.includes(partyName))D.parties.push(partyName);
+    if(!D.sites.includes(project))D.sites.push(project);
+    processed++;
+  }
+  
+  console.log('✅ Outstanding loaded:',processed,'sites');
+  console.log('  📋 Pending:',D.pending.length,'= '+fc(D.pending.reduce((s,x)=>s+x.amount,0)));
+  console.log('  🔒 SD:',D.sd.length,'= '+fc(D.sd.reduce((s,x)=>s+x.amount,0)));
+  console.log('  ⚠️ LD:',D.ld.length,'= '+fc(D.ld.reduce((s,x)=>s+x.amount,0)));
+  console.log('  📄 GST:',D.gst.length,'= '+fc(D.gst.reduce((s,x)=>s+x.amount,0)));
+  console.log('  📑 Other:',D.otherDed.length,'= '+fc(D.otherDed.reduce((s,x)=>s+x.amount,0)));
+  console.log('  🔐 Withheld:',D.withheld.length,'= '+fc(D.withheld.reduce((s,x)=>s+x.amount,0)));
+}
+
+// ==================== STOCK PROCESS ====================
 function processRaw(rows){const ve=[];const vt=[];let dt='';let sec='';for(let i=0;i<rows.length;i++){const r=rows[i];if(!r||!r.length)continue;const txt=r.join(' ').toUpperCase();if(txt.includes('STOCK AS ON')){for(let v of r)if(v&&String(v).match(/\d+\/\d+\/\d+/)){dt=v;break}continue}if(txt.includes('VE STOCK')&&!txt.includes('VTPL')){sec='VE';continue}if(txt.includes('VTPL STOCK')){sec='VTPL';continue}if(txt.includes('S.NO')&&txt.includes('SITE'))continue;if(txt.includes('NET STOCK')||txt.includes('TOTAL BOTH'))continue;if(r[1]&&String(r[1]).toUpperCase().trim()==='TOTAL')continue;const sno=pn(r[0]);const site=r[1]?String(r[1]).trim():'';if(sno>0&&site.length>2&&sec){const item={id:sno,sno,siteName:site,tabLink:String(r[2]||''),stockValue:pn(r[3]),siteExpenses:pn(r[4]),netWIP:pn(r[5]),remarks:String(r[6]||''),driveLink:String(r[7]||''),dayAgeing:pn(r[8]),cell:String(r[9]||''),company:sec};if(sec==='VE')ve.push(item);else vt.push(item)}}saveStock(ve,vt,dt)}
 
 function processObj(rows){const ve=[];const vt=[];let dt='';let sec='';for(let r of rows){const vals=Object.values(r);const txt=vals.join(' ').toUpperCase();if(txt.includes('STOCK AS ON')){for(let v of vals)if(v&&String(v).match(/\d+\/\d+\/\d+/)){dt=v;break}continue}if(txt.includes('VE STOCK')&&!txt.includes('VTPL')){sec='VE';continue}if(txt.includes('VTPL STOCK')){sec='VTPL';continue}const sno=pn(vals[0]);const site=vals[1]?String(vals[1]).trim():'';if(sno>0&&site.length>2&&sec){const item={id:sno,sno,siteName:site,tabLink:String(vals[2]||''),stockValue:pn(vals[3]),siteExpenses:pn(vals[4]),netWIP:pn(vals[5]),remarks:String(vals[6]||''),driveLink:String(vals[7]||''),dayAgeing:pn(vals[8]),cell:String(vals[9]||''),company:sec};if(sec==='VE')ve.push(item);else vt.push(item)}}saveStock(ve,vt,dt)}
@@ -544,7 +764,6 @@ function processObj(rows){const ve=[];const vt=[];let dt='';let sec='';for(let r
 function saveStock(ve,vt,dt){D.veStock=ve;D.vtplStock=vt;const vet=ve.reduce((s,x)=>s+x.stockValue,0);const vee=ve.reduce((s,x)=>s+x.siteExpenses,0);const vew=ve.reduce((s,x)=>s+x.netWIP,0);const vtt=vt.reduce((s,x)=>s+x.stockValue,0);const vte=vt.reduce((s,x)=>s+x.siteExpenses,0);const vtw=vt.reduce((s,x)=>s+x.netWIP,0);D.stockSum={date:dt,veTotal:vet,veExp:vee,veWIP:vew,vtplTotal:vtt,vtplExp:vte,vtplWIP:vtw,netTotal:vet+vtt,netWIP:vew+vtw};console.log('VE:',ve.length,'VTPL:',vt.length,'Total:',fc(vet+vtt))}
 
 function renderStock(){const tb=document.getElementById('tbStock');const sm=D.stockSum||{};const totalSites=D.veStock.length+D.vtplStock.length;document.getElementById('stSites').textContent=totalSites;document.getElementById('stValue').textContent=fc(sm.netTotal);document.getElementById('stWIP').textContent=fc(sm.netWIP);document.getElementById('stAge').textContent=[...D.veStock,...D.vtplStock].filter(s=>s.dayAgeing>180).length;
-// WIP Card
 document.getElementById('wipContainer').innerHTML=totalSites>0?`<div id="wipCard"><div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0;font-size:16px">📊 WIP Stock - Vishal Groups</h3><span style="font-size:12px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px">📅 ${sm.date||'-'}</span></div><div class="wg"><div class="wb"><div class="wl">🏢 VE Stock</div><div class="wv">${fc(sm.veTotal)}</div><div class="ws">${D.veStock.length} sites • WIP: ${fc(sm.veWIP)}</div></div><div class="wb"><div class="wl">🏭 VTPL Stock</div><div class="wv">${fc(sm.vtplTotal)}</div><div class="ws">${D.vtplStock.length} sites • WIP: ${fc(sm.vtplWIP)}</div></div><div class="wb"><div class="wl">💰 Combined WIP</div><div class="wv">${fc(sm.netWIP)}</div></div><div class="wb hl"><div class="wl">🏆 NET STOCK</div><div class="wv">${fc(sm.netTotal)}</div></div></div></div>`:'';
 if(totalSites===0){tb.innerHTML='<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--text-light)">🔄 Loading data...</td></tr>';return}
 let h='';if(sm.date)h+=`<tr style="background:#fef3c7"><td colspan="10" style="padding:8px;font-weight:700;text-align:center">📅 ${sm.date}</td></tr>`;
@@ -567,7 +786,9 @@ function exportAll(){alert('Exporting all data...');exportStock()}
 // ==================== INIT ====================
 load();
 window.addEventListener('load',()=>{refreshAll();setTimeout(liveSync,500);setInterval(liveSync,5*60*1000)});
-console.log('🔥 Vishal Electricals ERP Loaded');
+console.log('🔥 Vishal Electricals ERP - Stock + Payment LIVE Sync');
+console.log('📦 Stock URL:',CSV_URL.substring(0,60)+'...');
+console.log('💳 Payment URL:',PAY_CSV_URL.substring(0,60)+'...');
 </script>
 </body>
 </html>
