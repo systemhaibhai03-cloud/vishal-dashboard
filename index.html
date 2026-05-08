@@ -109,6 +109,29 @@ tr:last-child td{border-bottom:none}
 .ai-chip:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:4px}
+/* DATA ENTRY STYLES */
+.entry-tabs{display:flex;gap:6px;margin-bottom:18px;border-bottom:1.5px solid var(--border2);padding-bottom:0}
+.entry-tab{padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;font-family:inherit;transition:color .15s,border-color .15s}
+.entry-tab:hover{color:var(--text)}
+.entry-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.entry-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:900px){.entry-form-grid{grid-template-columns:1fr 1fr}}
+.entry-form-grid .full{grid-column:1/-1}
+.section-badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;margin-bottom:12px}
+.badge-ve{background:#eff4ff;color:#1a56db}
+.badge-vtpl{background:#ecfdf5;color:#065f46}
+.records-filter-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.tag-ve{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;background:#eff4ff;color:#1a56db;font-weight:600}
+.tag-vtpl{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;background:#ecfdf5;color:#065f46;font-weight:600}
+.tag-rev{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;background:#fdf2f2;color:#c81e1e;font-weight:600}
+.tag-deb{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;background:#fffbeb;color:#92400e;font-weight:600}
+.entry-success{padding:10px 14px;background:var(--green-bg);color:var(--green);border-radius:var(--rs);font-size:12px;font-weight:500;display:none;margin-bottom:12px;border:0.5px solid #a7f3d0}
+.summary-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.summary-mini{background:var(--surface2);border-radius:var(--rs);padding:12px 14px}
+.summary-mini-lbl{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.summary-mini-val{font-size:16px;font-weight:700}
+.del-btn{border:none;background:none;cursor:pointer;color:var(--red);font-size:13px;padding:0 4px;opacity:.7}
+.del-btn:hover{opacity:1}
 @media(max-width:900px){.sidebar{width:56px}.sb-name,.sb-sub,.nav-sec,.nav-item span,.sb-footer .data-pill span{display:none}.main{margin-left:56px}.charts-row{grid-template-columns:1fr}.day-grid{grid-template-columns:1fr 1fr}.metrics-grid{grid-template-columns:repeat(2,1fr)}.ai-window{width:calc(100vw - 40px)}}
 /* STOCK PAGE */
 .ageing-badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
@@ -177,6 +200,19 @@ const CONFIG = {
     <button class="nav-item" onclick="showPage('stock',this)">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
       <span>Stock Register</span>
+    </button>
+    <div class="nav-sec">Data Entry</div>
+    <button class="nav-item" onclick="showPage('entry-revenue',this)">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Revenue Entry</span>
+    </button>
+    <button class="nav-item" onclick="showPage('entry-debtors',this)">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
+      <span>Debtors Entry</span>
+    </button>
+    <button class="nav-item" onclick="showPage('entry-records',this)">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/><polyline points="9 12 11 14 15 10"/></svg>
+      <span>All Records</span>
     </button>
   </nav>
   <div class="sb-footer">
@@ -371,6 +407,271 @@ const CONFIG = {
           <div class="card-header"><div class="card-title">Ageing distribution</div></div>
           <div class="chart-wrap h260"><canvas id="chart-stock-age" role="img" aria-label="Stock ageing"></canvas></div>
         </div>
+      </div>
+    </div>
+
+    <!-- PAGE: REVENUE ENTRY -->
+    <div class="page" id="page-entry-revenue">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">💰 Revenue Entry</div><div class="card-sub">VE (Vishal Electricals) & VTPL (Vishal Technopower) dono ka revenue record karein</div></div>
+        </div>
+        <!-- Tabs: VE / VTPL -->
+        <div class="entry-tabs">
+          <button class="entry-tab active" onclick="switchRevTab('ve',this)">Vishal Electricals (VE)</button>
+          <button class="entry-tab" onclick="switchRevTab('vtpl',this)">Vishal Technopower (VTPL)</button>
+        </div>
+        <div id="rev-success" class="entry-success">✓ Revenue entry save ho gayi!</div>
+        <!-- VE Form -->
+        <div id="rev-form-ve">
+          <span class="section-badge badge-ve">VE — Vishal Electricals</span>
+          <div class="summary-mini-grid" id="ve-summary"></div>
+          <div class="entry-form-grid">
+            <div class="form-group">
+              <label class="form-label">Date *</label>
+              <input type="date" class="form-input" id="rv-ve-date">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Party / Site Name *</label>
+              <input type="text" class="form-input" id="rv-ve-party" placeholder="e.g. IOCL Panipat DO">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Invoice No.</label>
+              <input type="text" class="form-input" id="rv-ve-inv" placeholder="e.g. VE/2025-26/001">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Invoice Amount (₹) *</label>
+              <input type="number" class="form-input" id="rv-ve-amount" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">GST Amount (₹)</label>
+              <input type="number" class="form-input" id="rv-ve-gst" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Payment Received (₹)</label>
+              <input type="number" class="form-input" id="rv-ve-paid" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">TDS Deducted (₹)</label>
+              <input type="number" class="form-input" id="rv-ve-tds" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Work Order / PO No.</label>
+              <input type="text" class="form-input" id="rv-ve-wo" placeholder="Optional">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-input" id="rv-ve-status">
+                <option value="Pending">Pending</option>
+                <option value="Partial">Partial</option>
+                <option value="Received">Received</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Remarks</label>
+              <input type="text" class="form-input" id="rv-ve-remarks" placeholder="Optional notes...">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" onclick="saveRevenue('ve')">💾 Save VE Revenue Entry</button>
+          </div>
+          <div style="margin-top:20px">
+            <div class="card-title" style="font-size:13px;margin-bottom:10px">Recent VE Revenue Entries</div>
+            <div class="tbl-wrap"><table><thead><tr>
+              <th>Date</th><th>Party / Site</th><th>Invoice No.</th>
+              <th class="r">Invoice Amt</th><th class="r">Received</th><th class="r">Pending</th><th>Status</th><th></th>
+            </tr></thead><tbody id="rv-ve-tbody"></tbody></table></div>
+          </div>
+        </div>
+        <!-- VTPL Form -->
+        <div id="rev-form-vtpl" style="display:none">
+          <span class="section-badge badge-vtpl">VTPL — Vishal Technopower Pvt Ltd</span>
+          <div class="summary-mini-grid" id="vtpl-summary"></div>
+          <div class="entry-form-grid">
+            <div class="form-group">
+              <label class="form-label">Date *</label>
+              <input type="date" class="form-input" id="rv-vtpl-date">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Party / Site Name *</label>
+              <input type="text" class="form-input" id="rv-vtpl-party" placeholder="e.g. NTPC Dadri">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Invoice No.</label>
+              <input type="text" class="form-input" id="rv-vtpl-inv" placeholder="e.g. VTPL/2025-26/001">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Invoice Amount (₹) *</label>
+              <input type="number" class="form-input" id="rv-vtpl-amount" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">GST Amount (₹)</label>
+              <input type="number" class="form-input" id="rv-vtpl-gst" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Payment Received (₹)</label>
+              <input type="number" class="form-input" id="rv-vtpl-paid" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">TDS Deducted (₹)</label>
+              <input type="number" class="form-input" id="rv-vtpl-tds" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Work Order / PO No.</label>
+              <input type="text" class="form-input" id="rv-vtpl-wo" placeholder="Optional">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-input" id="rv-vtpl-status">
+                <option value="Pending">Pending</option>
+                <option value="Partial">Partial</option>
+                <option value="Received">Received</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Remarks</label>
+              <input type="text" class="form-input" id="rv-vtpl-remarks" placeholder="Optional notes...">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" onclick="saveRevenue('vtpl')">💾 Save VTPL Revenue Entry</button>
+          </div>
+          <div style="margin-top:20px">
+            <div class="card-title" style="font-size:13px;margin-bottom:10px">Recent VTPL Revenue Entries</div>
+            <div class="tbl-wrap"><table><thead><tr>
+              <th>Date</th><th>Party / Site</th><th>Invoice No.</th>
+              <th class="r">Invoice Amt</th><th class="r">Received</th><th class="r">Pending</th><th>Status</th><th></th>
+            </tr></thead><tbody id="rv-vtpl-tbody"></tbody></table></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: DEBTORS ENTRY -->
+    <div class="page" id="page-entry-debtors">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">👤 Debtors Reconciliation Entry</div><div class="card-sub">Party-wise outstanding, payment received, aur balance track karein</div></div>
+        </div>
+        <div id="deb-success" class="entry-success">✓ Debtor entry save ho gayi!</div>
+        <div class="summary-mini-grid" id="deb-summary-top"></div>
+        <div class="entry-form-grid">
+          <div class="form-group">
+            <label class="form-label">Date *</label>
+            <input type="date" class="form-input" id="db-date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Company</label>
+            <select class="form-input" id="db-company">
+              <option value="VE">Vishal Electricals (VE)</option>
+              <option value="VTPL">Vishal Technopower (VTPL)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Party / Site Name *</label>
+            <input type="text" class="form-input" id="db-party" placeholder="e.g. IOCL Panipat DO">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Opening Balance (₹)</label>
+            <input type="number" class="form-input" id="db-opening" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Invoice Amount (₹)</label>
+            <input type="number" class="form-input" id="db-new-inv" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Payment Received (₹)</label>
+            <input type="number" class="form-input" id="db-payment" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">SD Deducted (₹)</label>
+            <input type="number" class="form-input" id="db-sd" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">LD Deducted (₹)</label>
+            <input type="number" class="form-input" id="db-ld" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">TDS (₹)</label>
+            <input type="number" class="form-input" id="db-tds" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Closing Balance (₹)</label>
+            <input type="number" class="form-input" id="db-closing" placeholder="Auto calculated" min="0" style="background:#f8f8f6">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Days Outstanding</label>
+            <input type="number" class="form-input" id="db-days" placeholder="e.g. 45" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bucket</label>
+            <select class="form-input" id="db-bucket">
+              <option value="0-30">0–30 days</option>
+              <option value="30-45">30–45 days</option>
+              <option value="45-60">45–60 days</option>
+              <option value=">60">&gt;60 days</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Remarks / Notes</label>
+            <input type="text" class="form-input" id="db-remarks" placeholder="e.g. Cheque received, awaiting clearance...">
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;padding:8px 12px;background:var(--surface2);border-radius:var(--rs)">
+          💡 Closing Balance = Opening + New Invoice − Payment − SD − LD − TDS (auto calculate hoga)
+        </div>
+        <div class="form-actions">
+          <button class="btn" onclick="calcDebtorBalance()">🔢 Calculate Balance</button>
+          <button class="btn btn-primary" onclick="saveDebtor()">💾 Save Debtor Entry</button>
+        </div>
+        <div style="margin-top:20px">
+          <div class="records-filter-row">
+            <div class="card-title" style="font-size:13px">Debtor Entries</div>
+            <input type="text" class="search-input" style="max-width:200px" placeholder="Search party..." id="deb-search" oninput="renderDebtorEntries()">
+            <select class="form-input" style="max-width:140px" id="deb-company-filter" onchange="renderDebtorEntries()">
+              <option value="">All companies</option>
+              <option value="VE">VE only</option>
+              <option value="VTPL">VTPL only</option>
+            </select>
+          </div>
+          <div class="tbl-wrap"><table><thead><tr>
+            <th>Date</th><th>Co.</th><th>Party / Site</th>
+            <th class="r">Opening</th><th class="r">New Invoice</th><th class="r">Payment</th>
+            <th class="r">Deductions</th><th class="r">Closing Bal.</th><th>Bucket</th><th></th>
+          </tr></thead><tbody id="deb-entry-tbody"></tbody></table></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: ALL RECORDS -->
+    <div class="page" id="page-entry-records">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">📋 All Records — Day-wise / Party-wise / Site-wise</div><div class="card-sub">Sabhi manually entered data ek jagah — Revenue + Debtors + Stock</div></div>
+        </div>
+        <div class="metrics-grid" id="rec-metrics-grid" style="margin-bottom:16px"></div>
+        <div class="records-filter-row">
+          <input type="text" class="search-input" style="max-width:220px" placeholder="Search party, site..." id="rec-search" oninput="renderAllRecords()">
+          <select class="form-input" style="max-width:130px" id="rec-type-filter" onchange="renderAllRecords()">
+            <option value="">All types</option>
+            <option value="revenue">Revenue</option>
+            <option value="debtor">Debtors</option>
+            <option value="stock">Stock</option>
+          </select>
+          <select class="form-input" style="max-width:130px" id="rec-co-filter" onchange="renderAllRecords()">
+            <option value="">All companies</option>
+            <option value="VE">VE</option>
+            <option value="VTPL">VTPL</option>
+          </select>
+          <input type="date" class="form-input" style="max-width:150px" id="rec-from" onchange="renderAllRecords()" title="From date">
+          <input type="date" class="form-input" style="max-width:150px" id="rec-to" onchange="renderAllRecords()" title="To date">
+          <button class="btn" onclick="clearRecFilters()">Clear</button>
+          <button class="btn" onclick="exportCSV()">⬇ Export CSV</button>
+        </div>
+        <div class="tbl-wrap"><table><thead><tr>
+          <th>Date</th><th>Type</th><th>Co.</th><th>Party / Site</th>
+          <th class="r">Amount / Invoice</th><th class="r">Received / Balance</th><th>Status / Remarks</th><th></th>
+        </tr></thead><tbody id="rec-tbody"></tbody></table></div>
       </div>
     </div>
 
@@ -810,13 +1111,16 @@ async function loadData() {
 }
 
 // ═══════════════ NAVIGATION ═══════════════
-const PAGE_TITLES = {overview:"Overview",sitewise:"Site-wise Breakup",invoices:"Invoice Days",debtors:"Debtor Days",deductions:"Deduction Analysis",stock:"Stock Register"};
+const PAGE_TITLES = {overview:"Overview",sitewise:"Site-wise Breakup",invoices:"Invoice Days",debtors:"Debtor Days",deductions:"Deduction Analysis",stock:"Stock Register","entry-revenue":"Revenue Entry","entry-debtors":"Debtors Entry","entry-records":"All Records"};
 function showPage(id, btn) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   document.getElementById("page-"+id).classList.add("active");
   btn.classList.add("active");
-  document.getElementById("topbar-title").textContent = PAGE_TITLES[id];
+  document.getElementById("topbar-title").textContent = PAGE_TITLES[id] || id;
+  if(id==="entry-revenue") initRevenuePage();
+  if(id==="entry-debtors") initDebtorPage();
+  if(id==="entry-records") renderAllRecords();
 }
 
 // ═══════════════ RENDER ALL ═══════════════
@@ -1808,6 +2112,304 @@ document.getElementById("stock-modal").addEventListener("click", function(e) {
 // ═══════════════ AUTO REFRESH — ALSO RELOAD STOCK ═══════════════
 if(CONFIG.AUTO_REFRESH_MINUTES>0){
   setInterval(()=>{loadData();loadStockCSV();},CONFIG.AUTO_REFRESH_MINUTES*60*1000);
+}
+
+// ═══════════════════════════════════════════════════════════
+// DATA ENTRY MODULE — Revenue, Debtors, Records
+// ═══════════════════════════════════════════════════════════
+
+// ── Storage helpers ──
+function loadStore(key) {
+  try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch(e) { return []; }
+}
+function saveStore(key, arr) {
+  try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e) { console.warn("Storage error", e); }
+}
+
+const STORE_REV = "ve_revenue_entries";
+const STORE_DEB = "ve_debtor_entries";
+
+// ── Revenue tab switching ──
+let currentRevTab = "ve";
+function switchRevTab(tab, btn) {
+  currentRevTab = tab;
+  document.querySelectorAll(".entry-tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("rev-form-ve").style.display   = tab==="ve"   ? "block" : "none";
+  document.getElementById("rev-form-vtpl").style.display = tab==="vtpl" ? "block" : "none";
+  renderRevTable(tab);
+  renderRevSummary(tab);
+}
+
+// ── Init revenue page (set today's date, render tables) ──
+function initRevenuePage() {
+  const td = new Date().toISOString().split("T")[0];
+  if(!document.getElementById("rv-ve-date").value)   document.getElementById("rv-ve-date").value = td;
+  if(!document.getElementById("rv-vtpl-date").value) document.getElementById("rv-vtpl-date").value = td;
+  renderRevTable("ve");
+  renderRevTable("vtpl");
+  renderRevSummary("ve");
+  renderRevSummary("vtpl");
+}
+
+// ── Save Revenue ──
+function saveRevenue(co) {
+  const p = id => document.getElementById("rv-"+co+"-"+id);
+  const date   = p("date").value;
+  const party  = p("party").value.trim();
+  const amount = parseFloat(p("amount").value) || 0;
+  if (!date || !party || !amount) {
+    alert("Date, Party Name, aur Invoice Amount zaroori hain!"); return;
+  }
+  const entry = {
+    id: Date.now(),
+    co: co.toUpperCase(),
+    date,
+    party,
+    invNo:   p("inv").value.trim(),
+    amount,
+    gst:     parseFloat(p("gst").value)    || 0,
+    paid:    parseFloat(p("paid").value)   || 0,
+    tds:     parseFloat(p("tds").value)    || 0,
+    wo:      p("wo").value.trim(),
+    status:  p("status").value,
+    remarks: p("remarks").value.trim(),
+    type: "revenue"
+  };
+  entry.pending = Math.max(0, entry.amount - entry.paid - entry.tds);
+
+  const arr = loadStore(STORE_REV);
+  arr.unshift(entry);
+  saveStore(STORE_REV, arr);
+
+  // Clear form (keep date, company)
+  ["party","inv","amount","gst","paid","tds","wo","remarks"].forEach(f => { const el = p(f); if(el) el.value=""; });
+  p("status").value = "Pending";
+
+  const s = document.getElementById("rev-success");
+  s.style.display="block"; setTimeout(()=>s.style.display="none",2500);
+  renderRevTable(co);
+  renderRevSummary(co);
+}
+
+// ── Render Revenue Table ──
+function renderRevTable(co) {
+  const tbody = document.getElementById("rv-"+co+"-tbody");
+  if(!tbody) return;
+  const all = loadStore(STORE_REV).filter(r=>r.co===co.toUpperCase());
+  if(!all.length){ tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;color:var(--faint);padding:20px">Koi entry nahi. Upar form se add karein.</td></tr>`; return; }
+  tbody.innerHTML = all.slice(0,30).map(r=>`<tr>
+    <td style="white-space:nowrap">${r.date}</td>
+    <td style="font-weight:500">${r.party}</td>
+    <td style="color:var(--muted)">${r.invNo||"—"}</td>
+    <td class="r">₹${fmt(r.amount)}</td>
+    <td class="r" style="color:var(--green)">₹${fmt(r.paid)}</td>
+    <td class="r" style="color:var(--red)">₹${fmt(r.pending)}</td>
+    <td><span class="pill ${r.status==='Received'?'pill-wit':r.status==='Partial'?'pill-sd':'pill-ld'}">${r.status}</span></td>
+    <td><button class="del-btn" onclick="deleteRevEntry(${r.id})">✕</button></td>
+  </tr>`).join("");
+}
+
+function deleteRevEntry(id) {
+  if(!confirm("Yeh entry delete karein?")) return;
+  const arr = loadStore(STORE_REV).filter(r=>r.id!==id);
+  saveStore(STORE_REV, arr);
+  renderRevTable("ve"); renderRevTable("vtpl");
+  renderRevSummary("ve"); renderRevSummary("vtpl");
+}
+
+// ── Revenue Summary mini cards ──
+function renderRevSummary(co) {
+  const el = document.getElementById(co+"-summary");
+  if(!el) return;
+  const all = loadStore(STORE_REV).filter(r=>r.co===co.toUpperCase());
+  const totalInv = all.reduce((s,r)=>s+r.amount,0);
+  const totalPaid= all.reduce((s,r)=>s+r.paid,0);
+  const totalPend= all.reduce((s,r)=>s+r.pending,0);
+  el.innerHTML = `
+    <div class="summary-mini"><div class="summary-mini-lbl">Total Invoiced</div><div class="summary-mini-val accent" style="color:var(--accent)">₹${fmtL(totalInv)}</div></div>
+    <div class="summary-mini"><div class="summary-mini-lbl">Total Received</div><div class="summary-mini-val" style="color:#059669">₹${fmtL(totalPaid)}</div></div>
+    <div class="summary-mini"><div class="summary-mini-lbl">Total Pending</div><div class="summary-mini-val" style="color:var(--red)">₹${fmtL(totalPend)}</div></div>
+  `;
+}
+
+// ── Debtor page init ──
+function initDebtorPage() {
+  const td = new Date().toISOString().split("T")[0];
+  if(!document.getElementById("db-date").value) document.getElementById("db-date").value = td;
+  // Auto-calculate on input change
+  ["db-opening","db-new-inv","db-payment","db-sd","db-ld","db-tds"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.oninput = calcDebtorBalance;
+  });
+  renderDebtorEntries();
+  renderDebtorTopSummary();
+}
+
+// ── Calculate debtor closing balance ──
+function calcDebtorBalance() {
+  const g = id => parseFloat(document.getElementById(id)?.value) || 0;
+  const closing = g("db-opening") + g("db-new-inv") - g("db-payment") - g("db-sd") - g("db-ld") - g("db-tds");
+  document.getElementById("db-closing").value = Math.max(0, closing).toFixed(2);
+}
+
+// ── Save Debtor ──
+function saveDebtor() {
+  const g = id => document.getElementById(id);
+  const date  = g("db-date").value;
+  const party = g("db-party").value.trim();
+  if (!date || !party) { alert("Date aur Party Name zaroori hain!"); return; }
+  calcDebtorBalance();
+  const entry = {
+    id: Date.now(),
+    type: "debtor",
+    co:      g("db-company").value,
+    date, party,
+    opening: parseFloat(g("db-opening").value)  || 0,
+    newInv:  parseFloat(g("db-new-inv").value)  || 0,
+    payment: parseFloat(g("db-payment").value)  || 0,
+    sd:      parseFloat(g("db-sd").value)        || 0,
+    ld:      parseFloat(g("db-ld").value)        || 0,
+    tds:     parseFloat(g("db-tds").value)       || 0,
+    closing: parseFloat(g("db-closing").value)   || 0,
+    days:    parseInt(g("db-days").value)        || 0,
+    bucket:  g("db-bucket").value,
+    remarks: g("db-remarks").value.trim()
+  };
+  entry.deductions = entry.sd + entry.ld + entry.tds;
+
+  const arr = loadStore(STORE_DEB);
+  arr.unshift(entry);
+  saveStore(STORE_DEB, arr);
+
+  ["db-opening","db-new-inv","db-payment","db-sd","db-ld","db-tds","db-closing","db-days","db-remarks","db-party"].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value="";
+  });
+
+  const s = document.getElementById("deb-success");
+  s.style.display="block"; setTimeout(()=>s.style.display="none",2500);
+  renderDebtorEntries();
+  renderDebtorTopSummary();
+}
+
+// ── Render Debtor Entries Table ──
+function renderDebtorEntries() {
+  const tbody = document.getElementById("deb-entry-tbody");
+  if(!tbody) return;
+  const q   = (document.getElementById("deb-search")?.value||"").toLowerCase();
+  const cf  = document.getElementById("deb-company-filter")?.value||"";
+  let arr = loadStore(STORE_DEB);
+  if(q)  arr = arr.filter(r=>r.party.toLowerCase().includes(q));
+  if(cf) arr = arr.filter(r=>r.co===cf);
+  if(!arr.length){ tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;color:var(--faint);padding:20px">Koi entry nahi.</td></tr>`; return; }
+  tbody.innerHTML = arr.slice(0,40).map(r=>`<tr>
+    <td style="white-space:nowrap">${r.date}</td>
+    <td><span class="tag-${r.co.toLowerCase()}">${r.co}</span></td>
+    <td style="font-weight:500">${r.party}</td>
+    <td class="r">₹${fmt(r.opening)}</td>
+    <td class="r">₹${fmt(r.newInv)}</td>
+    <td class="r" style="color:#059669">₹${fmt(r.payment)}</td>
+    <td class="r" style="color:var(--red)">₹${fmt(r.deductions)}</td>
+    <td class="r" style="font-weight:600">₹${fmt(r.closing)}</td>
+    <td><span class="pill pill-${r.bucket===">60"?"ld":r.bucket==="45-60"?"sd":"wit"}">${r.bucket} days</span></td>
+    <td><button class="del-btn" onclick="deleteDebEntry(${r.id})">✕</button></td>
+  </tr>`).join("");
+}
+
+function deleteDebEntry(id) {
+  if(!confirm("Yeh entry delete karein?")) return;
+  saveStore(STORE_DEB, loadStore(STORE_DEB).filter(r=>r.id!==id));
+  renderDebtorEntries(); renderDebtorTopSummary();
+}
+
+function renderDebtorTopSummary() {
+  const el = document.getElementById("deb-summary-top"); if(!el) return;
+  const arr = loadStore(STORE_DEB);
+  const totalClos = arr.reduce((s,r)=>s+r.closing,0);
+  const totalPay  = arr.reduce((s,r)=>s+r.payment,0);
+  const overdue   = arr.filter(r=>r.bucket===">60").reduce((s,r)=>s+r.closing,0);
+  el.innerHTML = `
+    <div class="summary-mini"><div class="summary-mini-lbl">Total Outstanding (Closing)</div><div class="summary-mini-val" style="color:var(--accent)">₹${fmtL(totalClos)}</div></div>
+    <div class="summary-mini"><div class="summary-mini-lbl">Total Payments Received</div><div class="summary-mini-val" style="color:#059669">₹${fmtL(totalPay)}</div></div>
+    <div class="summary-mini"><div class="summary-mini-lbl">Overdue (&gt;60 days)</div><div class="summary-mini-val" style="color:var(--red)">₹${fmtL(overdue)}</div></div>
+  `;
+}
+
+// ── All Records page ──
+function clearRecFilters() {
+  ["rec-search","rec-from","rec-to"].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=""; });
+  document.getElementById("rec-type-filter").value="";
+  document.getElementById("rec-co-filter").value="";
+  renderAllRecords();
+}
+
+function renderAllRecords() {
+  const q    = (document.getElementById("rec-search")?.value||"").toLowerCase();
+  const tf   = document.getElementById("rec-type-filter")?.value||"";
+  const cf   = document.getElementById("rec-co-filter")?.value||"";
+  const from = document.getElementById("rec-from")?.value||"";
+  const to   = document.getElementById("rec-to")?.value||"";
+
+  let revs = loadStore(STORE_REV).map(r=>({...r, type:"revenue"}));
+  let debs = loadStore(STORE_DEB).map(r=>({...r, type:"debtor"}));
+  let stks = (typeof MANUAL_STOCK !== "undefined" ? MANUAL_STOCK : []).map((r,i)=>({
+    id:"stk_"+i, type:"stock", co:"VE", date:r.date||"—",
+    party: r.site, amount: r.stockValue||0, closing: r.netWIP||0,
+    remarks: r.remarks||"", status: r.tab||"Manual"
+  }));
+
+  let all = [...revs, ...debs, ...stks].sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+
+  if(q)   all = all.filter(r=>(r.party||"").toLowerCase().includes(q)||(r.remarks||"").toLowerCase().includes(q));
+  if(tf)  all = all.filter(r=>r.type===tf);
+  if(cf)  all = all.filter(r=>(r.co||"").toUpperCase()===cf);
+  if(from) all = all.filter(r=>r.date>=from);
+  if(to)   all = all.filter(r=>r.date<=to);
+
+  // Metrics
+  const totalRev  = all.filter(r=>r.type==="revenue").reduce((s,r)=>s+r.amount,0);
+  const totalDeb  = all.filter(r=>r.type==="debtor").reduce((s,r)=>s+r.closing,0);
+  const totalStk  = all.filter(r=>r.type==="stock").reduce((s,r)=>s+r.closing,0);
+  document.getElementById("rec-metrics-grid").innerHTML = `
+    <div class="metric-card"><div class="metric-label">Revenue Entries</div><div class="metric-value accent">${all.filter(r=>r.type==="revenue").length}</div><div class="metric-sub">₹${fmtL(totalRev)} total invoiced</div></div>
+    <div class="metric-card"><div class="metric-label">Debtor Entries</div><div class="metric-value amber">${all.filter(r=>r.type==="debtor").length}</div><div class="metric-sub">₹${fmtL(totalDeb)} outstanding</div></div>
+    <div class="metric-card"><div class="metric-label">Stock Entries (Manual)</div><div class="metric-value green">${all.filter(r=>r.type==="stock").length}</div><div class="metric-sub">₹${fmtL(totalStk)} Net WIP</div></div>
+    <div class="metric-card"><div class="metric-label">Total Records</div><div class="metric-value">${all.length}</div><div class="metric-sub">Filtered results</div></div>
+  `;
+
+  const tbody = document.getElementById("rec-tbody");
+  if(!all.length){ tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;color:var(--faint);padding:24px">Koi record nahi mila.</td></tr>`; return; }
+
+  tbody.innerHTML = all.slice(0,100).map(r=>`<tr>
+    <td style="white-space:nowrap;color:var(--muted)">${r.date||"—"}</td>
+    <td><span class="tag-${r.type==="revenue"?"rev":r.type==="debtor"?"deb":"ve"}">${r.type==="revenue"?"Revenue":r.type==="debtor"?"Debtor":"Stock"}</span></td>
+    <td><span class="tag-${(r.co||"ve").toLowerCase()}">${r.co||"VE"}</span></td>
+    <td style="font-weight:500">${r.party||"—"}</td>
+    <td class="r">₹${fmt(r.amount||r.newInv||0)}</td>
+    <td class="r" style="font-weight:600">₹${fmt(r.closing||r.pending||r.paid||0)}</td>
+    <td style="color:var(--muted);font-size:11px">${r.status||r.bucket||r.remarks||"—"}</td>
+    <td><button class="del-btn" onclick="deleteRecord('${r.type}',${r.id})">✕</button></td>
+  </tr>`).join("");
+}
+
+function deleteRecord(type, id) {
+  if(!confirm("Yeh record delete karein?")) return;
+  if(type==="revenue") { saveStore(STORE_REV, loadStore(STORE_REV).filter(r=>r.id!==id)); }
+  else if(type==="debtor") { saveStore(STORE_DEB, loadStore(STORE_DEB).filter(r=>r.id!==id)); }
+  renderAllRecords();
+}
+
+// ── Export to CSV ──
+function exportCSV() {
+  const revs = loadStore(STORE_REV).map(r=>[r.date,r.type,r.co,r.party,r.invNo||"",r.amount,r.paid,r.pending,r.status,r.remarks||""]);
+  const debs = loadStore(STORE_DEB).map(r=>[r.date,r.type,r.co,r.party,"",r.newInv,r.payment,r.closing,r.bucket+" days",r.remarks||""]);
+  const header = ["Date","Type","Company","Party/Site","Invoice No.","Amount/Invoice","Received/Payment","Pending/Balance","Status/Bucket","Remarks"];
+  const rows = [header, ...revs, ...debs];
+  const csv = rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = "data:text/csv;charset=utf-8,"+encodeURIComponent(csv);
+  a.download = "VE_Records_"+new Date().toISOString().split("T")[0]+".csv";
+  a.click();
 }
 
 // ═══════════════ INIT ═══════════════
