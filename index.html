@@ -566,14 +566,14 @@ const SPREADSHEET_ID = "1iHrPxhvsFnedO2Js7u3wmFbPAxLeC4F1WP71MBv5gcw";
 
 // ═══════════════ FETCH INV. DATE FROM INDIVIDUAL SHEET ═══════════════
 async function fetchInvDateFromSheet(siteName, gid) {
-  // gviz/tq endpoint — works without CORS issues on public sheets
-  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&gid=${gid}&t=${Date.now()}`;
+  // Published CSV URL with gid — same base as summary, CORS-free
+  const url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv&gid=${gid}&t=${Date.now()}`;
   try {
     const resp = await fetch(url);
-    if (!resp.ok) return [];
+    if (!resp.ok) { console.warn(`Sheet fetch failed [${siteName}]: HTTP ${resp.status}`); return []; }
     const csv = await resp.text();
     const lines = csv.trim().split("\n");
-    if (lines.length < 2) return [];
+    if (lines.length < 2) { console.warn(`Sheet empty [${siteName}]`); return []; }
 
     // Find header row with "Inv. Date" column
     let headerRow = -1, invDateCol = -1, invNoCol = -1, pendingCol = -1;
@@ -648,14 +648,12 @@ async function fetchInvDateFromSheet(siteName, gid) {
 
 // ═══════════════ LOAD INVOICES FROM PENDING SITES ONLY ═══════════════
 async function loadInvoicesFromSheets(pendingSites) {
-  const allInvoices = [];
   const PENDING_ARRAY = [...pendingSites];
 
+  // Build list of {siteName, gid} pairs
+  const tasks = [];
   for (const siteName of PENDING_ARRAY) {
-    // Exact match first
     let gid = SITE_GIDS[siteName];
-
-    // Fuzzy match fallback
     if (gid === undefined) {
       const siteWords = siteName.toLowerCase().split(" ").filter(w => w.length > 3);
       const matchedKey = Object.keys(SITE_GIDS).find(k => {
@@ -664,18 +662,24 @@ async function loadInvoicesFromSheets(pendingSites) {
       });
       if (matchedKey !== undefined) gid = SITE_GIDS[matchedKey];
     }
-
-    if (gid === undefined || gid === null) {
-      console.warn("No GID found for site:", siteName);
-      continue;
+    if (gid !== undefined && gid !== null) {
+      tasks.push({ siteName, gid });
+    } else {
+      console.warn("No GID for site:", siteName);
     }
-
-    const invs = await fetchInvDateFromSheet(siteName, gid);
-    invs.forEach(inv => allInvoices.push(inv));
   }
 
+  // Parallel fetch — much faster than sequential
+  const results = await Promise.all(
+    tasks.map(t => fetchInvDateFromSheet(t.siteName, t.gid))
+  );
+
+  const allInvoices = [];
+  results.forEach(invs => invs.forEach(inv => allInvoices.push(inv)));
+  console.log(`Loaded ${allInvoices.length} invoices from ${tasks.length} sheets`);
   return allInvoices;
 }
+
 
 async function loadData() {
   setSidebar("loading");
@@ -714,8 +718,8 @@ async function loadData() {
 
   // ── Step 2: Sirf pending > 0 wali sites ki invoice dates fetch karo ──
   const pendingSites = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site));
-  setNotice(`✓ Summary loaded. ${pendingSites.size} pending sites ki Inv. Date fetch ho rahi hai...`, "info");
-  setSidebar("loading");
+  setSidebar("live");
+  setNotice(`✓ Summary live (${pendingSites.size} pending sites). Invoice dates fetch ho rahi hain...`, "success");
 
   try {
     const invoices = await loadInvoicesFromSheets(pendingSites);
