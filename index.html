@@ -436,61 +436,28 @@ function parseCSV(csv) {
   const lines = csv.trim().split("\n");
   const out   = [];
 
-  // ── Find header row ──
-  let hdr = -1, hCols = [];
-  for (let i = 0; i < Math.min(lines.length, 6); i++) {
-    const c = splitCSVRow(lines[i]);
-    const joined = c.join(" ").toLowerCase();
-    if (joined.includes("pending") || joined.includes("site") || joined.includes("s.no")) {
-      hdr = i; hCols = c.map(x => x.trim().toLowerCase()); break;
-    }
-  }
-
-  // ── Column index helper ──
-  function ci(keywords) {
-    for (const kw of keywords) {
-      const idx = hCols.findIndex(h => h.includes(kw));
-      if (idx >= 0) return idx;
-    }
-    return -1;
-  }
-
-  const iSno      = hdr >= 0 ? ci(["s.no","sno","sr"]) : 0;
-  const iSite     = hdr >= 0 ? ci(["site","project","name"]) : 1;
-  const iTab      = hdr >= 0 ? ci(["sheet","tab","gid"]) : 2;
-  const iPending  = hdr >= 0 ? ci(["pending"]) : 3;
-  const iSD       = hdr >= 0 ? ci(["sd","security"]) : 4;
-  const iLD       = hdr >= 0 ? ci(["ld","liquidated","delay"]) : 5;
-  const iGST      = hdr >= 0 ? ci(["gst"]) : 6;
-  const iInstant  = hdr >= 0 ? ci(["instant"]) : 7;
-  const iOther    = hdr >= 0 ? ci(["other"]) : 8;
-  const iWithheld = hdr >= 0 ? ci(["withheld","retain"]) : 9;
-  const iTotal    = hdr >= 0 ? ci(["total","outstanding"]) : 10;
-
-  const startRow = hdr >= 0 ? hdr + 1 : 0;
-
-  for (let i = startRow; i < lines.length; i++) {
+  for (let i = 0; i < lines.length; i++) {
     const cols = splitCSVRow(lines[i]);
-    const sno  = iSno >= 0 ? parseInt(cols[iSno]) : parseInt(cols[0]);
+    // Find rows where col[0] is a valid S.No. (1,2,3...)
+    const sno  = parseInt(cols[0]);
     if (isNaN(sno) || sno <= 0) continue;
-    const site = iSite >= 0 ? (cols[iSite] || "").trim() : (cols[1] || "").trim();
+    const site = (cols[1] || "").trim();
     if (!site || site.length < 3) continue;
+    // Skip if col[1] looks like a header
     if (site.toLowerCase().includes("project") || site.toLowerCase().includes("site name")) continue;
-
-    const get = (idx, fallback) => idx >= 0 && idx < cols.length ? cols[idx] : (fallback >= 0 ? cols[fallback] : "");
 
     out.push({
       sno,
       site,
-      sheetTab: (get(iTab, 2) || "").trim(),
-      pending:  toN(get(iPending, 3)),
-      sd:       toN(get(iSD, 4)),
-      ld:       toN(get(iLD, 5)),
-      gst:      toN(get(iGST, 6)),
-      instant:  toN(get(iInstant, 7)),
-      other:    toN(get(iOther, 8)),
-      withheld: toN(get(iWithheld, 9)),
-      total:    toN(get(iTotal, 10)),
+      sheetTab: (cols[2]  || "").trim(),
+      pending:  toN(cols[3]),
+      sd:       toN(cols[4]),
+      ld:       toN(cols[5]),
+      gst:      toN(cols[6]),
+      instant:  toN(cols[7]),
+      other:    toN(cols[8]),
+      withheld: toN(cols[9]),
+      total:    toN(cols[10]),
       comm:     0
     });
   }
@@ -544,6 +511,7 @@ const SITE_GIDS = {
   "IOCL Mumbai DO":           387496523,
   "IOCL Sarpara":             323328787,
   "IOCL Moradabad DO":        493192291,
+  "IOCL Barabanki":           1725908395,
   "Transrail Lighting Ltd":   1199190624,
   "IOCL Vijaywada":           1110433204,
   "GAIL Vijaipur":            606059273,
@@ -566,14 +534,13 @@ const SPREADSHEET_ID = "1iHrPxhvsFnedO2Js7u3wmFbPAxLeC4F1WP71MBv5gcw";
 
 // ═══════════════ FETCH INV. DATE FROM INDIVIDUAL SHEET ═══════════════
 async function fetchInvDateFromSheet(siteName, gid) {
-  // Published CSV URL with gid — same base as summary, CORS-free
-  const url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv&gid=${gid}&t=${Date.now()}`;
+  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${gid}&t=${Date.now()}`;
   try {
     const resp = await fetch(url);
-    if (!resp.ok) { console.warn(`Sheet fetch failed [${siteName}]: HTTP ${resp.status}`); return []; }
+    if (!resp.ok) return [];
     const csv = await resp.text();
     const lines = csv.trim().split("\n");
-    if (lines.length < 2) { console.warn(`Sheet empty [${siteName}]`); return []; }
+    if (lines.length < 2) return [];
 
     // Find header row with "Inv. Date" column
     let headerRow = -1, invDateCol = -1, invNoCol = -1, pendingCol = -1;
@@ -648,12 +615,14 @@ async function fetchInvDateFromSheet(siteName, gid) {
 
 // ═══════════════ LOAD INVOICES FROM PENDING SITES ONLY ═══════════════
 async function loadInvoicesFromSheets(pendingSites) {
+  const allInvoices = [];
   const PENDING_ARRAY = [...pendingSites];
 
-  // Build list of {siteName, gid} pairs
-  const tasks = [];
   for (const siteName of PENDING_ARRAY) {
+    // Exact match first
     let gid = SITE_GIDS[siteName];
+
+    // Fuzzy match fallback
     if (gid === undefined) {
       const siteWords = siteName.toLowerCase().split(" ").filter(w => w.length > 3);
       const matchedKey = Object.keys(SITE_GIDS).find(k => {
@@ -662,24 +631,24 @@ async function loadInvoicesFromSheets(pendingSites) {
       });
       if (matchedKey !== undefined) gid = SITE_GIDS[matchedKey];
     }
-    if (gid !== undefined && gid !== null) {
-      tasks.push({ siteName, gid });
-    } else {
-      console.warn("No GID for site:", siteName);
+
+    if (gid === undefined || gid === null) {
+      console.warn("No GID found for site:", siteName);
+      continue;
     }
+
+    // ★ Skip gid=0 sites — these have no individual tab/sheet
+    if (gid === 0) {
+      console.log("Skipping gid=0 site (no sheet tab):", siteName);
+      continue;
+    }
+
+    const invs = await fetchInvDateFromSheet(siteName, gid);
+    invs.forEach(inv => allInvoices.push(inv));
   }
 
-  // Parallel fetch — much faster than sequential
-  const results = await Promise.all(
-    tasks.map(t => fetchInvDateFromSheet(t.siteName, t.gid))
-  );
-
-  const allInvoices = [];
-  results.forEach(invs => invs.forEach(inv => allInvoices.push(inv)));
-  console.log(`Loaded ${allInvoices.length} invoices from ${tasks.length} sheets`);
   return allInvoices;
 }
-
 
 async function loadData() {
   setSidebar("loading");
@@ -716,10 +685,11 @@ async function loadData() {
     return;
   }
 
-  // ── Step 2: Sirf pending > 0 wali sites ki invoice dates fetch karo ──
-  const pendingSites = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site));
-  setSidebar("live");
-  setNotice(`✓ Summary live (${pendingSites.size} pending sites). Invoice dates fetch ho rahi hain...`, "success");
+  // ── Step 2: Sirf total > 0 wali sites ki invoice dates fetch karo (pending ya LD/SD koi bhi)
+  // Zero outstanding wali sites ka invoice BILKUL fetch nahi hoga
+  const pendingSites = new Set(DATA.filter(r => r.total > 0.01).map(r => r.site));
+  setNotice(`✓ Summary loaded. ${pendingSites.size} active sites ki Inv. Date fetch ho rahi hai...`, "info");
+  setSidebar("loading");
 
   try {
     const invoices = await loadInvoicesFromSheets(pendingSites);
@@ -899,66 +869,48 @@ function renderInvoiceTable() {
   const siteFilter =  document.getElementById("inv-filter")?.value  || "";
   const daysF      =  document.getElementById("inv-days-filter")?.value || "";
 
-  // ★ Pending sites from DATA (summary) — always the source of truth ★
-  const pendingData = DATA.filter(r => r.pending > 0.01);
-  const pendingSites = new Set(pendingData.map(r => r.site));
+  // ★ Show invoices for ALL sites with total > 0 in SUMMARY
+  // Zero outstanding sites ka koi bhi invoice show nahi hoga
+  const pendingSites = new Set(DATA.filter(r => r.total > 0.01).map(r => r.site));
 
-  // Build base rows from summary DATA (always available)
-  // Then MERGE invoice date+days from INVOICES if available
-  const invMap = {}; // site -> best (oldest) invoice
+  let rows = [];
   if (INVOICES.length > 0) {
-    INVOICES.forEach(i => {
-      if (!invMap[i.site] || i.daysOld > invMap[i.site].daysOld) {
-        invMap[i.site] = i;
-      }
-    });
+    // Live data — only sites with outstanding > 0, only invoices with pending amount > 0
+    rows = INVOICES.filter(i =>
+      pendingSites.has(i.site) && i.pending > 0.01
+    );
+  } else {
+    // Fallback when no invoice data — show all active sites from summary
+    rows = DATA.filter(r => r.total > 0.01).map(r => ({
+      site: r.site, invNo: "—", invDate: "—",
+      daysOld: 0, totalInv: r.total,
+      payRcvd: 0, pending: r.pending
+    }));
   }
 
-  let rows = pendingData.map(r => {
-    const inv = invMap[r.site];
-    return {
-      site:     r.site,
-      invNo:    inv ? inv.invNo    : "—",
-      invDate:  inv ? inv.invDate  : "Loading...",
-      daysOld:  inv ? inv.daysOld  : -1,
-      totalInv: inv ? inv.totalInv : r.total,
-      payRcvd:  inv ? inv.payRcvd  : 0,
-      pending:  r.pending,
-      hasInv:   !!inv
-    };
-  });
-
-  // Refresh dropdown — rebuild every time so it stays in sync
-  const sel = document.getElementById("inv-filter");
-  if (sel) {
-    const curVal = sel.value;
-    sel.innerHTML = '<option value="">All Sites</option>';
-    [...pendingSites].sort().forEach(s => {
-      const o = document.createElement("option");
-      o.value = s; o.textContent = s;
-      sel.appendChild(o);
-    });
-    if (curVal && pendingSites.has(curVal)) sel.value = curVal;
-  }
-
-  // Apply filters
+  // Apply search / site / days filters
   if (q)          rows = rows.filter(r => (r.site + r.invNo).toLowerCase().includes(q));
   if (siteFilter) rows = rows.filter(r => r.site === siteFilter);
   if (daysF) {
     const df = parseInt(daysF);
-    if      (df === 30)  rows = rows.filter(r => r.daysOld >= 0 && r.daysOld <= 30);
+    if      (df === 30)  rows = rows.filter(r => r.daysOld <= 30);
     else if (df === 60)  rows = rows.filter(r => r.daysOld > 30  && r.daysOld <= 60);
     else if (df === 90)  rows = rows.filter(r => r.daysOld > 60  && r.daysOld <= 90);
     else if (df === 999) rows = rows.filter(r => r.daysOld > 90);
   }
 
-  // Sort: rows with invoice data first (oldest first), then rows without
-  rows.sort((a, b) => {
-    if (a.daysOld >= 0 && b.daysOld >= 0) return b.daysOld - a.daysOld;
-    if (a.daysOld >= 0) return -1;
-    if (b.daysOld >= 0) return 1;
-    return a.site.localeCompare(b.site);
-  });
+  // Populate site dropdown — all active sites (total > 0)
+  const sel = document.getElementById("inv-filter");
+  if (sel && sel.options.length <= 1) {
+    [...pendingSites].sort().forEach(s => {
+      const o = document.createElement("option");
+      o.value = s; o.textContent = s;
+      sel.appendChild(o);
+    });
+  }
+
+  // Sort: oldest first
+  rows.sort((a, b) => b.daysOld - a.daysOld);
 
   if (rows.length === 0) {
     document.getElementById("inv-tbody").innerHTML =
@@ -969,31 +921,26 @@ function renderInvoiceTable() {
   }
 
   const totalPending = rows.reduce((s,r) => s + (r.pending || 0), 0);
-  const daysRows = rows.filter(r=>r.daysOld >= 0);
-  const avgDays = daysRows.length > 0
-    ? Math.round(daysRows.reduce((s,r) => s+r.daysOld, 0) / daysRows.length)
+  const avgDays = rows.filter(r=>r.daysOld>0).length > 0
+    ? Math.round(rows.filter(r=>r.daysOld>0).reduce((s,r) => s+r.daysOld, 0) / rows.filter(r=>r.daysOld>0).length)
     : 0;
 
   document.getElementById("inv-tbody").innerHTML = rows.map(r => {
-    const hasD = r.daysOld >= 0;
-    const dc = hasD ? daysColor(r.daysOld) : {bg:"#f0eeea",c:"#9a9a94"};
-    const status = !hasD          ? "Fetching..."
+    const dc = daysColor(r.daysOld);
+    const status = r.daysOld <= 0  ? "—"
       : r.daysOld <= 30  ? "Fresh"
       : r.daysOld <= 60  ? "Follow up"
       : r.daysOld <= 90  ? "Urgent"
       : r.daysOld <= 180 ? "Critical"
       : "Very Critical";
-    const invDateDisplay = r.invDate === "Loading..." 
-      ? `<span style="color:var(--faint);font-size:11px;font-style:italic">Fetching...</span>`
-      : (r.invDate || "—");
     return `<tr>
       <td><span class="site-name">${r.site}</span></td>
       <td style="font-family:monospace;font-size:11px;color:var(--muted)">${r.invNo}</td>
-      <td style="font-size:12px">${invDateDisplay}</td>
+      <td style="font-size:12px">${r.invDate || "—"}</td>
       <td class="r">
-        ${hasD
+        ${r.daysOld > 0
           ? `<span class="days-badge" style="background:${dc.bg};color:${dc.c};font-weight:700">${r.daysOld} days</span>`
-          : `<span style="color:var(--faint);font-size:11px">—</span>`}
+          : `<span style="color:var(--faint)">—</span>`}
       </td>
       <td class="r">${r.totalInv > 0 ? "₹"+fmt(r.totalInv) : "—"}</td>
       <td class="r">${r.payRcvd  > 0 ? "₹"+fmt(r.payRcvd)  : "—"}</td>
@@ -1006,7 +953,7 @@ function renderInvoiceTable() {
       </td>
     </tr>`;
   }).join("") + `<tr class="total-row">
-    <td colspan="3">${rows.length} sites${daysRows.length > 0 ? " | Avg: "+avgDays+" days" : " | Invoice dates loading..."}</td>
+    <td colspan="3">${rows.length} invoices${avgDays > 0 ? " | Avg: "+avgDays+" days" : ""}</td>
     <td></td><td></td><td></td>
     <td class="r" style="color:#c81e1e">₹${fmt(totalPending)}</td>
     <td></td>
@@ -1015,82 +962,81 @@ function renderInvoiceTable() {
 
 
 function renderInvoiceChart() {
-  const pendingData = DATA.filter(r => r.pending > 0.01);
-  const pendingSites = new Set(pendingData.map(r => r.site));
+  // ★ Sirf total > 0 wali sites ★
+  const pendingSites = new Set(DATA.filter(r => r.total > 0.01).map(r => r.site));
   const siteMap = {};
 
-  // Always init from DATA (pending sites)
-  pendingData.forEach(r => {
-    siteMap[r.site] = {total: 0, count: 0, maxDays: 0, pending: r.pending};
-  });
-
-  // Overlay with INVOICES data if available
   if (INVOICES.length > 0) {
-    INVOICES.filter(i => pendingSites.has(i.site) && i.daysOld >= 0).forEach(i => {
-      if (siteMap[i.site]) {
-        siteMap[i.site].total   += i.daysOld;
-        siteMap[i.site].count   += 1;
-        siteMap[i.site].maxDays  = Math.max(siteMap[i.site].maxDays, i.daysOld);
-      }
+    INVOICES.filter(i => pendingSites.has(i.site) && i.daysOld > 0).forEach(i => {
+      if (!siteMap[i.site]) siteMap[i.site] = {total:0, count:0, maxDays:0};
+      siteMap[i.site].total   += i.daysOld;
+      siteMap[i.site].count   += 1;
+      siteMap[i.site].maxDays  = Math.max(siteMap[i.site].maxDays, i.daysOld);
+    });
+  } else {
+    // Fallback: active sites with 0 days (will show as unknown)
+    DATA.filter(r => r.total > 0.01).forEach(r => {
+      siteMap[r.site] = {total:0, count:1, maxDays:0};
     });
   }
 
   const sites = Object.keys(siteMap)
-    .map(s => ({
-      site: s,
-      avg:  siteMap[s].count > 0 ? Math.round(siteMap[s].total / siteMap[s].count) : 0,
-      max:  siteMap[s].maxDays,
-      hasData: siteMap[s].count > 0
-    }))
-    .sort((a,b) => b.avg - a.avg);
+    .map(s => ({site:s, avg:Math.round(siteMap[s].total/siteMap[s].count), max:siteMap[s].maxDays}))
+    .sort((a,b) => b.avg - a.avg)
+    .slice(0, 15);
 
   if (sites.length === 0) return;
 
-  const labels = sites.map(s => s.site.length > 22 ? s.site.slice(0,22)+"…" : s.site);
-  const avgData = sites.map(s => s.avg);
-  const colors  = sites.map(s => s.hasData
-    ? (s.avg <= 30 ? "#059669" : s.avg <= 60 ? "#d97706" : s.avg <= 90 ? "#ea580c" : "#c81e1e")
-    : "#b0c4de"
-  );
-
-  if (charts.invChart) charts.invChart.destroy();
-  charts.invChart = new Chart(document.getElementById("chart-site-days"), {
+  if (charts.siteDays) charts.siteDays.destroy();
+  charts.siteDays = new Chart(document.getElementById("chart-site-days"), {
     type: "bar",
     data: {
-      labels,
+      labels: sites.map(s => s.site.length>16 ? s.site.slice(0,16)+"…" : s.site),
       datasets: [{
-        label: "Avg Days Outstanding",
-        data:  avgData,
-        backgroundColor: colors,
-        borderWidth: 0,
-        borderRadius: 3
+        label: "Avg days",
+        data: sites.map(s => s.avg),
+        backgroundColor: sites.map(s => s.avg>90?"#c81e1e":s.avg>60?"#d97706":s.avg>30?"#f59e0b":"#059669"),
+        borderWidth: 0
       }]
     },
     options: {
-      indexAxis: "y",
-      responsive: true, maintainAspectRatio: false,
+      indexAxis: "y", responsive:true, maintainAspectRatio:false,
       plugins: {
-        legend: {display: false},
-        tooltip: {callbacks: {label: ctx => ctx.raw > 0 ? ` ${ctx.raw} days` : " Invoice date pending"}}
+        legend: {display:false},
+        tooltip: {callbacks:{label:ctx=>` ${ctx.raw} days outstanding`}}
       },
       scales: {
-        x: {beginAtZero: true, ticks: {callback: v => v+" days"}, grid: {color: "rgba(0,0,0,0.04)"}},
-        y: {ticks: {font: {size: 11}}}
+        x: {ticks:{callback:v=>v+" days",font:{size:10},color:"#9a9a94"}, grid:{color:"rgba(0,0,0,0.05)"}},
+        y: {ticks:{font:{size:10},color:"#6b6b66"}, grid:{display:false}}
       }
     }
   });
 }
 
-function renderDebtorTable() {
-  // Build rows with ACTUAL days from invoice data
-  const rows = DEBTORS.map(r => {
-    const invs = matchSiteInvoices(r.name).filter(i => i.daysOld > 0);
-    // Actual days = max days among matched invoices (oldest invoice)
-    const actualDays = invs.length > 0
-      ? Math.max(...invs.map(i => i.daysOld))
-      : null; // null = no invoice data, show as unknown
-    return { ...r, actualDays, hasLive: invs.length > 0 };
+// ═══════════════ DEBTOR TABLE ═══════════════
+function matchSiteInvoices(debtorName) {
+  if (INVOICES.length === 0) return [];
+  const name = debtorName.toLowerCase().trim();
+  const words = name.split(' ').filter(w => w.length > 3);
+  return INVOICES.filter(i => {
+    const s = i.site.toLowerCase();
+    return words.some(w => s.includes(w));
   });
+}
+
+function renderDebtorTable() {
+  // ★ KEY FIX: Only show debtors with total > 0
+  // Actual days = from invoice date, NOT from DAYWISE sheet buckets
+  const rows = DEBTORS
+    .filter(r => r.total > 0.01)   // ← zero-amount debtors SKIP
+    .map(r => {
+      const invs = matchSiteInvoices(r.name).filter(i => i.daysOld > 0);
+      // Actual days = max days among matched invoices (oldest unpaid invoice date se)
+      const actualDays = invs.length > 0
+        ? Math.max(...invs.map(i => i.daysOld))
+        : null; // null = no invoice data fetched yet
+      return { ...r, actualDays, hasLive: invs.length > 0 };
+    });
 
   const gt  = rows.reduce((s,r) => s + r.total, 0);
   // Weighted avg using actual days where available
@@ -1232,14 +1178,15 @@ function A() {
   const top5       = [...active].sort((a,b) => b.total - a.total).slice(0,5);
   const topLD      = [...d].filter(r=>r.ld>0).sort((a,b)=>b.ld-a.ld).slice(0,5);
   const topSD      = [...d].filter(r=>r.sd>0).sort((a,b)=>b.sd-a.sd).slice(0,5);
-  const pendInv    = iv.filter(i => i.pending > 0);
+  const pendInv    = iv.filter(i => i.pending > 0 && i.daysOld > 0);
+  const allActiveInv = iv.filter(i => i.daysOld > 0);
   const critical   = pendInv.filter(i => i.daysOld > 180).sort((a,b)=>b.daysOld-a.daysOld);
   const veryOld    = pendInv.filter(i => i.daysOld > 90 && i.daysOld <=180).sort((a,b)=>b.daysOld-a.daysOld);
   const urgent     = pendInv.filter(i => i.daysOld > 60 && i.daysOld <= 90);
   const avgDays    = pendInv.length > 0
     ? Math.round(pendInv.reduce((s,i)=>s+i.daysOld,0) / pendInv.length) : 0;
   return {d,iv,totalOut,totalPend,totalLD,totalSD,totalGST,totalWit,totalOth,
-    active,pendSites,top5,topLD,topSD,pendInv,critical,veryOld,urgent,avgDays};
+    active,pendSites,top5,topLD,topSD,pendInv,allActiveInv,critical,veryOld,urgent,avgDays};
 }
 
 function findSite(keyword) {
