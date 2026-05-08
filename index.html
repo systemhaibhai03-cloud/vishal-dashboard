@@ -2,96 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vishal Electricals - Finance Management</title>
+<title>Vishal Electricals - Live Dashboard</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 :root {
-  --primary: #1a56db;
-  --primary-dark: #1e40af;
-  --primary-light: #dbeafe;
-  --success: #059669;
-  --warning: #d97706;
-  --danger: #dc2626;
-  --bg: #f1f5f9;
-  --white: #ffffff;
-  --text: #1e293b;
-  --text-light: #64748b;
-  --border: #e2e8f0;
-  --sidebar-width: 240px;
+  --primary: #1a56db; --primary-dark: #1e40af; --primary-light: #dbeafe;
+  --success: #059669; --warning: #d97706; --danger: #dc2626;
+  --bg: #f1f5f9; --white: #ffffff; --text: #1e293b;
+  --text-light: #64748b; --border: #e2e8f0; --sidebar-width: 240px;
 }
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); }
+body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
 
-/* SIDEBAR */
-.sidebar {
-  position: fixed; left:0; top:0; bottom:0; width: var(--sidebar-width);
+.sidebar { position: fixed; left:0; top:0; bottom:0; width: var(--sidebar-width);
   background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-  color: white; overflow-y: auto; z-index: 100;
-  transition: transform 0.3s;
-}
+  color: white; overflow-y: auto; z-index: 100; }
 .sidebar-header { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }
 .sidebar-header .logo { width: 36px; height: 36px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
 .sidebar-header .brand { font-size: 14px; }
 .sidebar-header .brand span { display: block; font-size: 11px; color: #94a3b8; }
 .sidebar-section { padding: 12px 0; }
 .sidebar-section-title { padding: 4px 16px 8px; font-size: 10px; text-transform: uppercase; color: #64748b; letter-spacing: 1px; }
-.sidebar-item {
-  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
-  cursor: pointer; font-size: 13px; color: #cbd5e1; transition: all 0.2s;
-  border-left: 3px solid transparent;
-}
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; font-size: 13px; color: #cbd5e1; transition: all 0.2s; border-left: 3px solid transparent; }
 .sidebar-item:hover { background: rgba(255,255,255,0.05); color: white; }
 .sidebar-item.active { background: rgba(26,86,219,0.2); color: #60a5fa; border-left-color: #60a5fa; }
-.sidebar-item .icon { width: 20px; text-align: center; }
 
-/* TOP BAR */
-.topbar {
-  position: fixed; top: 0; left: var(--sidebar-width); right: 0; height: 56px;
+.topbar { position: fixed; top: 0; left: var(--sidebar-width); right: 0; height: 56px;
   background: white; border-bottom: 1px solid var(--border); display: flex;
-  align-items: center; justify-content: space-between; padding: 0 20px; z-index: 99;
-}
-.topbar-left { display: flex; align-items: center; gap: 16px; }
-.topbar-search {
-  display: flex; align-items: center; gap: 8px; background: #f8fafc;
-  border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; min-width: 300px;
-}
+  align-items: center; justify-content: space-between; padding: 0 20px; z-index: 99; }
+.topbar-search { display: flex; align-items: center; gap: 8px; background: #f8fafc;
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; min-width: 300px; }
 .topbar-search input { border: none; background: none; outline: none; font-size: 13px; width: 100%; }
-.topbar-right { display: flex; align-items: center; gap: 12px; }
-.topbar-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 6px; }
-.topbar-user { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.topbar-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer; font-size: 12px; }
+.topbar-user { display: flex; align-items: center; gap: 8px; }
 .topbar-user .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
 
-/* MAIN CONTENT */
 .main { margin-left: var(--sidebar-width); margin-top: 56px; padding: 20px; min-height: calc(100vh - 56px); }
 
-/* TAB NAVIGATION */
-.tab-nav {
-  display: flex; gap: 0; background: white; border-radius: 10px 10px 0 0;
-  border-bottom: 2px solid var(--border); margin-bottom: 0; overflow-x: auto;
-}
-.tab-btn {
-  padding: 14px 24px; cursor: pointer; font-size: 13px; font-weight: 500;
-  color: var(--text-light); border-bottom: 2px solid transparent;
-  transition: all 0.2s; white-space: nowrap; background: none; border: none;
-  border-bottom: 2px solid transparent; margin-bottom: -2px;
-}
-.tab-btn:hover { color: var(--primary); background: var(--primary-light); }
-.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
-
-.tab-content { display: none; background: white; border-radius: 0 0 10px 10px; padding: 20px; }
+.tab-content { display: none; background: white; border-radius: 10px; padding: 20px; }
 .tab-content.active { display: block; }
 
-/* CARDS */
 .card { background: white; border-radius: 10px; border: 1px solid var(--border); padding: 20px; margin-bottom: 16px; }
 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .card-title { font-size: 16px; font-weight: 600; }
 
-/* STAT CARDS */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
-.stat-card {
-  background: white; border-radius: 10px; padding: 16px; border: 1px solid var(--border);
-  display: flex; align-items: center; gap: 14px;
-}
+.stat-card { background: white; border-radius: 10px; padding: 16px; border: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
 .stat-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
 .stat-icon.blue { background: #dbeafe; color: #2563eb; }
 .stat-icon.green { background: #d1fae5; color: #059669; }
@@ -101,201 +56,95 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .stat-info .stat-value { font-size: 22px; font-weight: 700; }
 .stat-info .stat-label { font-size: 12px; color: var(--text-light); }
 
-/* TABLES */
-.table-container { overflow-x: auto; }
+.table-container { overflow-x: auto; max-height: 600px; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { background: #f8fafc; padding: 10px 12px; text-align: left; font-weight: 600; color: var(--text-light); border-bottom: 2px solid var(--border); white-space: nowrap; }
+th { background: #f8fafc; padding: 10px 12px; text-align: left; font-weight: 600; color: var(--text-light); border-bottom: 2px solid var(--border); white-space: nowrap; position: sticky; top: 0; z-index: 10; }
 td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
 tr:hover { background: #f8fafc; }
 
-/* FORMS */
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 16px; }
-.form-group { display: flex; flex-direction: column; gap: 4px; }
-.form-group label { font-size: 12px; font-weight: 600; color: var(--text-light); }
-.form-group input, .form-group select, .form-group textarea {
-  padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px;
-  font-size: 13px; outline: none; transition: border 0.2s;
-}
-.form-group input:focus, .form-group select:focus { border-color: var(--primary); }
-
-/* BUTTONS */
-.btn {
-  padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500;
-  cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
-}
+.btn { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
 .btn-primary { background: var(--primary); color: white; }
-.btn-primary:hover { background: var(--primary-dark); }
 .btn-success { background: var(--success); color: white; }
-.btn-danger { background: var(--danger); color: white; }
 .btn-outline { background: white; border: 1px solid var(--border); color: var(--text); }
-.btn-outline:hover { background: #f8fafc; }
 .btn-sm { padding: 5px 10px; font-size: 12px; }
 
-/* SUB TABS */
-.sub-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-.sub-tab {
-  padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 12px;
-  background: #f1f5f9; color: var(--text-light); border: none; font-weight: 500;
-}
-.sub-tab.active { background: var(--primary); color: white; }
-.sub-tab-content { display: none; }
-.sub-tab-content.active { display: block; }
-
-/* BADGES */
-.badge {
-  padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
-}
-.badge-pending { background: #fef3c7; color: #92400e; }
-.badge-paid { background: #d1fae5; color: #065f46; }
-.badge-overdue { background: #fee2e2; color: #991b1b; }
-.badge-hold { background: #e0e7ff; color: #3730a3; }
-.badge-new { background: #dbeafe; color: #1e40af; }
-.badge-repeat { background: #d1fae5; color: #065f46; }
-
-/* SEARCH BOX */
-.search-box {
-  display: flex; align-items: center; gap: 8px; border: 1px solid var(--border);
-  border-radius: 6px; padding: 6px 12px; background: white; max-width: 300px;
-}
-.search-box input { border: none; outline: none; font-size: 13px; width: 100%; }
-
-/* FILTER BAR */
-.filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
-
-/* MODAL */
-.modal-overlay {
-  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center;
-}
-.modal-overlay.active { display: flex; }
-.modal {
-  background: white; border-radius: 12px; width: 90%; max-width: 800px;
-  max-height: 85vh; overflow-y: auto; padding: 24px;
-}
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-light); }
-
-/* SECTION DIVIDER */
-.section-divider { border-top: 2px solid var(--border); margin: 20px 0; padding-top: 16px; }
-.section-title { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-
-/* SYNC STATUS */
-.sync-status {
-  position: fixed; bottom: 16px; left: 16px; background: #0f172a; color: white;
-  padding: 10px 16px; border-radius: 8px; font-size: 12px; z-index: 100;
-  display: flex; align-items: center; gap: 8px; width: calc(var(--sidebar-width) - 32px);
-}
-.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-/* FILE DROP */
-.file-drop {
-  border: 2px dashed var(--border); border-radius: 10px; padding: 30px;
-  text-align: center; cursor: pointer; transition: all 0.2s;
-}
-.file-drop:hover { border-color: var(--primary); background: var(--primary-light); }
-
-/* RESPONSIVE */
-@media(max-width:768px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .main { margin-left: 0; }
-  .topbar { left: 0; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .form-grid { grid-template-columns: 1fr; }
-}
-
-/* AMOUNT FORMATTING */
 .amount { font-family: 'Courier New', monospace; font-weight: 600; }
 .amount.positive { color: var(--success); }
 .amount.negative { color: var(--danger); }
 
-/* SCROLLBAR */
+.sync-status { position: fixed; bottom: 16px; left: 16px; background: #0f172a; color: white;
+  padding: 10px 16px; border-radius: 8px; font-size: 12px; z-index: 100;
+  display: flex; align-items: center; gap: 8px; width: calc(var(--sidebar-width) - 32px); }
+.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.search-box { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; background: white; max-width: 300px; }
+.search-box input { border: none; outline: none; font-size: 13px; width: 100%; }
+
+.filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+
+.badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.age-badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; color: white; }
+
+#wipSummaryCard { background: linear-gradient(135deg, #1a56db 0%, #7c3aed 100%); color: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+#wipSummaryCard .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 16px; }
+#wipSummaryCard .summary-box { background: rgba(255,255,255,0.15); padding: 14px; border-radius: 8px; }
+#wipSummaryCard .summary-box.highlight { background: rgba(255,255,255,0.25); border: 2px solid rgba(255,255,255,0.5); }
+#wipSummaryCard .label { font-size: 11px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+#wipSummaryCard .value { font-size: 22px; font-weight: 700; margin-top: 6px; }
+#wipSummaryCard .sub { font-size: 11px; opacity: 0.85; margin-top: 4px; }
+
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-/* DROPDOWN SEARCH */
-.dropdown-search { position: relative; }
-.dropdown-search .dropdown-list {
-  position: absolute; top: 100%; left: 0; right: 0; background: white;
-  border: 1px solid var(--border); border-radius: 6px; max-height: 200px;
-  overflow-y: auto; z-index: 50; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-.dropdown-search .dropdown-list.show { display: block; }
-.dropdown-search .dropdown-item {
-  padding: 8px 12px; cursor: pointer; font-size: 13px;
-}
-.dropdown-search .dropdown-item:hover { background: var(--primary-light); }
+.section-row { background: linear-gradient(90deg, #fb923c, #f59e0b); color: white; }
+.section-row.vtpl { background: linear-gradient(90deg, #7c3aed, #a855f7); }
+.section-row td { padding: 12px !important; font-weight: 700; font-size: 14px; }
+.total-row { font-weight: 700; }
+.total-row.ve { background: #fed7aa; }
+.total-row.vtpl { background: #ddd6fe; }
+.grand-total { background: linear-gradient(90deg, #1a56db, #7c3aed); color: white; }
+.grand-total td { padding: 14px !important; font-weight: 700; font-size: 15px; }
 
-.row-add-btn { display: flex; align-items: center; gap: 6px; color: var(--primary); cursor: pointer; font-size: 13px; padding: 8px 0; }
-.row-add-btn:hover { text-decoration: underline; }
-
-.delete-row { color: var(--danger); cursor: pointer; border: none; background: none; font-size: 16px; }
+.loading { text-align: center; padding: 40px; color: var(--text-light); }
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
+<div class="sidebar">
   <div class="sidebar-header">
     <div class="logo">VE</div>
     <div class="brand">VISHAL<br><span>ELECTRICALS</span></div>
   </div>
-  
   <div class="sidebar-section">
     <div class="sidebar-section-title">MAIN</div>
-    <div class="sidebar-item active" onclick="switchTab('report')">
-      <span class="icon">📊</span> Report
-    </div>
-    <div class="sidebar-item" onclick="switchTab('sales')">
-      <span class="icon">💰</span> Sales
-    </div>
-    <div class="sidebar-item" onclick="switchTab('dataentry')">
-      <span class="icon">📝</span> Data Entry (Sale)
-    </div>
-    <div class="sidebar-item" onclick="switchTab('payment')">
-      <span class="icon">💳</span> Payment Received
-    </div>
-    <div class="sidebar-item" onclick="switchTab('stock')">
-      <span class="icon">📦</span> Stock
-    </div>
+    <div class="sidebar-item" onclick="switchTab('report', this)"><span>📊</span> Report</div>
+    <div class="sidebar-item" onclick="switchTab('sales', this)"><span>💰</span> Sales</div>
+    <div class="sidebar-item" onclick="switchTab('dataentry', this)"><span>📝</span> Data Entry</div>
+    <div class="sidebar-item" onclick="switchTab('payment', this)"><span>💳</span> Payment</div>
+    <div class="sidebar-item active" onclick="switchTab('stock', this)"><span>📦</span> Stock (LIVE)</div>
   </div>
-  
   <div class="sidebar-section">
-    <div class="sidebar-section-title">DATA SYNC</div>
-    <div class="sidebar-item" onclick="syncGoogleSheet()">
-      <span class="icon">🔄</span> Sync Google Sheets
-    </div>
-    <div class="sidebar-item" onclick="showSettings()">
-      <span class="icon">⚙️</span> Settings
-    </div>
+    <div class="sidebar-section-title">SYNC</div>
+    <div class="sidebar-item" onclick="liveSync()"><span>🔄</span> Sync Now</div>
   </div>
-  
   <div class="sync-status">
     <span class="sync-dot"></span>
     <div>
-      <div>Live Data Sync</div>
-      <div style="color:#94a3b8;font-size:10px" id="lastSync">Last sync: --</div>
+      <div>Live Sync</div>
+      <div style="color:#94a3b8;font-size:10px" id="lastSync">Initializing...</div>
     </div>
-    <span style="cursor:pointer;margin-left:auto" onclick="syncGoogleSheet()">🔄</span>
   </div>
 </div>
 
-<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-left">
-    <span style="cursor:pointer;font-size:20px" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</span>
-    <div class="topbar-search">
-      <span>🔍</span>
-      <input type="text" placeholder="Search transactions, invoices, projects..." id="globalSearch" onkeyup="globalSearchFn()">
-      <span style="font-size:11px;color:#94a3b8">Ctrl+K</span>
-    </div>
+  <div class="topbar-search">
+    <span>🔍</span>
+    <input type="text" placeholder="Search..." id="globalSearch">
   </div>
-  <div class="topbar-right">
-    <div class="topbar-btn">📅 FY 2024-25</div>
-    <div class="topbar-btn" onclick="exportAll()">📥 Export</div>
-    <span style="cursor:pointer;font-size:18px">🔔</span>
+  <div style="display:flex;gap:12px;align-items:center">
+    <button class="topbar-btn" onclick="liveSync()">🔄 Refresh</button>
     <div class="topbar-user">
       <div class="avatar">VS</div>
       <div style="font-size:13px">
@@ -306,1851 +155,602 @@ tr:hover { background: #f8fafc; }
   </div>
 </div>
 
-<!-- MAIN CONTENT -->
 <div class="main">
 
-<!-- ==================== TAB 1: REPORT ==================== -->
-<div class="tab-content active" id="tab-report">
-  <div class="card" style="border:none;padding:0;background:transparent">
-    <h2 style="margin-bottom:4px">📊 Report Dashboard</h2>
-    <p style="color:var(--text-light);font-size:13px;margin-bottom:20px">Complete financial overview - Pending Bills, SD, LD, Hold</p>
-  </div>
-  
-  <!-- Report Stats -->
-  <div class="stats-grid" id="reportStats">
-    <div class="stat-card">
-      <div class="stat-icon orange">📋</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalPendingAmt">₹ 0</div>
-        <div class="stat-label">Total Pending Bills</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon blue">🔒</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalSDAmt">₹ 0</div>
-        <div class="stat-label">Total SD Amount</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon red">⚠️</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalLDAmt">₹ 0</div>
-        <div class="stat-label">Total LD Amount</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon purple">✋</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalHoldAmt">₹ 0</div>
-        <div class="stat-label">Total Hold Amount</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon green">📄</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalGSTAmt">₹ 0</div>
-        <div class="stat-label">GST Amount</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Report Sub Tabs -->
-  <div class="card">
-    <div class="sub-tabs">
-      <button class="sub-tab active" onclick="switchReportSub('pendingBills')">📋 Pending Bills</button>
-      <button class="sub-tab" onclick="switchReportSub('sdReport')">🔒 Security Deposit (SD)</button>
-      <button class="sub-tab" onclick="switchReportSub('ldReport')">⚠️ Liquidated Damages (LD)</button>
-      <button class="sub-tab" onclick="switchReportSub('holdReport')">✋ Hold Amount</button>
-      <button class="sub-tab" onclick="switchReportSub('otherDeduction')">📑 Other Deductions</button>
-      <button class="sub-tab" onclick="switchReportSub('gstReport')">📄 GST Amount</button>
-      <button class="sub-tab" onclick="switchReportSub('withheldReport')">🔐 Withheld Amount</button>
-    </div>
-
-    <!-- PENDING BILLS -->
-    <div class="sub-tab-content active" id="sub-pendingBills">
-      <div class="filter-bar">
-        <div class="search-box">
-          <span>🔍</span>
-          <input type="text" placeholder="Search site name..." onkeyup="filterTable('pendingBillsTable', this.value)">
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="openAddModal('pending')">+ Add Pending Bill</button>
-        <button class="btn btn-outline btn-sm" onclick="exportTable('pendingBillsTable')">📥 Export</button>
-      </div>
-      <div class="table-container">
-        <table id="pendingBillsTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Site Name</th>
-              <th>Party Name</th>
-              <th>Invoice No</th>
-              <th>Bill Date</th>
-              <th>Bill Amount</th>
-              <th>Days Pending</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="pendingBillsBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- SD REPORT -->
-    <div class="sub-tab-content" id="sub-sdReport">
-      <div class="filter-bar">
-        <div class="search-box">
-          <span>🔍</span>
-          <input type="text" placeholder="Search..." onkeyup="filterTable('sdTable', this.value)">
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="openAddModal('sd')">+ Add SD Entry</button>
-        <button class="btn btn-outline btn-sm" onclick="exportTable('sdTable')">📥 Export</button>
-      </div>
-      <div class="table-container">
-        <table id="sdTable">
-          <thead>
-            <tr><th>#</th><th>Site Name</th><th>Party Name</th><th>SD Date</th><th>SD Amount</th><th>Days</th><th>Status</th><th>Action</th></tr>
-          </thead>
-          <tbody id="sdBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- LD REPORT -->
-    <div class="sub-tab-content" id="sub-ldReport">
-      <div class="filter-bar">
-        <div class="search-box">
-          <span>🔍</span>
-          <input type="text" placeholder="Search..." onkeyup="filterTable('ldTable', this.value)">
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="openAddModal('ld')">+ Add LD Entry</button>
-        <button class="btn btn-outline btn-sm" onclick="exportTable('ldTable')">📥 Export</button>
-      </div>
-      <div class="table-container">
-        <table id="ldTable">
-          <thead>
-            <tr><th>#</th><th>Site Name</th><th>Party Name</th><th>LD Date</th><th>LD Amount</th><th>Days</th><th>Reason</th><th>Action</th></tr>
-          </thead>
-          <tbody id="ldBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- HOLD REPORT -->
-    <div class="sub-tab-content" id="sub-holdReport">
-      <div class="filter-bar">
-        <div class="search-box"><span>🔍</span><input type="text" placeholder="Search..." onkeyup="filterTable('holdTable', this.value)"></div>
-        <button class="btn btn-primary btn-sm" onclick="openAddModal('hold')">+ Add Hold</button>
-      </div>
-      <div class="table-container">
-        <table id="holdTable">
-          <thead><tr><th>#</th><th>Site Name</th><th>Party Name</th><th>Date</th><th>Hold Amount</th><th>Days</th><th>Reason</th><th>Action</th></tr></thead>
-          <tbody id="holdBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- OTHER DEDUCTIONS -->
-    <div class="sub-tab-content" id="sub-otherDeduction">
-      <div class="filter-bar">
-        <div class="search-box"><span>🔍</span><input type="text" placeholder="Search..." onkeyup="filterTable('otherDedTable', this.value)"></div>
-        <button class="btn btn-primary btn-sm" onclick="openAddModal('otherDed')">+ Add Deduction</button>
-      </div>
-      <div class="table-container">
-        <table id="otherDedTable">
-          <thead><tr><th>#</th><th>Site Name</th><th>Party</th><th>Date</th><th>Deduction Type</th><th>Amount</th><th>Remarks</th><th>Action</th></tr></thead>
-          <tbody id="otherDedBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- GST REPORT -->
-    <div class="sub-tab-content" id="sub-gstReport">
-      <div class="filter-bar">
-        <div class="search-box"><span>🔍</span><input type="text" placeholder="Search..." onkeyup="filterTable('gstTable', this.value)"></div>
-        <button class="btn btn-primary btn-sm" onclick="openAddModal('gst')">+ Add GST Entry</button>
-      </div>
-      <div class="table-container">
-        <table id="gstTable">
-          <thead><tr><th>#</th><th>Site Name</th><th>Party</th><th>Invoice</th><th>Date</th><th>GST Amount</th><th>GST %</th><th>Status</th><th>Action</th></tr></thead>
-          <tbody id="gstBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- WITHHELD REPORT -->
-    <div class="sub-tab-content" id="sub-withheldReport">
-      <div class="filter-bar">
-        <div class="search-box"><span>🔍</span><input type="text" placeholder="Search..." onkeyup="filterTable('withheldTable', this.value)"></div>
-        <button class="btn btn-primary btn-sm" onclick="openAddModal('withheld')">+ Add Withheld</button>
-      </div>
-      <div class="table-container">
-        <table id="withheldTable">
-          <thead><tr><th>#</th><th>Site Name</th><th>Party</th><th>Date</th><th>Withheld Amount</th><th>Reason</th><th>Days</th><th>Action</th></tr></thead>
-          <tbody id="withheldBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== TAB 2: SALES ==================== -->
-<div class="tab-content" id="tab-sales">
-  <div class="card" style="border:none;padding:0;background:transparent">
-    <h2 style="margin-bottom:4px">💰 Vishal Groups - Sales Report</h2>
-    <p style="color:var(--text-light);font-size:13px;margin-bottom:20px">Company wise sales tracking - VE & VTPL</p>
-  </div>
+<!-- STOCK TAB (DEFAULT ACTIVE) -->
+<div class="tab-content active" id="tab-stock">
+  <h2 style="margin-bottom:4px">📦 Stock Management - LIVE</h2>
+  <p style="color:var(--text-light);font-size:13px;margin-bottom:20px">
+    Auto-fetched from Google Sheets every 5 minutes
+  </p>
 
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-icon blue">🏢</div>
       <div class="stat-info">
-        <div class="stat-value" id="veTotalSales">₹ 0</div>
-        <div class="stat-label">VE Total Sales</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon green">🏭</div>
-      <div class="stat-info">
-        <div class="stat-value" id="vtplTotalSales">₹ 0</div>
-        <div class="stat-label">VTPL Total Sales</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon purple">📈</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalCombinedSales">₹ 0</div>
-        <div class="stat-label">Combined Sales</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon orange">🆕</div>
-      <div class="stat-info">
-        <div class="stat-value" id="newCustomerCount">0</div>
-        <div class="stat-label">New Customers (N)</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon green">🔄</div>
-      <div class="stat-info">
-        <div class="stat-value" id="repeatCustomerCount">0</div>
-        <div class="stat-label">Repeat Customers (R)</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="sub-tabs">
-      <button class="sub-tab active" onclick="switchSalesSub('veCompany')">🏢 VE (Vishal Electricals)</button>
-      <button class="sub-tab" onclick="switchSalesSub('vtplCompany')">🏭 VTPL Company</button>
-      <button class="sub-tab" onclick="switchSalesSub('monthWise')">📅 Month Wise Report</button>
-    </div>
-
-    <!-- VE SALES -->
-    <div class="sub-tab-content active" id="sub-veCompany">
-      <div class="filter-bar">
-        <div class="search-box"><span>🔍</span><input type="text" placeholder="Search party..." onkeyup="filterTable('veSalesTable', this.value)"></div>
-        <select class="btn btn-outline btn-sm" onchange="filterByMonth('veSalesTable', this.value)">
-          <option value="">All Months</option>
-          <option>April</option><option>May</option><option>June</option><option>July</option>
-          <option>August</option><option>September</option><option>October</option><option>November</option>
-          <option>December</option><option>January</option><option>February</option><option>March</option>
-        </select>
-        <select class="btn btn-outline btn-sm" onchange="filterByCode('veSalesTable', this.value)">
-          <option value="">All (N/R)</option>
-          <option value="N">New (N)</option>
-          <option value="R">Repeat (R)</option>
-        </select>
-        <button class="btn btn-primary btn-sm" onclick="openSalesEntryModal('VE')">+ Add VE Sale</button>
-      </div>
-      <div class="table-container">
-        <table id="veSalesTable">
-          <thead>
-            <tr><th>#</th><th>Month</th><th>Party Name</th><th>Site Name</th><th>Invoice No</th><th>Date</th><th>Amount</th><th>Code (N/R)</th><th>Action</th></tr>
-          </thead>
-          <tbody id="veSalesBody"></tbody>
-        </table>
-      </div>
-      <div style="margin-top:12px;font-weight:600;font-size:15px">Total VE Sales: <span id="veSalesTotal" class="amount positive">₹ 0</span></div>
-    </div>
-
-    <!-- VTPL SALES -->
-    <div class="sub-tab-content" id="sub-vtplCompany">
-      <div class="filter-bar">
-        <div class="search-box"><span>🔍</span><input type="text" placeholder="Search party..." onkeyup="filterTable('vtplSalesTable', this.value)"></div>
-        <select class="btn btn-outline btn-sm" onchange="filterByMonth('vtplSalesTable', this.value)">
-          <option value="">All Months</option>
-          <option>April</option><option>May</option><option>June</option><option>July</option>
-          <option>August</option><option>September</option><option>October</option><option>November</option>
-          <option>December</option><option>January</option><option>February</option><option>March</option>
-        </select>
-        <select class="btn btn-outline btn-sm" onchange="filterByCode('vtplSalesTable', this.value)">
-          <option value="">All (N/R)</option><option value="N">New (N)</option><option value="R">Repeat (R)</option>
-        </select>
-        <button class="btn btn-primary btn-sm" onclick="openSalesEntryModal('VTPL')">+ Add VTPL Sale</button>
-      </div>
-      <div class="table-container">
-        <table id="vtplSalesTable">
-          <thead><tr><th>#</th><th>Month</th><th>Party Name</th><th>Site Name</th><th>Invoice No</th><th>Date</th><th>Amount</th><th>Code (N/R)</th><th>Action</th></tr></thead>
-          <tbody id="vtplSalesBody"></tbody>
-        </table>
-      </div>
-      <div style="margin-top:12px;font-weight:600;font-size:15px">Total VTPL Sales: <span id="vtplSalesTotal" class="amount positive">₹ 0</span></div>
-    </div>
-
-    <!-- MONTH WISE -->
-    <div class="sub-tab-content" id="sub-monthWise">
-      <div class="table-container">
-        <table id="monthWiseTable">
-          <thead>
-            <tr><th>Month</th><th>VE Sales</th><th>VE New (N)</th><th>VE Repeat (R)</th><th>VTPL Sales</th><th>VTPL New (N)</th><th>VTPL Repeat (R)</th><th>Combined Total</th></tr>
-          </thead>
-          <tbody id="monthWiseBody"></tbody>
-          <tfoot><tr style="font-weight:700;background:#f0f9ff"><td>TOTAL</td><td id="mwVETotal">₹0</td><td id="mwVEN">0</td><td id="mwVER">0</td><td id="mwVTPLTotal">₹0</td><td id="mwVTPLN">0</td><td id="mwVTPLR">0</td><td id="mwCombined">₹0</td></tr></tfoot>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== TAB 3: DATA ENTRY (SALE) ==================== -->
-<div class="tab-content" id="tab-dataentry">
-  <div class="card" style="border:none;padding:0;background:transparent">
-    <h2 style="margin-bottom:4px">📝 Data Entry - Sale</h2>
-    <p style="color:var(--text-light);font-size:13px;margin-bottom:20px">Add sale entries with BOQ from Excel. System auto-adds BOQ serial numbers.</p>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">📄 Sale Entry Form</div>
-    </div>
-    
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Company</label>
-        <select id="de_company">
-          <option value="VE">Vishal Electricals (VE)</option>
-          <option value="VTPL">VTPL</option>
-        </select>
-      </div>
-      <div class="form-group dropdown-search">
-        <label>Party Name</label>
-        <input type="text" id="de_party" placeholder="Type to search party..." oninput="searchDropdown(this, 'partyDropdown', getAllParties())" onfocus="searchDropdown(this, 'partyDropdown', getAllParties())">
-        <div class="dropdown-list" id="partyDropdown"></div>
-      </div>
-      <div class="form-group dropdown-search">
-        <label>Site Name</label>
-        <input type="text" id="de_site" placeholder="Type to search site..." oninput="searchDropdown(this, 'siteDropdown', getAllSites())" onfocus="searchDropdown(this, 'siteDropdown', getAllSites())">
-        <div class="dropdown-list" id="siteDropdown"></div>
-      </div>
-      <div class="form-group">
-        <label>Invoice Number</label>
-        <input type="text" id="de_invoice" placeholder="INV-2025-XXXX">
-      </div>
-      <div class="form-group">
-        <label>Invoice Date</label>
-        <input type="date" id="de_date">
-      </div>
-      <div class="form-group">
-        <label>Invoice Amount (₹)</label>
-        <input type="number" id="de_amount" placeholder="0.00">
-      </div>
-      <div class="form-group">
-        <label>Customer Code (N/R)</label>
-        <select id="de_code">
-          <option value="N">N - New Customer</option>
-          <option value="R">R - Repeat Customer</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="section-divider"></div>
-    <div class="section-title">📎 BOQ - Upload Excel & Auto-Add</div>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">Upload BOQ Excel file. System will read serial numbers and auto-add items.</p>
-    
-    <div class="file-drop" id="boqDropZone" onclick="document.getElementById('boqFileInput').click()" ondrop="handleBOQDrop(event)" ondragover="event.preventDefault()">
-      <div style="font-size:36px;margin-bottom:8px">📎</div>
-      <div style="font-weight:600">Click or Drag Excel File Here</div>
-      <div style="font-size:12px;color:var(--text-light)">Supports .xlsx, .xls, .csv</div>
-      <input type="file" id="boqFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleBOQFile(this)">
-    </div>
-
-    <div id="boqPreview" style="display:none;margin-top:16px">
-      <div class="section-title">📋 BOQ Items (Auto-Fetched from Excel)</div>
-      <div class="table-container">
-        <table id="boqTable">
-          <thead><tr><th>Sr No</th><th>Description</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Amount</th><th>Action</th></tr></thead>
-          <tbody id="boqBody"></tbody>
-        </table>
-      </div>
-      <div style="margin-top:8px;font-weight:600">BOQ Total: <span id="boqTotal" class="amount">₹ 0</span></div>
-    </div>
-
-    <div style="margin-top:20px;display:flex;gap:10px">
-      <button class="btn btn-primary" onclick="saveSaleEntry()">💾 Save Sale Entry</button>
-      <button class="btn btn-outline" onclick="clearSaleForm()">🔄 Clear</button>
-    </div>
-  </div>
-
-  <!-- SAVED SALES LIST -->
-  <div class="card" style="margin-top:16px">
-    <div class="card-header">
-      <div class="card-title">📃 All Sale Entries</div>
-      <button class="btn btn-outline btn-sm" onclick="exportTable('saleEntriesTable')">📥 Export</button>
-    </div>
-    <div class="table-container">
-      <table id="saleEntriesTable">
-        <thead><tr><th>#</th><th>Company</th><th>Party</th><th>Site</th><th>Invoice</th><th>Date</th><th>Amount</th><th>Code</th><th>BOQ Items</th><th>Action</th></tr></thead>
-        <tbody id="saleEntriesBody"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== TAB 4: PAYMENT RECEIVED ==================== -->
-<div class="tab-content" id="tab-payment">
-  <div class="card" style="border:none;padding:0;background:transparent">
-    <h2 style="margin-bottom:4px">💳 Payment Received</h2>
-    <p style="color:var(--text-light);font-size:13px;margin-bottom:20px">Record payments with deductions, hold amounts, and recovery tracking</p>
-  </div>
-
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon green">💰</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalReceived">₹ 0</div>
-        <div class="stat-label">Total Received</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon red">📉</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalDeductions">₹ 0</div>
-        <div class="stat-label">Total Deductions</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon purple">✋</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalHeldPay">₹ 0</div>
-        <div class="stat-label">Total Held</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon blue">✅</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalNetReceived">₹ 0</div>
-        <div class="stat-label">Net Received</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">➕ New Payment Entry</div>
-    </div>
-
-    <!-- PARTY & INVOICE SELECTION -->
-    <div class="section-title">🔎 Select Party & Invoice</div>
-    <div class="form-grid">
-      <div class="form-group dropdown-search">
-        <label>Party Name</label>
-        <input type="text" id="pay_party" placeholder="Search party..." oninput="searchPayParty(this)" onfocus="searchPayParty(this)">
-        <div class="dropdown-list" id="payPartyDropdown"></div>
-      </div>
-      <div class="form-group dropdown-search">
-        <label>Site Name</label>
-        <input type="text" id="pay_site" placeholder="Search site..." oninput="searchPaySite(this)" onfocus="searchPaySite(this)">
-        <div class="dropdown-list" id="paySiteDropdown"></div>
-      </div>
-      <div class="form-group dropdown-search">
-        <label>Invoice Number (Site wise)</label>
-        <select id="pay_invoice" onchange="fillInvoiceDetails()">
-          <option value="">-- Select Invoice --</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Invoice Amount</label>
-        <input type="text" id="pay_invAmount" readonly style="background:#f8fafc">
-      </div>
-    </div>
-
-    <!-- RECEIVE AMOUNT -->
-    <div class="section-divider"></div>
-    <div class="section-title">💰 Receive Amount</div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Payment Receive Date</label>
-        <input type="date" id="pay_date">
-      </div>
-      <div class="form-group">
-        <label>Received Amount (₹)</label>
-        <input type="number" id="pay_amount" placeholder="0.00" oninput="calcPaymentSummary()">
-      </div>
-    </div>
-
-    <!-- DEDUCTIONS -->
-    <div class="section-divider"></div>
-    <div class="section-title">📉 Deductions</div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Income Tax TDS (₹)</label>
-        <input type="number" id="ded_itTds" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>GST TDS (₹)</label>
-        <input type="number" id="ded_gstTds" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>Labour Cess (₹)</label>
-        <input type="number" id="ded_labourCess" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>Bill Discounting Charges (₹)</label>
-        <input type="number" id="ded_billDiscount" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>Other Deduction (₹)</label>
-        <input type="number" id="ded_other" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>Total Deduction</label>
-        <input type="text" id="ded_total" readonly style="background:#fef3c7;font-weight:700">
-      </div>
-    </div>
-
-    <!-- HOLD AMOUNTS -->
-    <div class="section-divider"></div>
-    <div class="section-title">✋ Hold Amounts (from received amount)</div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>SD Hold (₹)</label>
-        <input type="number" id="hold_sd" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>LD Hold (₹)</label>
-        <input type="number" id="hold_ld" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>GST Amount Hold (₹)</label>
-        <input type="number" id="hold_gst" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>Withheld Amount (₹)</label>
-        <input type="number" id="hold_withheld" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>Other Hold (₹)</label>
-        <input type="number" id="hold_other" placeholder="0" oninput="calcPaymentSummary()">
-      </div>
-      <div class="form-group">
-        <label>Total Hold</label>
-        <input type="text" id="hold_total" readonly style="background:#e0e7ff;font-weight:700">
-      </div>
-    </div>
-
-    <!-- PAYMENT SUMMARY -->
-    <div class="section-divider"></div>
-    <div style="background:#f0fdf4;border-radius:8px;padding:16px;margin-bottom:16px">
-      <div class="section-title" style="margin-bottom:8px">📊 Payment Summary</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:14px">
-        <div>Invoice Amount: <strong id="sumInvAmt">₹ 0</strong></div>
-        <div>Received: <strong id="sumReceived" class="amount positive">₹ 0</strong></div>
-        <div>Deductions: <strong id="sumDeductions" class="amount negative">₹ 0</strong></div>
-        <div>Hold: <strong id="sumHold" style="color:#7c3aed">₹ 0</strong></div>
-        <div>Net Received: <strong id="sumNet" class="amount positive">₹ 0</strong></div>
-        <div>Balance Due: <strong id="sumBalance" class="amount negative">₹ 0</strong></div>
-      </div>
-    </div>
-
-    <button class="btn btn-primary" onclick="savePaymentEntry()">💾 Save Payment Entry</button>
-    <button class="btn btn-outline" onclick="clearPaymentForm()">🔄 Clear</button>
-  </div>
-
-  <!-- HOLD RECOVERY SECTION -->
-  <div class="card" style="margin-top:16px">
-    <div class="card-header">
-      <div class="card-title">🔓 Hold Recovery Entry</div>
-    </div>
-    <div class="form-grid">
-      <div class="form-group dropdown-search">
-        <label>Vendor Name</label>
-        <input type="text" id="rec_vendor" placeholder="Search vendor...">
-      </div>
-      <div class="form-group">
-        <label>Invoice</label>
-        <input type="text" id="rec_invoice" placeholder="Invoice number">
-      </div>
-      <div class="form-group">
-        <label>Payment Receive Date</label>
-        <input type="date" id="rec_date">
-      </div>
-      <div class="form-group">
-        <label>Recovered Amount (₹)</label>
-        <input type="number" id="rec_amount" placeholder="0.00">
-      </div>
-      <div class="form-group">
-        <label>Recovery Type</label>
-        <select id="rec_type">
-          <option>SD Recovery</option><option>LD Recovery</option><option>GST Recovery</option>
-          <option>Withheld Recovery</option><option>Other Recovery</option>
-        </select>
-      </div>
-    </div>
-    <button class="btn btn-success btn-sm" onclick="saveRecovery()">💾 Save Recovery</button>
-  </div>
-
-  <!-- ALL PAYMENTS TABLE -->
-  <div class="card" style="margin-top:16px">
-    <div class="card-header">
-      <div class="card-title">📃 All Payment Records</div>
-      <button class="btn btn-outline btn-sm" onclick="exportTable('allPaymentsTable')">📥 Export</button>
-    </div>
-    <div class="table-container">
-      <table id="allPaymentsTable">
-        <thead>
-          <tr><th>#</th><th>Date</th><th>Party</th><th>Site</th><th>Invoice</th><th>Inv Amt</th><th>Received</th><th>Deductions</th><th>Hold</th><th>Net</th><th>Action</th></tr>
-        </thead>
-        <tbody id="allPaymentsBody"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== TAB 5: STOCK ==================== -->
-<div class="tab-content" id="tab-stock">
-  <div class="card" style="border:none;padding:0;background:transparent">
-    <h2 style="margin-bottom:4px">📦 Stock Management</h2>
-    <p style="color:var(--text-light);font-size:13px;margin-bottom:20px">Live stock data from Google Sheets - Auto Fetched</p>
-  </div>
-
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon blue">📦</div>
-      <div class="stat-info">
-        <div class="stat-value" id="totalStockItems">0</div>
-        <div class="stat-label">Total Items</div>
+        <div class="stat-value" id="totalSites">0</div>
+        <div class="stat-label">Total Sites</div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon green">💰</div>
       <div class="stat-info">
         <div class="stat-value" id="totalStockValue">₹ 0</div>
-        <div class="stat-label">Stock Value</div>
+        <div class="stat-label">Total Stock Value</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon orange">📊</div>
+      <div class="stat-info">
+        <div class="stat-value" id="totalNetWIP">₹ 0</div>
+        <div class="stat-label">Combined Net WIP</div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon red">⚠️</div>
       <div class="stat-info">
-        <div class="stat-value" id="lowStockCount">0</div>
-        <div class="stat-label">Low Stock Items</div>
+        <div class="stat-value" id="highAgeingCount">0</div>
+        <div class="stat-label">High Ageing (>180d)</div>
       </div>
     </div>
   </div>
 
+  <!-- WIP Summary Card will be inserted here -->
+  <div id="wipSummaryContainer"></div>
+
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📋 Stock Inventory (Auto-fetched from Google Sheets)</div>
+      <div class="card-title">📋 Stock Details (Live from Google Sheets)</div>
       <div style="display:flex;gap:8px">
-        <button class="btn btn-primary btn-sm" onclick="syncStockFromSheet()">🔄 Sync Now</button>
-        <button class="btn btn-outline btn-sm" onclick="exportTable('stockTable')">📥 Export</button>
+        <button class="btn btn-primary btn-sm" onclick="liveSync()">🔄 Sync Now</button>
+        <button class="btn btn-outline btn-sm" onclick="exportStock()">📥 Export</button>
       </div>
     </div>
     <div class="filter-bar">
-      <div class="search-box"><span>🔍</span><input type="text" placeholder="Search stock items..." onkeyup="filterTable('stockTable', this.value)"></div>
-      <select class="btn btn-outline btn-sm" id="stockCategoryFilter" onchange="filterStockCategory()">
-        <option value="">All Categories</option>
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" placeholder="Search site name..." onkeyup="filterStock(this.value)">
+      </div>
+      <select class="btn btn-outline btn-sm" onchange="filterByCompany(this.value)">
+        <option value="">All Companies</option>
+        <option value="VE">VE Only</option>
+        <option value="VTPL">VTPL Only</option>
       </select>
     </div>
     <div class="table-container">
       <table id="stockTable">
         <thead>
-          <tr><th>#</th><th>Item Code</th><th>Item Name</th><th>Category</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Value</th><th>Min Qty</th><th>Status</th></tr>
+          <tr>
+            <th>S.No</th>
+            <th>Site Name</th>
+            <th>Tab Link</th>
+            <th>Stock Value</th>
+            <th>Site Expenses</th>
+            <th>Net WIP</th>
+            <th>Remarks</th>
+            <th>Drive</th>
+            <th>Day Ageing</th>
+            <th>Cell</th>
+          </tr>
         </thead>
-        <tbody id="stockBody"></tbody>
+        <tbody id="stockBody">
+          <tr><td colspan="10" class="loading">🔄 Loading data from Google Sheets...</td></tr>
+        </tbody>
       </table>
     </div>
   </div>
-
-  <!-- Google Sheet Config -->
-  <div class="card" style="margin-top:16px">
-    <div class="card-header">
-      <div class="card-title">⚙️ Google Sheet Configuration</div>
-    </div>
-    <div class="form-grid">
-      <div class="form-group" style="grid-column:span 2">
-        <label>Google Sheet URL (Stock Sheet)</label>
-        <input type="text" id="stockSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/XXXX/edit">
-      </div>
-      <div class="form-group">
-        <label>Sheet Name / Tab</label>
-        <input type="text" id="stockSheetTab" placeholder="Stock" value="Stock">
-      </div>
-      <div class="form-group">
-        <label>API Key (for Apps Script)</label>
-        <input type="text" id="stockApiKey" placeholder="Your deployed Apps Script URL">
-      </div>
-    </div>
-    <div class="form-grid">
-      <div class="form-group" style="grid-column:span 2">
-        <label>Google Sheet URL (Payment/Debtor Sheet)</label>
-        <input type="text" id="paymentSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/XXXX/edit">
-      </div>
-      <div class="form-group">
-        <label>Sheet Tab</label>
-        <input type="text" id="paymentSheetTab" placeholder="Payments" value="Payments">
-      </div>
-    </div>
-    <button class="btn btn-primary" onclick="saveSheetConfig()">💾 Save Configuration</button>
-    <button class="btn btn-success" onclick="testConnection()" style="margin-left:8px">🔗 Test Connection</button>
-  </div>
 </div>
 
-</div> <!-- END MAIN -->
-
-<!-- ==================== MODALS ==================== -->
-<!-- ADD MODAL (Generic) -->
-<div class="modal-overlay" id="addModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 id="addModalTitle">Add Entry</h3>
-      <button class="modal-close" onclick="closeModal('addModal')">✕</button>
-    </div>
-    <div id="addModalBody"></div>
-    <div style="margin-top:20px;display:flex;gap:10px">
-      <button class="btn btn-primary" id="addModalSaveBtn" onclick="saveModalEntry()">💾 Save</button>
-      <button class="btn btn-outline" onclick="closeModal('addModal')">Cancel</button>
-    </div>
-  </div>
+<!-- OTHER TABS PLACEHOLDER -->
+<div class="tab-content" id="tab-report">
+  <div class="card"><h2>📊 Report Dashboard</h2><p style="color:var(--text-light)">Coming with payment sheet integration</p></div>
+</div>
+<div class="tab-content" id="tab-sales">
+  <div class="card"><h2>💰 Sales</h2><p style="color:var(--text-light)">VE & VTPL sales tracking</p></div>
+</div>
+<div class="tab-content" id="tab-dataentry">
+  <div class="card"><h2>📝 Data Entry</h2><p style="color:var(--text-light)">Sale entry with BOQ</p></div>
+</div>
+<div class="tab-content" id="tab-payment">
+  <div class="card"><h2>💳 Payment</h2><p style="color:var(--text-light)">Payment received tracking</p></div>
 </div>
 
-<!-- SALES ENTRY MODAL -->
-<div class="modal-overlay" id="salesEntryModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 id="salesModalTitle">Add Sale</h3>
-      <button class="modal-close" onclick="closeModal('salesEntryModal')">✕</button>
-    </div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Company</label>
-        <input type="text" id="sm_company" readonly>
-      </div>
-      <div class="form-group">
-        <label>Party Name</label>
-        <input type="text" id="sm_party" placeholder="Party name">
-      </div>
-      <div class="form-group">
-        <label>Site Name</label>
-        <input type="text" id="sm_site" placeholder="Site name">
-      </div>
-      <div class="form-group">
-        <label>Invoice No</label>
-        <input type="text" id="sm_invoice" placeholder="Invoice number">
-      </div>
-      <div class="form-group">
-        <label>Date</label>
-        <input type="date" id="sm_date">
-      </div>
-      <div class="form-group">
-        <label>Amount (₹)</label>
-        <input type="number" id="sm_amount" placeholder="0.00">
-      </div>
-      <div class="form-group">
-        <label>Code (N/R)</label>
-        <select id="sm_code"><option value="N">N - New</option><option value="R">R - Repeat</option></select>
-      </div>
-    </div>
-    <button class="btn btn-primary" onclick="saveSalesModal()">💾 Save</button>
-  </div>
 </div>
-
-<!-- SETTINGS MODAL -->
-<div class="modal-overlay" id="settingsModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>⚙️ Settings</h3>
-      <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
-    </div>
-    <div class="form-grid">
-      <div class="form-group" style="grid-column:span 2">
-        <label>Google Apps Script Deployment URL</label>
-        <input type="text" id="appsScriptUrl" placeholder="https://script.google.com/macros/s/XXXX/exec">
-        <small style="color:var(--text-light)">Deploy your Google Apps Script as web app and paste URL here</small>
-      </div>
-      <div class="form-group">
-        <label>Auto Sync Interval (minutes)</label>
-        <input type="number" id="syncInterval" value="5" min="1">
-      </div>
-      <div class="form-group">
-        <label>Company Name</label>
-        <input type="text" id="companyName" value="Vishal Electricals">
-      </div>
-    </div>
-    <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
-  </div>
-</div>
-
-<!-- XLSX PARSER (SheetJS CDN) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script>
-// ==================== DATA STORE ====================
+// ==========================================
+// VISHAL ELECTRICALS - LIVE DATA SYSTEM
+// ==========================================
+
+// 🔗 APPS SCRIPT URL - YE AAPKA URL HAI
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
+
+// Direct CSV URL as backup
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
+
+// Data Store
 const DB = {
-  pendingBills: [],
-  sd: [],
-  ld: [],
-  hold: [],
-  otherDeductions: [],
-  gst: [],
-  withheld: [],
-  salesVE: [],
-  salesVTPL: [],
-  saleEntries: [],
-  boqItems: [],
-  payments: [],
-  recoveries: [],
-  stock: [],
-  parties: ['ABC Infrastructure Ltd.', 'XYZ Constructions', 'Metro Rail Corp.', 'Power Grid Corp.', 'Dream Homes Pvt. Ltd.', 'Tata Projects', 'L&T Construction'],
-  sites: ['Industrial Plant Upgrade', 'Commercial Complex', 'Metro Station Phase 2', 'Power Distribution System', 'Residential Tower Project', 'Highway Electrical Work', 'Airport Terminal'],
-  config: { appsScriptUrl: '', syncInterval: 5, stockSheetUrl: '', paymentSheetUrl: '' }
+  veStock: [],
+  vtplStock: [],
+  stockSummary: {},
+  filteredCompany: ''
 };
 
-// Load from localStorage
-function loadData() {
-  const saved = localStorage.getItem('vishalERP');
-  if (saved) {
-    const parsed = JSON.parse(saved);
-    Object.assign(DB, parsed);
-  }
-  // Load sample data if empty
-  if (DB.pendingBills.length === 0) loadSampleData();
-}
-
-function saveData() {
-  localStorage.setItem('vishalERP', JSON.stringify(DB));
-}
-
-function loadSampleData() {
-  DB.pendingBills = [
-    { id: 1, site: 'Industrial Plant Upgrade', party: 'ABC Infrastructure Ltd.', invoice: 'INV-2025-1012', date: '2025-04-15', amount: 245000, status: 'Pending' },
-    { id: 2, site: 'Commercial Complex', party: 'XYZ Constructions', invoice: 'INV-2025-1011', date: '2025-04-20', amount: 320000, status: 'Pending' },
-    { id: 3, site: 'Metro Station Phase 2', party: 'Metro Rail Corp.', invoice: 'INV-2025-1010', date: '2025-03-10', amount: 475000, status: 'Overdue' },
-    { id: 4, site: 'Power Distribution System', party: 'Power Grid Corp.', invoice: 'INV-2025-1009', date: '2025-05-01', amount: 180000, status: 'Pending' },
-  ];
-  DB.sd = [
-    { id: 1, site: 'Industrial Plant Upgrade', party: 'ABC Infrastructure Ltd.', date: '2025-01-15', amount: 50000, status: 'Active' },
-    { id: 2, site: 'Metro Station Phase 2', party: 'Metro Rail Corp.', date: '2024-11-10', amount: 75000, status: 'Active' },
-  ];
-  DB.ld = [
-    { id: 1, site: 'Highway Electrical Work', party: 'L&T Construction', date: '2025-03-01', amount: 25000, reason: 'Delay in completion' },
-  ];
-  DB.hold = [
-    { id: 1, site: 'Commercial Complex', party: 'XYZ Constructions', date: '2025-04-10', amount: 40000, reason: 'Quality inspection pending' },
-  ];
-  DB.gst = [
-    { id: 1, site: 'Industrial Plant Upgrade', party: 'ABC Infrastructure Ltd.', invoice: 'INV-2025-1012', date: '2025-04-15', amount: 44100, gstPct: 18, status: 'Pending' },
-  ];
-  DB.salesVE = [
-    { id: 1, month: 'April', party: 'ABC Infrastructure Ltd.', site: 'Industrial Plant Upgrade', invoice: 'INV-VE-001', date: '2025-04-10', amount: 500000, code: 'N' },
-    { id: 2, month: 'April', party: 'XYZ Constructions', site: 'Commercial Complex', invoice: 'INV-VE-002', date: '2025-04-18', amount: 320000, code: 'R' },
-    { id: 3, month: 'May', party: 'Metro Rail Corp.', site: 'Metro Station Phase 2', invoice: 'INV-VE-003', date: '2025-05-05', amount: 450000, code: 'N' },
-  ];
-  DB.salesVTPL = [
-    { id: 1, month: 'April', party: 'Power Grid Corp.', site: 'Power Distribution System', invoice: 'INV-VTPL-001', date: '2025-04-12', amount: 280000, code: 'R' },
-    { id: 2, month: 'May', party: 'Dream Homes Pvt. Ltd.', site: 'Residential Tower Project', invoice: 'INV-VTPL-002', date: '2025-05-08', amount: 190000, code: 'N' },
-  ];
-  DB.stock = [
-    { id:1, code:'EL-001', name:'MCB 32A SP', category:'MCB', unit:'Nos', qty:150, rate:285, minQty:50 },
-    { id:2, code:'EL-002', name:'MCCB 100A', category:'MCCB', unit:'Nos', qty:25, rate:3500, minQty:10 },
-    { id:3, code:'CB-001', name:'4 Sq mm Cable', category:'Cables', unit:'Mtr', qty:500, rate:45, minQty:200 },
-    { id:4, code:'CB-002', name:'2.5 Sq mm Cable', category:'Cables', unit:'Mtr', qty:80, rate:32, minQty:200 },
-    { id:5, code:'SW-001', name:'16A Switch', category:'Switches', unit:'Nos', qty:200, rate:125, minQty:100 },
-    { id:6, code:'PG-001', name:'25mm PVC Pipe', category:'Conduit', unit:'Mtr', qty:350, rate:55, minQty:150 },
-  ];
-  DB.saleEntries = [...DB.salesVE.map(s => ({...s, company:'VE', boqCount:0}))];
-  saveData();
-}
-
 // ==================== TAB SWITCHING ====================
-function switchTab(tabId) {
+function switchTab(tabId, el) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-' + tabId).classList.add('active');
-  event.target.closest('.sidebar-item').classList.add('active');
-  refreshAll();
+  if (el) el.classList.add('active');
 }
 
-// ==================== REPORT SUB TABS ====================
-function switchReportSub(subId) {
-  document.querySelectorAll('#tab-report .sub-tab-content').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('#tab-report .sub-tab').forEach(s => s.classList.remove('active'));
-  document.getElementById('sub-' + subId).classList.add('active');
-  event.target.classList.add('active');
+// ==================== MAIN LIVE SYNC ====================
+async function liveSync() {
+  showStatus('🔄 Fetching live data...', 'blue');
+  
+  // Try Apps Script first, fallback to CSV
+  let success = await tryAppsScript();
+  
+  if (!success) {
+    console.log('⚠️ Apps Script failed, trying CSV...');
+    success = await tryCSV();
+  }
+  
+  if (success) {
+    renderStock();
+    const time = new Date().toLocaleTimeString();
+    showStatus(`✅ Synced at ${time}`, 'green');
+  } else {
+    showStatus('❌ Sync failed', 'red');
+    document.getElementById('stockBody').innerHTML = `
+      <tr><td colspan="10" style="text-align:center;padding:30px;color:#dc2626">
+        ❌ Could not load data. Please check:<br>
+        1. Sheet is shared as "Anyone with link"<br>
+        2. Apps Script is deployed correctly
+      </td></tr>
+    `;
+  }
 }
 
-function switchSalesSub(subId) {
-  document.querySelectorAll('#tab-sales .sub-tab-content').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('#tab-sales .sub-tab').forEach(s => s.classList.remove('active'));
-  document.getElementById('sub-' + subId).classList.add('active');
-  event.target.classList.add('active');
-  if (subId === 'monthWise') renderMonthWise();
+// ==================== APPS SCRIPT METHOD ====================
+async function tryAppsScript() {
+  try {
+    const response = await fetch(APPS_SCRIPT_URL + '?t=' + Date.now());
+    const data = await response.json();
+    
+    console.log('📊 Apps Script Response:', data);
+    
+    if (data.error) {
+      console.error('Apps Script error:', data.error);
+      return false;
+    }
+    
+    // Handle different response structures
+    let rawData = data.data || data.stock || data;
+    
+    if (Array.isArray(rawData) && rawData.length > 0) {
+      // If it's array of arrays (raw sheet data)
+      if (Array.isArray(rawData[0])) {
+        processRawSheetData(rawData);
+        return true;
+      }
+      // If it's array of objects
+      if (typeof rawData[0] === 'object') {
+        processObjectData(rawData);
+        return true;
+      }
+    }
+    
+    return false;
+  } catch (err) {
+    console.error('Apps Script fetch failed:', err);
+    return false;
+  }
+}
+
+// ==================== CSV METHOD (FALLBACK) ====================
+async function tryCSV() {
+  try {
+    const response = await fetch(CSV_URL + '&t=' + Date.now());
+    const text = await response.text();
+    
+    const lines = text.split('\n').map(parseCSVLine);
+    console.log('📋 CSV loaded:', lines.length, 'rows');
+    
+    processRawSheetData(lines);
+    return true;
+  } catch (err) {
+    console.error('CSV fetch failed:', err);
+    return false;
+  }
+}
+
+// ==================== PROCESS RAW SHEET DATA ====================
+function processRawSheetData(rows) {
+  const veStock = [];
+  const vtplStock = [];
+  let stockDate = '';
+  let currentSection = '';
+  
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    if (!row || row.length === 0) continue;
+    
+    const rowText = row.join(' ').toUpperCase();
+    
+    // Detect date
+    if (rowText.includes('STOCK AS ON')) {
+      for (let j = 0; j < row.length; j++) {
+        const val = String(row[j] || '');
+        if (val.match(/\d+\/\d+\/\d+/) || val.match(/\d{4}-\d{2}-\d{2}/)) {
+          stockDate = val;
+          break;
+        }
+      }
+      continue;
+    }
+    
+    // Section detection
+    if (rowText.includes('VE STOCK') && !rowText.includes('VTPL')) {
+      currentSection = 'VE';
+      continue;
+    }
+    if (rowText.includes('VTPL STOCK')) {
+      currentSection = 'VTPL';
+      continue;
+    }
+    
+    // Skip headers
+    if (rowText.includes('S.NO') && rowText.includes('SITE NAME')) continue;
+    if (rowText.includes('NET STOCK') || rowText.includes('TOTAL BOTH')) continue;
+    
+    // Skip total rows
+    if (row[1] && String(row[1]).toUpperCase().trim() === 'TOTAL') continue;
+    
+    // Process data row
+    const sno = parseNum(row[0]);
+    const siteName = row[1] ? String(row[1]).trim() : '';
+    
+    if (sno > 0 && siteName && siteName.length > 2 && currentSection) {
+      const item = {
+        id: sno,
+        sno: sno,
+        siteName: siteName,
+        tabLink: String(row[2] || '').trim(),
+        stockValue: parseNum(row[3]),
+        siteExpenses: parseNum(row[4]),
+        netWIP: parseNum(row[5]),
+        remarks: String(row[6] || '').trim(),
+        driveLink: String(row[7] || '').trim(),
+        dayAgeing: parseNum(row[8]),
+        cell: String(row[9] || '').trim(),
+        company: currentSection
+      };
+      
+      if (currentSection === 'VE') veStock.push(item);
+      else if (currentSection === 'VTPL') vtplStock.push(item);
+    }
+  }
+  
+  saveData(veStock, vtplStock, stockDate);
+}
+
+// ==================== PROCESS OBJECT DATA ====================
+function processObjectData(rows) {
+  const veStock = [];
+  const vtplStock = [];
+  let stockDate = '';
+  let currentSection = '';
+  
+  for (let row of rows) {
+    const values = Object.values(row);
+    const rowText = values.join(' ').toUpperCase();
+    
+    if (rowText.includes('STOCK AS ON')) {
+      for (let v of values) {
+        if (v && String(v).match(/\d+\/\d+\/\d+/)) { stockDate = v; break; }
+      }
+      continue;
+    }
+    
+    if (rowText.includes('VE STOCK') && !rowText.includes('VTPL')) { currentSection = 'VE'; continue; }
+    if (rowText.includes('VTPL STOCK')) { currentSection = 'VTPL'; continue; }
+    
+    const sno = parseNum(values[0]);
+    const siteName = values[1] ? String(values[1]).trim() : '';
+    
+    if (sno > 0 && siteName.length > 2 && currentSection) {
+      const item = {
+        id: sno, sno: sno, siteName,
+        tabLink: String(values[2] || ''),
+        stockValue: parseNum(values[3]),
+        siteExpenses: parseNum(values[4]),
+        netWIP: parseNum(values[5]),
+        remarks: String(values[6] || ''),
+        driveLink: String(values[7] || ''),
+        dayAgeing: parseNum(values[8]),
+        cell: String(values[9] || ''),
+        company: currentSection
+      };
+      
+      if (currentSection === 'VE') veStock.push(item);
+      else if (currentSection === 'VTPL') vtplStock.push(item);
+    }
+  }
+  
+  saveData(veStock, vtplStock, stockDate);
+}
+
+// ==================== SAVE DATA ====================
+function saveData(veStock, vtplStock, stockDate) {
+  const veTotal = veStock.reduce((s, x) => s + x.stockValue, 0);
+  const veExpenses = veStock.reduce((s, x) => s + x.siteExpenses, 0);
+  const veNetWIP = veStock.reduce((s, x) => s + x.netWIP, 0);
+  
+  const vtplTotal = vtplStock.reduce((s, x) => s + x.stockValue, 0);
+  const vtplExpenses = vtplStock.reduce((s, x) => s + x.siteExpenses, 0);
+  const vtplNetWIP = vtplStock.reduce((s, x) => s + x.netWIP, 0);
+  
+  DB.veStock = veStock;
+  DB.vtplStock = vtplStock;
+  DB.stockSummary = {
+    date: stockDate,
+    veTotal, veExpenses, veNetWIP,
+    vtplTotal, vtplExpenses, vtplNetWIP,
+    netStockTotal: veTotal + vtplTotal,
+    combinedNetWIP: veNetWIP + vtplNetWIP
+  };
+  
+  console.log('✅ Data saved:', {
+    VE: veStock.length,
+    VTPL: vtplStock.length,
+    Total: DB.stockSummary.netStockTotal
+  });
+  
+  localStorage.setItem('vishalStock', JSON.stringify(DB));
+}
+
+// ==================== RENDER STOCK TABLE ====================
+function renderStock() {
+  const tbody = document.getElementById('stockBody');
+  const summary = DB.stockSummary || {};
+  
+  // Update stat cards
+  const totalSites = DB.veStock.length + DB.vtplStock.length;
+  document.getElementById('totalSites').textContent = totalSites;
+  document.getElementById('totalStockValue').textContent = formatCurrency(summary.netStockTotal || 0);
+  document.getElementById('totalNetWIP').textContent = formatCurrency(summary.combinedNetWIP || 0);
+  
+  const highAgeing = [...DB.veStock, ...DB.vtplStock].filter(s => s.dayAgeing > 180).length;
+  document.getElementById('highAgeingCount').textContent = highAgeing;
+  
+  // Render summary card
+  renderSummaryCard();
+  
+  // Render table
+  let html = '';
+  
+  if (totalSites === 0) {
+    html = `<tr><td colspan="10" class="loading">No data found. Click "Sync Now" to refresh.</td></tr>`;
+    tbody.innerHTML = html;
+    return;
+  }
+  
+  // Date header
+  if (summary.date) {
+    html += `<tr style="background:#fef3c7"><td colspan="10" style="padding:10px;font-weight:700;text-align:center">📅 Stock as on: ${summary.date}</td></tr>`;
+  }
+  
+  // VE Section
+  const showVE = !DB.filteredCompany || DB.filteredCompany === 'VE';
+  if (showVE && DB.veStock.length > 0) {
+    html += `<tr class="section-row"><td colspan="10">🏢 VE STOCK (${DB.veStock.length} sites)</td></tr>`;
+    
+    DB.veStock.forEach(s => {
+      html += renderStockRow(s);
+    });
+    
+    html += `<tr class="total-row ve">
+      <td colspan="3" style="text-align:right;padding:10px">VE TOTAL ➤</td>
+      <td class="amount">${formatCurrency(summary.veTotal)}</td>
+      <td class="amount">${formatCurrency(summary.veExpenses)}</td>
+      <td class="amount" style="color:#059669;font-size:14px">${formatCurrency(summary.veNetWIP)}</td>
+      <td colspan="4"></td>
+    </tr>`;
+  }
+  
+  // VTPL Section
+  const showVTPL = !DB.filteredCompany || DB.filteredCompany === 'VTPL';
+  if (showVTPL && DB.vtplStock.length > 0) {
+    html += `<tr class="section-row vtpl"><td colspan="10">🏭 VTPL STOCK (${DB.vtplStock.length} sites)</td></tr>`;
+    
+    DB.vtplStock.forEach(s => {
+      html += renderStockRow(s);
+    });
+    
+    html += `<tr class="total-row vtpl">
+      <td colspan="3" style="text-align:right;padding:10px">VTPL TOTAL ➤</td>
+      <td class="amount">${formatCurrency(summary.vtplTotal)}</td>
+      <td class="amount">${formatCurrency(summary.vtplExpenses)}</td>
+      <td class="amount" style="color:#059669;font-size:14px">${formatCurrency(summary.vtplNetWIP)}</td>
+      <td colspan="4"></td>
+    </tr>`;
+  }
+  
+  // Grand Total
+  if (!DB.filteredCompany) {
+    html += `<tr class="grand-total">
+      <td colspan="5" style="text-align:right">🏆 NET STOCK (BOTH COMPANIES) ➤</td>
+      <td class="amount" style="font-size:17px">${formatCurrency(summary.netStockTotal)}</td>
+      <td colspan="4"></td>
+    </tr>`;
+  }
+  
+  tbody.innerHTML = html;
+}
+
+function renderStockRow(s) {
+  const ageColor = getAgeColor(s.dayAgeing);
+  return `<tr>
+    <td><strong>${s.sno}</strong></td>
+    <td><strong>${s.siteName}</strong></td>
+    <td style="color:#3b82f6;font-size:12px">${s.tabLink || '-'}</td>
+    <td class="amount">${formatCurrency(s.stockValue)}</td>
+    <td class="amount">${formatCurrency(s.siteExpenses)}</td>
+    <td class="amount" style="font-weight:700;color:#059669">${formatCurrency(s.netWIP)}</td>
+    <td style="font-size:12px">${s.remarks || '-'}</td>
+    <td>${s.driveLink && s.driveLink.startsWith('http') ? `<a href="${s.driveLink}" target="_blank" title="${s.driveLink}">📎</a>` : '-'}</td>
+    <td><span class="age-badge" style="background:${ageColor}">${s.dayAgeing}d</span></td>
+    <td style="font-size:11px;color:#64748b">${s.cell}</td>
+  </tr>`;
+}
+
+// ==================== SUMMARY CARD ====================
+function renderSummaryCard() {
+  const summary = DB.stockSummary || {};
+  const container = document.getElementById('wipSummaryContainer');
+  
+  container.innerHTML = `
+    <div id="wipSummaryCard">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0;font-size:18px">📊 WIP Stock Summary - Vishal Groups</h3>
+        <span style="font-size:13px;background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:12px">📅 ${summary.date || '-'}</span>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <div class="label">🏢 VE Stock Value</div>
+          <div class="value">${formatCurrency(summary.veTotal||0)}</div>
+          <div class="sub">${DB.veStock.length} sites • Net WIP: ${formatCurrency(summary.veNetWIP||0)}</div>
+        </div>
+        <div class="summary-box">
+          <div class="label">🏭 VTPL Stock Value</div>
+          <div class="value">${formatCurrency(summary.vtplTotal||0)}</div>
+          <div class="sub">${DB.vtplStock.length} sites • Net WIP: ${formatCurrency(summary.vtplNetWIP||0)}</div>
+        </div>
+        <div class="summary-box">
+          <div class="label">💰 Combined Net WIP</div>
+          <div class="value">${formatCurrency(summary.combinedNetWIP||0)}</div>
+        </div>
+        <div class="summary-box highlight">
+          <div class="label">🏆 NET STOCK TOTAL</div>
+          <div class="value">${formatCurrency(summary.netStockTotal||0)}</div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 // ==================== UTILITY FUNCTIONS ====================
+function parseCSVLine(line) {
+  if (!line) return [];
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      if (inQuotes && line[i + 1] === '"') { current += '"'; i++; }
+      else { inQuotes = !inQuotes; }
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current.trim());
+  return result.map(v => v.replace(/^"|"$/g, ''));
+}
+
+function parseNum(val) {
+  if (val === null || val === undefined || val === '') return 0;
+  if (typeof val === 'number') return val;
+  const cleaned = String(val).replace(/[₹,\s]/g, '').replace(/[^\d.-]/g, '');
+  return Number(cleaned) || 0;
+}
+
 function formatCurrency(num) {
   if (!num) return '₹ 0';
-  return '₹ ' + Number(num).toLocaleString('en-IN');
+  return '₹ ' + Number(num).toLocaleString('en-IN', { maximumFractionDigits: 2 });
 }
 
-function calcDays(dateStr) {
-  if (!dateStr) return 0;
-  const d = new Date(dateStr);
-  const now = new Date();
-  return Math.floor((now - d) / (1000 * 60 * 60 * 24));
+function getAgeColor(days) {
+  if (days > 365) return '#dc2626';
+  if (days > 180) return '#f59e0b';
+  if (days > 90) return '#3b82f6';
+  return '#22c55e';
 }
 
-function getMonth(dateStr) {
-  if (!dateStr) return '';
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  return months[new Date(dateStr).getMonth()];
-}
-
-function nextId(arr) {
-  return arr.length > 0 ? Math.max(...arr.map(a => a.id || 0)) + 1 : 1;
-}
-
-function getAllParties() { return [...new Set([...DB.parties, ...DB.saleEntries.map(s=>s.party), ...DB.pendingBills.map(p=>p.party)])]; }
-function getAllSites() { return [...new Set([...DB.sites, ...DB.saleEntries.map(s=>s.site), ...DB.pendingBills.map(p=>p.site)])]; }
-
-// ==================== DROPDOWN SEARCH ====================
-function searchDropdown(input, dropdownId, items) {
-  const dropdown = document.getElementById(dropdownId);
-  const val = input.value.toLowerCase();
-  const filtered = items.filter(i => i.toLowerCase().includes(val));
-  dropdown.innerHTML = filtered.map(i => `<div class="dropdown-item" onclick="selectDropdown('${input.id}','${dropdownId}','${i}')">${i}</div>`).join('');
-  dropdown.classList.add('show');
-}
-
-function selectDropdown(inputId, dropdownId, value) {
-  document.getElementById(inputId).value = value;
-  document.getElementById(dropdownId).classList.remove('show');
-  // Trigger dependent updates
-  if (inputId === 'pay_party') updatePaySites();
-  if (inputId === 'pay_site') updatePayInvoices();
-}
-
-// Close dropdowns on outside click
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.dropdown-search')) {
-    document.querySelectorAll('.dropdown-list').forEach(d => d.classList.remove('show'));
+function showStatus(text, color) {
+  const el = document.getElementById('lastSync');
+  if (el) {
+    el.textContent = text;
+    const colors = { green: '#22c55e', red: '#ef4444', blue: '#3b82f6', orange: '#f59e0b' };
+    el.style.color = colors[color] || '#94a3b8';
   }
-});
-
-// ==================== RENDER FUNCTIONS ====================
-function refreshAll() {
-  renderPendingBills();
-  renderSD();
-  renderLD();
-  renderHold();
-  renderOtherDeductions();
-  renderGST();
-  renderWithheld();
-  renderVESales();
-  renderVTPLSales();
-  renderSaleEntries();
-  renderPayments();
-  renderStock();
-  updateReportStats();
-  updateSalesStats();
-  updatePaymentStats();
-}
-
-// PENDING BILLS
-function renderPendingBills() {
-  const tbody = document.getElementById('pendingBillsBody');
-  tbody.innerHTML = DB.pendingBills.map((b, i) => {
-    const days = calcDays(b.date);
-    const statusClass = days > 60 ? 'badge-overdue' : days > 30 ? 'badge-pending' : 'badge-paid';
-    const statusText = days > 60 ? 'Overdue' : days > 30 ? 'Due' : 'Current';
-    return `<tr>
-      <td>${i + 1}</td><td>${b.site}</td><td>${b.party}</td><td>${b.invoice}</td>
-      <td>${b.date}</td><td class="amount">${formatCurrency(b.amount)}</td>
-      <td><strong>${days} days</strong></td>
-      <td><span class="badge ${statusClass}">${statusText}</span></td>
-      <td><button class="delete-row" onclick="deleteEntry('pendingBills',${b.id})">🗑️</button></td>
-    </tr>`;
-  }).join('');
-}
-
-function renderSD() {
-  const tbody = document.getElementById('sdBody');
-  tbody.innerHTML = DB.sd.map((s, i) => `<tr>
-    <td>${i+1}</td><td>${s.site}</td><td>${s.party}</td><td>${s.date}</td>
-    <td class="amount">${formatCurrency(s.amount)}</td><td><strong>${calcDays(s.date)} days</strong></td>
-    <td><span class="badge badge-hold">${s.status||'Active'}</span></td>
-    <td><button class="delete-row" onclick="deleteEntry('sd',${s.id})">🗑️</button></td>
-  </tr>`).join('');
-}
-
-function renderLD() {
-  const tbody = document.getElementById('ldBody');
-  tbody.innerHTML = DB.ld.map((l, i) => `<tr>
-    <td>${i+1}</td><td>${l.site}</td><td>${l.party}</td><td>${l.date}</td>
-    <td class="amount negative">${formatCurrency(l.amount)}</td><td><strong>${calcDays(l.date)} days</strong></td>
-    <td>${l.reason||'-'}</td>
-    <td><button class="delete-row" onclick="deleteEntry('ld',${l.id})">🗑️</button></td>
-  </tr>`).join('');
-}
-
-function renderHold() {
-  const tbody = document.getElementById('holdBody');
-  tbody.innerHTML = DB.hold.map((h, i) => `<tr>
-    <td>${i+1}</td><td>${h.site}</td><td>${h.party}</td><td>${h.date}</td>
-    <td class="amount">${formatCurrency(h.amount)}</td><td><strong>${calcDays(h.date)} days</strong></td>
-    <td>${h.reason||'-'}</td>
-    <td><button class="delete-row" onclick="deleteEntry('hold',${h.id})">🗑️</button></td>
-  </tr>`).join('');
-}
-
-function renderOtherDeductions() {
-  const tbody = document.getElementById('otherDedBody');
-  tbody.innerHTML = DB.otherDeductions.map((d, i) => `<tr>
-    <td>${i+1}</td><td>${d.site}</td><td>${d.party}</td><td>${d.date}</td>
-    <td>${d.type||'-'}</td><td class="amount negative">${formatCurrency(d.amount)}</td>
-    <td>${d.remarks||'-'}</td>
-    <td><button class="delete-row" onclick="deleteEntry('otherDeductions',${d.id})">🗑️</button></td>
-  </tr>`).join('');
-}
-
-function renderGST() {
-  const tbody = document.getElementById('gstBody');
-  tbody.innerHTML = DB.gst.map((g, i) => `<tr>
-    <td>${i+1}</td><td>${g.site}</td><td>${g.party}</td><td>${g.invoice||'-'}</td><td>${g.date}</td>
-    <td class="amount">${formatCurrency(g.amount)}</td><td>${g.gstPct||18}%</td>
-    <td><span class="badge badge-pending">${g.status||'Pending'}</span></td>
-    <td><button class="delete-row" onclick="deleteEntry('gst',${g.id})">🗑️</button></td>
-  </tr>`).join('');
-}
-
-function renderWithheld() {
-  const tbody = document.getElementById('withheldBody');
-  tbody.innerHTML = DB.withheld.map((w, i) => `<tr>
-    <td>${i+1}</td><td>${w.site}</td><td>${w.party}</td><td>${w.date}</td>
-    <td class="amount">${formatCurrency(w.amount)}</td><td>${w.reason||'-'}</td>
-    <td><strong>${calcDays(w.date)} days</strong></td>
-    <td><button class="delete-row" onclick="deleteEntry('withheld',${w.id})">🗑️</button></td>
-  </tr>`).join('');
-}
-
-// SALES
-function renderVESales() {
-  const tbody = document.getElementById('veSalesBody');
-  let total = 0;
-  tbody.innerHTML = DB.salesVE.map((s, i) => {
-    total += Number(s.amount);
-    return `<tr data-month="${s.month}" data-code="${s.code}">
-      <td>${i+1}</td><td>${s.month}</td><td>${s.party}</td><td>${s.site}</td><td>${s.invoice}</td>
-      <td>${s.date}</td><td class="amount">${formatCurrency(s.amount)}</td>
-      <td><span class="badge ${s.code==='N'?'badge-new':'badge-repeat'}">${s.code==='N'?'New (N)':'Repeat (R)'}</span></td>
-      <td><button class="delete-row" onclick="deleteSale('salesVE',${s.id})">🗑️</button></td>
-    </tr>`;
-  }).join('');
-  document.getElementById('veSalesTotal').textContent = formatCurrency(total);
-  document.getElementById('veTotalSales').textContent = formatCurrency(total);
-}
-
-function renderVTPLSales() {
-  const tbody = document.getElementById('vtplSalesBody');
-  let total = 0;
-  tbody.innerHTML = DB.salesVTPL.map((s, i) => {
-    total += Number(s.amount);
-    return `<tr data-month="${s.month}" data-code="${s.code}">
-      <td>${i+1}</td><td>${s.month}</td><td>${s.party}</td><td>${s.site}</td><td>${s.invoice}</td>
-      <td>${s.date}</td><td class="amount">${formatCurrency(s.amount)}</td>
-      <td><span class="badge ${s.code==='N'?'badge-new':'badge-repeat'}">${s.code==='N'?'New (N)':'Repeat (R)'}</span></td>
-      <td><button class="delete-row" onclick="deleteSale('salesVTPL',${s.id})">🗑️</button></td>
-    </tr>`;
-  }).join('');
-  document.getElementById('vtplSalesTotal').textContent = formatCurrency(total);
-  document.getElementById('vtplTotalSales').textContent = formatCurrency(total);
-}
-
-function renderMonthWise() {
-  const months = ['April','May','June','July','August','September','October','November','December','January','February','March'];
-  const tbody = document.getElementById('monthWiseBody');
-  let tveSales=0, tveN=0, tveR=0, tvtplSales=0, tvtplN=0, tvtplR=0;
-  
-  tbody.innerHTML = months.map(m => {
-    const veData = DB.salesVE.filter(s => s.month === m);
-    const vtplData = DB.salesVTPL.filter(s => s.month === m);
-    const veTotal = veData.reduce((s,x) => s + Number(x.amount), 0);
-    const veN = veData.filter(x => x.code==='N').length;
-    const veR = veData.filter(x => x.code==='R').length;
-    const vtplTotal = vtplData.reduce((s,x) => s + Number(x.amount), 0);
-    const vtplN = vtplData.filter(x => x.code==='N').length;
-    const vtplR = vtplData.filter(x => x.code==='R').length;
-    tveSales+=veTotal; tveN+=veN; tveR+=veR; tvtplSales+=vtplTotal; tvtplN+=vtplN; tvtplR+=vtplR;
-    return `<tr>
-      <td><strong>${m}</strong></td><td class="amount">${formatCurrency(veTotal)}</td><td>${veN}</td><td>${veR}</td>
-      <td class="amount">${formatCurrency(vtplTotal)}</td><td>${vtplN}</td><td>${vtplR}</td>
-      <td class="amount" style="font-weight:700">${formatCurrency(veTotal+vtplTotal)}</td>
-    </tr>`;
-  }).join('');
-  
-  document.getElementById('mwVETotal').textContent = formatCurrency(tveSales);
-  document.getElementById('mwVEN').textContent = tveN;
-  document.getElementById('mwVER').textContent = tveR;
-  document.getElementById('mwVTPLTotal').textContent = formatCurrency(tvtplSales);
-  document.getElementById('mwVTPLN').textContent = tvtplN;
-  document.getElementById('mwVTPLR').textContent = tvtplR;
-  document.getElementById('mwCombined').textContent = formatCurrency(tveSales + tvtplSales);
-}
-
-function renderSaleEntries() {
-  const tbody = document.getElementById('saleEntriesBody');
-  tbody.innerHTML = DB.saleEntries.map((s, i) => `<tr>
-    <td>${i+1}</td><td><span class="badge ${s.company==='VE'?'badge-new':'badge-repeat'}">${s.company}</span></td>
-    <td>${s.party}</td><td>${s.site}</td><td>${s.invoice}</td><td>${s.date}</td>
-    <td class="amount">${formatCurrency(s.amount)}</td>
-    <td><span class="badge ${s.code==='N'?'badge-new':'badge-repeat'}">${s.code}</span></td>
-    <td>${s.boqCount||0} items</td>
-    <td><button class="delete-row" onclick="deleteSaleEntry(${s.id})">🗑️</button></td>
-  </tr>`).join('');
-}
-
-function renderPayments() {
-  const tbody = document.getElementById('allPaymentsBody');
-  tbody.innerHTML = DB.payments.map((p, i) => `<tr>
-    <td>${i+1}</td><td>${p.date}</td><td>${p.party}</td><td>${p.site}</td><td>${p.invoice}</td>
-    <td class="amount">${formatCurrency(p.invAmount)}</td>
-    <td class="amount positive">${formatCurrency(p.received)}</td>
-    <td class="amount negative">${formatCurrency(p.totalDeduction)}</td>
-    <td class="amount" style="color:#7c3aed">${formatCurrency(p.totalHold)}</td>
-    <td class="amount positive" style="font-weight:700">${formatCurrency(p.netReceived)}</td>
-    <td><button class="delete-row" onclick="deletePayment(${p.id})">🗑️</button></td>
-  </tr>`).join('');
-}
-
-function renderStock() {
-  const tbody = document.getElementById('stockBody');
-  let totalValue = 0;
-  let lowCount = 0;
-  const categories = new Set();
-  
-  tbody.innerHTML = DB.stock.map((s, i) => {
-    const value = s.qty * s.rate;
-    totalValue += value;
-    categories.add(s.category);
-    const isLow = s.qty < (s.minQty || 0);
-    if (isLow) lowCount++;
-    return `<tr>
-      <td>${i+1}</td><td>${s.code}</td><td>${s.name}</td><td>${s.category}</td>
-      <td>${s.unit}</td><td>${s.qty}</td><td class="amount">${formatCurrency(s.rate)}</td>
-      <td class="amount">${formatCurrency(value)}</td><td>${s.minQty||'-'}</td>
-      <td><span class="badge ${isLow?'badge-overdue':'badge-paid'}">${isLow?'Low Stock':'OK'}</span></td>
-    </tr>`;
-  }).join('');
-  
-  document.getElementById('totalStockItems').textContent = DB.stock.length;
-  document.getElementById('totalStockValue').textContent = formatCurrency(totalValue);
-  document.getElementById('lowStockCount').textContent = lowCount;
-  
-  // Populate category filter
-  const catFilter = document.getElementById('stockCategoryFilter');
-  const currentVal = catFilter.value;
-  catFilter.innerHTML = '<option value="">All Categories</option>' + 
-    [...categories].map(c => `<option ${c===currentVal?'selected':''}>${c}</option>`).join('');
-}
-
-// ==================== STATS UPDATES ====================
-function updateReportStats() {
-  document.getElementById('totalPendingAmt').textContent = formatCurrency(DB.pendingBills.reduce((s,b) => s + Number(b.amount), 0));
-  document.getElementById('totalSDAmt').textContent = formatCurrency(DB.sd.reduce((s,b) => s + Number(b.amount), 0));
-  document.getElementById('totalLDAmt').textContent = formatCurrency(DB.ld.reduce((s,b) => s + Number(b.amount), 0));
-  document.getElementById('totalHoldAmt').textContent = formatCurrency(DB.hold.reduce((s,b) => s + Number(b.amount), 0));
-  document.getElementById('totalGSTAmt').textContent = formatCurrency(DB.gst.reduce((s,b) => s + Number(b.amount), 0));
-}
-
-function updateSalesStats() {
-  const veTotal = DB.salesVE.reduce((s,x) => s + Number(x.amount), 0);
-  const vtplTotal = DB.salesVTPL.reduce((s,x) => s + Number(x.amount), 0);
-  document.getElementById('totalCombinedSales').textContent = formatCurrency(veTotal + vtplTotal);
-  document.getElementById('newCustomerCount').textContent = DB.salesVE.filter(x=>x.code==='N').length + DB.salesVTPL.filter(x=>x.code==='N').length;
-  document.getElementById('repeatCustomerCount').textContent = DB.salesVE.filter(x=>x.code==='R').length + DB.salesVTPL.filter(x=>x.code==='R').length;
-}
-
-function updatePaymentStats() {
-  const totalRec = DB.payments.reduce((s,p) => s + Number(p.received||0), 0);
-  const totalDed = DB.payments.reduce((s,p) => s + Number(p.totalDeduction||0), 0);
-  const totalHold = DB.payments.reduce((s,p) => s + Number(p.totalHold||0), 0);
-  document.getElementById('totalReceived').textContent = formatCurrency(totalRec);
-  document.getElementById('totalDeductions').textContent = formatCurrency(totalDed);
-  document.getElementById('totalHeldPay').textContent = formatCurrency(totalHold);
-  document.getElementById('totalNetReceived').textContent = formatCurrency(totalRec - totalDed - totalHold);
-}
-
-// ==================== ADD MODAL (REPORT) ====================
-let currentModalType = '';
-
-function openAddModal(type) {
-  currentModalType = type;
-  const modal = document.getElementById('addModal');
-  const title = document.getElementById('addModalTitle');
-  const body = document.getElementById('addModalBody');
-  
-  const titles = { pending:'Add Pending Bill', sd:'Add SD Entry', ld:'Add LD Entry', hold:'Add Hold Entry', otherDed:'Add Other Deduction', gst:'Add GST Entry', withheld:'Add Withheld Entry' };
-  title.textContent = titles[type] || 'Add Entry';
-  
-  let html = '<div class="form-grid">';
-  html += '<div class="form-group"><label>Site Name</label><input type="text" id="modal_site" placeholder="Site name"></div>';
-  html += '<div class="form-group"><label>Party Name</label><input type="text" id="modal_party" placeholder="Party name"></div>';
-  html += '<div class="form-group"><label>Date</label><input type="date" id="modal_date"></div>';
-  html += '<div class="form-group"><label>Amount (₹)</label><input type="number" id="modal_amount" placeholder="0.00"></div>';
-  
-  if (type === 'pending') {
-    html += '<div class="form-group"><label>Invoice No</label><input type="text" id="modal_invoice" placeholder="Invoice number"></div>';
+  const dot = document.querySelector('.sync-dot');
+  if (dot) {
+    const colors = { green: '#22c55e', red: '#ef4444', blue: '#3b82f6', orange: '#f59e0b' };
+    dot.style.background = colors[color] || '#94a3b8';
   }
-  if (type === 'ld' || type === 'hold' || type === 'withheld') {
-    html += '<div class="form-group"><label>Reason</label><input type="text" id="modal_reason" placeholder="Reason"></div>';
-  }
-  if (type === 'otherDed') {
-    html += '<div class="form-group"><label>Deduction Type</label><input type="text" id="modal_dedType" placeholder="Type"></div>';
-    html += '<div class="form-group"><label>Remarks</label><input type="text" id="modal_remarks" placeholder="Remarks"></div>';
-  }
-  if (type === 'gst') {
-    html += '<div class="form-group"><label>Invoice No</label><input type="text" id="modal_invoice" placeholder="Invoice"></div>';
-    html += '<div class="form-group"><label>GST %</label><input type="number" id="modal_gstPct" value="18"></div>';
-  }
-  html += '</div>';
-  body.innerHTML = html;
-  modal.classList.add('active');
 }
 
-function saveModalEntry() {
-  const site = document.getElementById('modal_site')?.value || '';
-  const party = document.getElementById('modal_party')?.value || '';
-  const date = document.getElementById('modal_date')?.value || '';
-  const amount = Number(document.getElementById('modal_amount')?.value || 0);
-  
-  if (!site || !amount) { alert('Please fill required fields'); return; }
-  
-  const entry = { id: Date.now(), site, party, date, amount };
-  
-  switch(currentModalType) {
-    case 'pending':
-      entry.invoice = document.getElementById('modal_invoice')?.value || '';
-      entry.status = 'Pending';
-      DB.pendingBills.push(entry);
-      break;
-    case 'sd':
-      entry.status = 'Active';
-      DB.sd.push(entry);
-      break;
-    case 'ld':
-      entry.reason = document.getElementById('modal_reason')?.value || '';
-      DB.ld.push(entry);
-      break;
-    case 'hold':
-      entry.reason = document.getElementById('modal_reason')?.value || '';
-      DB.hold.push(entry);
-      break;
-    case 'otherDed':
-      entry.type = document.getElementById('modal_dedType')?.value || '';
-      entry.remarks = document.getElementById('modal_remarks')?.value || '';
-      DB.otherDeductions.push(entry);
-      break;
-    case 'gst':
-      entry.invoice = document.getElementById('modal_invoice')?.value || '';
-      entry.gstPct = Number(document.getElementById('modal_gstPct')?.value || 18);
-      entry.status = 'Pending';
-      DB.gst.push(entry);
-      break;
-    case 'withheld':
-      entry.reason = document.getElementById('modal_reason')?.value || '';
-      DB.withheld.push(entry);
-      break;
-  }
-  
-  saveData();
-  refreshAll();
-  closeModal('addModal');
-}
-
-function deleteEntry(type, id) {
-  if (!confirm('Are you sure?')) return;
-  DB[type] = DB[type].filter(x => x.id !== id);
-  saveData();
-  refreshAll();
-}
-
-// ==================== SALES MODAL ====================
-function openSalesEntryModal(company) {
-  document.getElementById('sm_company').value = company;
-  document.getElementById('salesModalTitle').textContent = `Add ${company} Sale`;
-  document.getElementById('sm_party').value = '';
-  document.getElementById('sm_site').value = '';
-  document.getElementById('sm_invoice').value = '';
-  document.getElementById('sm_date').value = '';
-  document.getElementById('sm_amount').value = '';
-  document.getElementById('salesEntryModal').classList.add('active');
-}
-
-function saveSalesModal() {
-  const company = document.getElementById('sm_company').value;
-  const entry = {
-    id: Date.now(),
-    month: getMonth(document.getElementById('sm_date').value),
-    party: document.getElementById('sm_party').value,
-    site: document.getElementById('sm_site').value,
-    invoice: document.getElementById('sm_invoice').value,
-    date: document.getElementById('sm_date').value,
-    amount: Number(document.getElementById('sm_amount').value || 0),
-    code: document.getElementById('sm_code').value
-  };
-  
-  if (!entry.party || !entry.amount) { alert('Fill required fields'); return; }
-  
-  if (company === 'VE') DB.salesVE.push(entry);
-  else DB.salesVTPL.push(entry);
-  
-  saveData();
-  refreshAll();
-  closeModal('salesEntryModal');
-}
-
-function deleteSale(type, id) {
-  if (!confirm('Delete?')) return;
-  DB[type] = DB[type].filter(x => x.id !== id);
-  saveData();
-  refreshAll();
-}
-
-// ==================== DATA ENTRY (SALE) ====================
-function saveSaleEntry() {
-  const company = document.getElementById('de_company').value;
-  const party = document.getElementById('de_party').value;
-  const site = document.getElementById('de_site').value;
-  const invoice = document.getElementById('de_invoice').value;
-  const date = document.getElementById('de_date').value;
-  const amount = Number(document.getElementById('de_amount').value || 0);
-  const code = document.getElementById('de_code').value;
-  
-  if (!party || !site || !amount) { alert('Please fill Party, Site and Amount'); return; }
-  
-  const entry = {
-    id: Date.now(), company, party, site, invoice, date, amount, code,
-    month: getMonth(date),
-    boqCount: DB.boqItems.length,
-    boqItems: [...DB.boqItems]
-  };
-  
-  DB.saleEntries.push(entry);
-  
-  // Also add to sales
-  const saleEntry = { id: entry.id, month: entry.month, party, site, invoice, date, amount, code };
-  if (company === 'VE') DB.salesVE.push(saleEntry);
-  else DB.salesVTPL.push(saleEntry);
-  
-  // Add to pending bills
-  DB.pendingBills.push({ id: Date.now()+1, site, party, invoice, date, amount, status: 'Pending' });
-  
-  // Add party/site to lists
-  if (!DB.parties.includes(party)) DB.parties.push(party);
-  if (!DB.sites.includes(site)) DB.sites.push(site);
-  
-  DB.boqItems = [];
-  saveData();
-  refreshAll();
-  clearSaleForm();
-  alert('Sale entry saved successfully! Also added to Pending Bills and Sales.');
-}
-
-function clearSaleForm() {
-  ['de_party','de_site','de_invoice','de_amount'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('de_date').value = '';
-  document.getElementById('boqPreview').style.display = 'none';
-  DB.boqItems = [];
-}
-
-function deleteSaleEntry(id) {
-  if (!confirm('Delete?')) return;
-  DB.saleEntries = DB.saleEntries.filter(x => x.id !== id);
-  saveData();
-  refreshAll();
-}
-
-// ==================== BOQ EXCEL HANDLING ====================
-function handleBOQDrop(e) {
-  e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (file) processBOQFile(file);
-}
-
-function handleBOQFile(input) {
-  if (input.files[0]) processBOQFile(input.files[0]);
-}
-
-function processBOQFile(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-      
-      DB.boqItems = [];
-      // Skip header row, process data
-      for (let i = 1; i < json.length; i++) {
-        const row = json[i];
-        if (row && row.length >= 3) {
-          DB.boqItems.push({
-            srNo: row[0] || i,
-            description: row[1] || '',
-            unit: row[2] || 'Nos',
-            qty: Number(row[3]) || 0,
-            rate: Number(row[4]) || 0,
-            amount: Number(row[5]) || (Number(row[3]) || 0) * (Number(row[4]) || 0)
-          });
-        }
-      }
-      
-      renderBOQ();
-      document.getElementById('boqPreview').style.display = 'block';
-      document.getElementById('boqDropZone').innerHTML = `
-        <div style="font-size:24px">✅</div>
-        <div style="font-weight:600;color:var(--success)">File Loaded: ${file.name}</div>
-        <div style="font-size:12px;color:var(--text-light)">${DB.boqItems.length} items imported</div>
-        <div style="font-size:12px;color:var(--primary);cursor:pointer" onclick="document.getElementById('boqFileInput').click()">Click to change file</div>
-      `;
-    } catch (err) {
-      alert('Error reading file: ' + err.message);
-    }
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-function renderBOQ() {
-  const tbody = document.getElementById('boqBody');
-  let total = 0;
-  tbody.innerHTML = DB.boqItems.map((b, i) => {
-    const amt = b.qty * b.rate;
-    total += amt;
-    return `<tr>
-      <td>${b.srNo}</td><td>${b.description}</td><td>${b.unit}</td>
-      <td>${b.qty}</td><td class="amount">${formatCurrency(b.rate)}</td>
-      <td class="amount">${formatCurrency(amt)}</td>
-      <td><button class="delete-row" onclick="removeBOQ(${i})">🗑️</button></td>
-    </tr>`;
-  }).join('');
-  document.getElementById('boqTotal').textContent = formatCurrency(total);
-}
-
-function removeBOQ(index) {
-  DB.boqItems.splice(index, 1);
-  renderBOQ();
-}
-
-// ==================== PAYMENT RECEIVED ====================
-function searchPayParty(input) {
-  const parties = getAllParties();
-  const dropdown = document.getElementById('payPartyDropdown');
-  const val = input.value.toLowerCase();
-  const filtered = parties.filter(p => p.toLowerCase().includes(val));
-  dropdown.innerHTML = filtered.map(p => `<div class="dropdown-item" onclick="selectPayParty('${p}')">${p}</div>`).join('');
-  dropdown.classList.add('show');
-}
-
-function selectPayParty(party) {
-  document.getElementById('pay_party').value = party;
-  document.getElementById('payPartyDropdown').classList.remove('show');
-  updatePaySites();
-}
-
-function searchPaySite(input) {
-  const party = document.getElementById('pay_party').value;
-  let sites = getAllSites();
-  if (party) {
-    const partySites = DB.saleEntries.filter(s => s.party === party).map(s => s.site);
-    if (partySites.length > 0) sites = [...new Set(partySites)];
-  }
-  const dropdown = document.getElementById('paySiteDropdown');
-  const val = input.value.toLowerCase();
-  const filtered = sites.filter(s => s.toLowerCase().includes(val));
-  dropdown.innerHTML = filtered.map(s => `<div class="dropdown-item" onclick="selectPaySite('${s}')">${s}</div>`).join('');
-  dropdown.classList.add('show');
-}
-
-function selectPaySite(site) {
-  document.getElementById('pay_site').value = site;
-  document.getElementById('paySiteDropdown').classList.remove('show');
-  updatePayInvoices();
-}
-
-function updatePaySites() {
-  const party = document.getElementById('pay_party').value;
-  document.getElementById('pay_site').value = '';
-  document.getElementById('pay_invoice').innerHTML = '<option value="">-- Select Invoice --</option>';
-}
-
-function updatePayInvoices() {
-  const party = document.getElementById('pay_party').value;
-  const site = document.getElementById('pay_site').value;
-  const select = document.getElementById('pay_invoice');
-  
-  // Find invoices for this party + site
-  const invoices = DB.saleEntries.filter(s => 
-    (!party || s.party === party) && (!site || s.site === site)
-  );
-  
-  // Also check pending bills
-  const pendingInvoices = DB.pendingBills.filter(b =>
-    (!party || b.party === party) && (!site || b.site === site)
-  );
-  
-  const allInv = [...new Map([...invoices, ...pendingInvoices].map(i => [i.invoice, i])).values()];
-  
-  select.innerHTML = '<option value="">-- Select Invoice --</option>' + 
-    allInv.map(inv => `<option value="${inv.invoice}" data-amount="${inv.amount}">${inv.invoice} (${formatCurrency(inv.amount)})</option>`).join('');
-}
-
-function fillInvoiceDetails() {
-  const select = document.getElementById('pay_invoice');
-  const opt = select.options[select.selectedIndex];
-  document.getElementById('pay_invAmount').value = opt?.dataset?.amount ? formatCurrency(opt.dataset.amount) : '';
-  document.getElementById('sumInvAmt').textContent = opt?.dataset?.amount ? formatCurrency(opt.dataset.amount) : '₹ 0';
-}
-
-function calcPaymentSummary() {
-  const received = Number(document.getElementById('pay_amount').value || 0);
-  const itTds = Number(document.getElementById('ded_itTds').value || 0);
-  const gstTds = Number(document.getElementById('ded_gstTds').value || 0);
-  const labourCess = Number(document.getElementById('ded_labourCess').value || 0);
-  const billDiscount = Number(document.getElementById('ded_billDiscount').value || 0);
-  const otherDed = Number(document.getElementById('ded_other').value || 0);
-  const totalDed = itTds + gstTds + labourCess + billDiscount + otherDed;
-  
-  const holdSD = Number(document.getElementById('hold_sd').value || 0);
-  const holdLD = Number(document.getElementById('hold_ld').value || 0);
-  const holdGST = Number(document.getElementById('hold_gst').value || 0);
-  const holdWithheld = Number(document.getElementById('hold_withheld').value || 0);
-  const holdOther = Number(document.getElementById('hold_other').value || 0);
-  const totalHold = holdSD + holdLD + holdGST + holdWithheld + holdOther;
-  
-  const net = received - totalDed - totalHold;
-  const invAmt = Number(document.getElementById('pay_invoice').options[document.getElementById('pay_invoice').selectedIndex]?.dataset?.amount || 0);
-  const balance = invAmt - received;
-  
-  document.getElementById('ded_total').value = formatCurrency(totalDed);
-  document.getElementById('hold_total').value = formatCurrency(totalHold);
-  document.getElementById('sumReceived').textContent = formatCurrency(received);
-  document.getElementById('sumDeductions').textContent = formatCurrency(totalDed);
-  document.getElementById('sumHold').textContent = formatCurrency(totalHold);
-  document.getElementById('sumNet').textContent = formatCurrency(net);
-  document.getElementById('sumBalance').textContent = formatCurrency(balance);
-}
-
-function savePaymentEntry() {
-  const party = document.getElementById('pay_party').value;
-  const site = document.getElementById('pay_site').value;
-  const invoice = document.getElementById('pay_invoice').value;
-  const date = document.getElementById('pay_date').value;
-  const received = Number(document.getElementById('pay_amount').value || 0);
-  
-  if (!party || !received) { alert('Fill required fields'); return; }
-  
-  const invOpt = document.getElementById('pay_invoice').options[document.getElementById('pay_invoice').selectedIndex];
-  const invAmount = Number(invOpt?.dataset?.amount || 0);
-  
-  const itTds = Number(document.getElementById('ded_itTds').value || 0);
-  const gstTds = Number(document.getElementById('ded_gstTds').value || 0);
-  const labourCess = Number(document.getElementById('ded_labourCess').value || 0);
-  const billDiscount = Number(document.getElementById('ded_billDiscount').value || 0);
-  const otherDed = Number(document.getElementById('ded_other').value || 0);
-  const totalDeduction = itTds + gstTds + labourCess + billDiscount + otherDed;
-  
-  const holdSD = Number(document.getElementById('hold_sd').value || 0);
-  const holdLD = Number(document.getElementById('hold_ld').value || 0);
-  const holdGST = Number(document.getElementById('hold_gst').value || 0);
-  const holdWithheld = Number(document.getElementById('hold_withheld').value || 0);
-  const holdOther = Number(document.getElementById('hold_other').value || 0);
-  const totalHold = holdSD + holdLD + holdGST + holdWithheld + holdOther;
-  
-  const netReceived = received - totalDeduction - totalHold;
-  
-  const payment = {
-    id: Date.now(), party, site, invoice, date, invAmount, received,
-    itTds, gstTds, labourCess, billDiscount, otherDed, totalDeduction,
-    holdSD, holdLD, holdGST, holdWithheld, holdOther, totalHold, netReceived
-  };
-  
-  DB.payments.push(payment);
-  
-  // Auto-add hold amounts to respective reports
-  if (holdSD > 0) DB.sd.push({ id: Date.now()+1, site, party, date, amount: holdSD, status: 'Active' });
-  if (holdLD > 0) DB.ld.push({ id: Date.now()+2, site, party, date, amount: holdLD, reason: 'Payment deduction' });
-  if (holdGST > 0) DB.gst.push({ id: Date.now()+3, site, party, invoice, date, amount: holdGST, gstPct: 18, status: 'Pending' });
-  if (holdWithheld > 0) DB.withheld.push({ id: Date.now()+4, site, party, date, amount: holdWithheld, reason: 'Payment hold' });
-  
-  saveData();
-  refreshAll();
-  clearPaymentForm();
-  alert('Payment entry saved! Hold amounts auto-added to reports.');
-}
-
-function clearPaymentForm() {
-  ['pay_party','pay_site','pay_amount','pay_invAmount','ded_itTds','ded_gstTds','ded_labourCess','ded_billDiscount','ded_other','hold_sd','hold_ld','hold_gst','hold_withheld','hold_other','ded_total','hold_total'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('pay_date').value = '';
-  document.getElementById('pay_invoice').innerHTML = '<option value="">-- Select Invoice --</option>';
-  calcPaymentSummary();
-}
-
-function deletePayment(id) {
-  if (!confirm('Delete payment?')) return;
-  DB.payments = DB.payments.filter(p => p.id !== id);
-  saveData();
-  refreshAll();
-}
-
-function saveRecovery() {
-  const recovery = {
-    id: Date.now(),
-    vendor: document.getElementById('rec_vendor').value,
-    invoice: document.getElementById('rec_invoice').value,
-    date: document.getElementById('rec_date').value,
-    amount: Number(document.getElementById('rec_amount').value || 0),
-    type: document.getElementById('rec_type').value
-  };
-  if (!recovery.vendor || !recovery.amount) { alert('Fill required fields'); return; }
-  DB.recoveries.push(recovery);
-  saveData();
-  alert('Recovery saved!');
-  ['rec_vendor','rec_invoice','rec_amount'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('rec_date').value = '';
-}
-
-// ==================== FILTER FUNCTIONS ====================
-function filterTable(tableId, searchVal) {
-  const table = document.getElementById(tableId);
-  const rows = table.querySelectorAll('tbody tr');
+// ==================== FILTERS ====================
+function filterStock(searchVal) {
+  const rows = document.querySelectorAll('#stockTable tbody tr');
   const val = searchVal.toLowerCase();
   rows.forEach(row => {
+    if (row.classList.contains('section-row') || row.classList.contains('total-row') || row.classList.contains('grand-total')) return;
     row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
   });
 }
 
-function filterByMonth(tableId, month) {
-  const table = document.getElementById(tableId);
-  const rows = table.querySelectorAll('tbody tr');
-  rows.forEach(row => {
-    if (!month) { row.style.display = ''; return; }
-    row.style.display = row.dataset.month === month ? '' : 'none';
-  });
-}
-
-function filterByCode(tableId, code) {
-  const table = document.getElementById(tableId);
-  const rows = table.querySelectorAll('tbody tr');
-  rows.forEach(row => {
-    if (!code) { row.style.display = ''; return; }
-    row.style.display = row.dataset.code === code ? '' : 'none';
-  });
-}
-
-function filterStockCategory() {
-  const val = document.getElementById('stockCategoryFilter').value;
-  filterTable('stockTable', val);
-}
-
-// ==================== GOOGLE SHEETS SYNC ====================
-async function syncGoogleSheet() {
-  const url = DB.config.appsScriptUrl || localStorage.getItem('appsScriptUrl');
-  if (!url) {
-    alert('Please configure Google Apps Script URL in Settings first.\n\nFor Vercel/GitHub deployment, use the API endpoint.');
-    return;
-  }
-  
-  try {
-    document.getElementById('lastSync').textContent = 'Syncing...';
-    
-    const response = await fetch(url + '?action=getAll');
-    const data = await response.json();
-    
-    if (data.stock) { DB.stock = data.stock; }
-    if (data.payments) { /* merge with existing */ }
-    if (data.debtors) { /* merge */ }
-    
-    saveData();
-    refreshAll();
-    
-    const now = new Date();
-    document.getElementById('lastSync').textContent = `Last sync: ${now.toLocaleTimeString()}`;
-  } catch (err) {
-    document.getElementById('lastSync').textContent = 'Sync failed';
-    console.error('Sync error:', err);
-  }
-}
-
-async function syncStockFromSheet() {
-  const url = document.getElementById('stockApiKey')?.value || DB.config.appsScriptUrl;
-  if (!url) {
-    // Try published CSV approach
-    const sheetUrl = document.getElementById('stockSheetUrl')?.value;
-    if (sheetUrl) {
-      try {
-        // Extract sheet ID from URL
-        const match = sheetUrl.match(/\/d\/([^/]+)/);
-        if (match) {
-          const sheetId = match[1];
-          const tab = document.getElementById('stockSheetTab')?.value || 'Stock';
-          const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`;
-          
-          const response = await fetch(csvUrl);
-          const csvText = await response.text();
-          
-          // Parse CSV
-          const rows = csvText.split('\n').map(r => r.split(',').map(c => c.replace(/"/g, '').trim()));
-          if (rows.length > 1) {
-            DB.stock = rows.slice(1).filter(r => r[0]).map((r, i) => ({
-              id: i + 1,
-              code: r[0] || '',
-              name: r[1] || '',
-              category: r[2] || '',
-              unit: r[3] || 'Nos',
-              qty: Number(r[4]) || 0,
-              rate: Number(r[5]) || 0,
-              minQty: Number(r[6]) || 0
-            }));
-            saveData();
-            renderStock();
-            alert(`Stock synced! ${DB.stock.length} items loaded.`);
-            document.getElementById('lastSync').textContent = `Last sync: ${new Date().toLocaleTimeString()}`;
-            return;
-          }
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    alert('Configure Google Sheet URL or Apps Script URL to sync.');
-    return;
-  }
-  
-  try {
-    const response = await fetch(url + '?action=getStock');
-    const data = await response.json();
-    if (data && data.length) {
-      DB.stock = data;
-      saveData();
-      renderStock();
-      alert('Stock synced successfully!');
-    }
-  } catch(err) {
-    alert('Sync failed: ' + err.message);
-  }
+function filterByCompany(company) {
+  DB.filteredCompany = company;
+  renderStock();
 }
 
 // ==================== EXPORT ====================
-function exportTable(tableId) {
-  const table = document.getElementById(tableId);
-  const wb = XLSX.utils.table_to_book(table, { sheet: 'Data' });
-  XLSX.writeFile(wb, `${tableId}_${new Date().toISOString().slice(0,10)}.xlsx`);
+function exportStock() {
+  let csv = 'S.No,Site Name,Stock Value,Site Expenses,Net WIP,Day Ageing,Company\n';
+  
+  [...DB.veStock, ...DB.vtplStock].forEach(s => {
+    csv += `${s.sno},"${s.siteName}",${s.stockValue},${s.siteExpenses},${s.netWIP},${s.dayAgeing},${s.company}\n`;
+  });
+  
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vishal_stock_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
 }
 
-function exportAll() {
-  const wb = XLSX.utils.book_new();
-  
-  const tables = {
-    'Pending Bills': 'pendingBillsTable',
-    'SD': 'sdTable',
-    'LD': 'ldTable',
-    'Hold': 'holdTable',
-    'VE Sales': 'veSalesTable',
-    'VTPL Sales': 'vtplSalesTable',
-    'Payments': 'allPaymentsTable',
-    'Stock': 'stockTable'
-  };
-  
-  for (const [name, id] of Object.entries(tables)) {
-    const table = document.getElementById(id);
-    if (table) {
-      const ws = XLSX.utils.table_to_sheet(table);
-      XLSX.utils.book_append_sheet(wb, ws, name);
-    }
+// ==================== INITIALIZATION ====================
+window.addEventListener('load', () => {
+  // Try loading cached data first
+  const cached = localStorage.getItem('vishalStock');
+  if (cached) {
+    try {
+      const data = JSON.parse(cached);
+      DB.veStock = data.veStock || [];
+      DB.vtplStock = data.vtplStock || [];
+      DB.stockSummary = data.stockSummary || {};
+      renderStock();
+    } catch(e) {}
   }
   
-  XLSX.writeFile(wb, `VishalElectricals_Export_${new Date().toISOString().slice(0,10)}.xlsx`);
-}
-
-// ==================== SETTINGS ====================
-function showSettings() {
-  document.getElementById('appsScriptUrl').value = DB.config.appsScriptUrl || '';
-  document.getElementById('syncInterval').value = DB.config.syncInterval || 5;
-  document.getElementById('settingsModal').classList.add('active');
-}
-
-function saveSettings() {
-  DB.config.appsScriptUrl = document.getElementById('appsScriptUrl').value;
-  DB.config.syncInterval = Number(document.getElementById('syncInterval').value || 5);
-  localStorage.setItem('appsScriptUrl', DB.config.appsScriptUrl);
-  saveData();
-  closeModal('settingsModal');
-  alert('Settings saved!');
+  // Then fetch live data
+  setTimeout(liveSync, 500);
   
-  // Setup auto sync
-  if (DB.config.appsScriptUrl) {
-    setInterval(syncGoogleSheet, DB.config.syncInterval * 60000);
-  }
-}
-
-function saveSheetConfig() {
-  DB.config.stockSheetUrl = document.getElementById('stockSheetUrl')?.value || '';
-  DB.config.paymentSheetUrl = document.getElementById('paymentSheetUrl')?.value || '';
-  saveData();
-  alert('Sheet configuration saved!');
-}
-
-function testConnection() {
-  syncStockFromSheet();
-}
-
-// ==================== MODAL UTILS ====================
-function closeModal(id) {
-  document.getElementById(id).classList.remove('active');
-}
-
-// ==================== GLOBAL SEARCH ====================
-function globalSearchFn() {
-  const val = document.getElementById('globalSearch').value.toLowerCase();
-  if (!val) return;
-  // Search across all data
-  console.log('Searching:', val);
-}
-
-// Keyboard shortcut
-document.addEventListener('keydown', function(e) {
-  if (e.ctrlKey && e.key === 'k') {
-    e.preventDefault();
-    document.getElementById('globalSearch').focus();
-  }
+  // Auto refresh every 5 minutes
+  setInterval(liveSync, 5 * 60 * 1000);
 });
 
-// ==================== INITIALIZE ====================
-loadData();
-refreshAll();
-
-// Set today's date as default
-document.querySelectorAll('input[type="date"]').forEach(input => {
-  if (!input.value) input.value = new Date().toISOString().slice(0, 10);
-});
-
-console.log('Vishal Electricals ERP System Loaded ✅');
-console.log('Data store:', DB);
+console.log('🔥 Vishal Electricals Live Dashboard Loaded');
+console.log('🔗 Apps Script:', APPS_SCRIPT_URL);
+console.log('📋 CSV Backup:', CSV_URL);
 </script>
 
 </body>
