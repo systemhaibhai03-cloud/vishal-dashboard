@@ -436,28 +436,61 @@ function parseCSV(csv) {
   const lines = csv.trim().split("\n");
   const out   = [];
 
-  for (let i = 0; i < lines.length; i++) {
+  // ── Find header row ──
+  let hdr = -1, hCols = [];
+  for (let i = 0; i < Math.min(lines.length, 6); i++) {
+    const c = splitCSVRow(lines[i]);
+    const joined = c.join(" ").toLowerCase();
+    if (joined.includes("pending") || joined.includes("site") || joined.includes("s.no")) {
+      hdr = i; hCols = c.map(x => x.trim().toLowerCase()); break;
+    }
+  }
+
+  // ── Column index helper ──
+  function ci(keywords) {
+    for (const kw of keywords) {
+      const idx = hCols.findIndex(h => h.includes(kw));
+      if (idx >= 0) return idx;
+    }
+    return -1;
+  }
+
+  const iSno      = hdr >= 0 ? ci(["s.no","sno","sr"]) : 0;
+  const iSite     = hdr >= 0 ? ci(["site","project","name"]) : 1;
+  const iTab      = hdr >= 0 ? ci(["sheet","tab","gid"]) : 2;
+  const iPending  = hdr >= 0 ? ci(["pending"]) : 3;
+  const iSD       = hdr >= 0 ? ci(["sd","security"]) : 4;
+  const iLD       = hdr >= 0 ? ci(["ld","liquidated","delay"]) : 5;
+  const iGST      = hdr >= 0 ? ci(["gst"]) : 6;
+  const iInstant  = hdr >= 0 ? ci(["instant"]) : 7;
+  const iOther    = hdr >= 0 ? ci(["other"]) : 8;
+  const iWithheld = hdr >= 0 ? ci(["withheld","retain"]) : 9;
+  const iTotal    = hdr >= 0 ? ci(["total","outstanding"]) : 10;
+
+  const startRow = hdr >= 0 ? hdr + 1 : 0;
+
+  for (let i = startRow; i < lines.length; i++) {
     const cols = splitCSVRow(lines[i]);
-    // Find rows where col[0] is a valid S.No. (1,2,3...)
-    const sno  = parseInt(cols[0]);
+    const sno  = iSno >= 0 ? parseInt(cols[iSno]) : parseInt(cols[0]);
     if (isNaN(sno) || sno <= 0) continue;
-    const site = (cols[1] || "").trim();
+    const site = iSite >= 0 ? (cols[iSite] || "").trim() : (cols[1] || "").trim();
     if (!site || site.length < 3) continue;
-    // Skip if col[1] looks like a header
     if (site.toLowerCase().includes("project") || site.toLowerCase().includes("site name")) continue;
+
+    const get = (idx, fallback) => idx >= 0 && idx < cols.length ? cols[idx] : (fallback >= 0 ? cols[fallback] : "");
 
     out.push({
       sno,
       site,
-      sheetTab: (cols[2]  || "").trim(),
-      pending:  toN(cols[3]),
-      sd:       toN(cols[4]),
-      ld:       toN(cols[5]),
-      gst:      toN(cols[6]),
-      instant:  toN(cols[7]),
-      other:    toN(cols[8]),
-      withheld: toN(cols[9]),
-      total:    toN(cols[10]),
+      sheetTab: (get(iTab, 2) || "").trim(),
+      pending:  toN(get(iPending, 3)),
+      sd:       toN(get(iSD, 4)),
+      ld:       toN(get(iLD, 5)),
+      gst:      toN(get(iGST, 6)),
+      instant:  toN(get(iInstant, 7)),
+      other:    toN(get(iOther, 8)),
+      withheld: toN(get(iWithheld, 9)),
+      total:    toN(get(iTotal, 10)),
       comm:     0
     });
   }
@@ -533,7 +566,8 @@ const SPREADSHEET_ID = "1iHrPxhvsFnedO2Js7u3wmFbPAxLeC4F1WP71MBv5gcw";
 
 // ═══════════════ FETCH INV. DATE FROM INDIVIDUAL SHEET ═══════════════
 async function fetchInvDateFromSheet(siteName, gid) {
-  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${gid}&t=${Date.now()}`;
+  // gviz/tq endpoint — works without CORS issues on public sheets
+  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&gid=${gid}&t=${Date.now()}`;
   try {
     const resp = await fetch(url);
     if (!resp.ok) return [];
@@ -861,47 +895,66 @@ function renderInvoiceTable() {
   const siteFilter =  document.getElementById("inv-filter")?.value  || "";
   const daysF      =  document.getElementById("inv-days-filter")?.value || "";
 
-  // ★ ONLY sites where Pending Bill Amount > 0 in SUMMARY ★
-  const pendingSites = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site));
+  // ★ Pending sites from DATA (summary) — always the source of truth ★
+  const pendingData = DATA.filter(r => r.pending > 0.01);
+  const pendingSites = new Set(pendingData.map(r => r.site));
 
-  let rows = [];
+  // Build base rows from summary DATA (always available)
+  // Then MERGE invoice date+days from INVOICES if available
+  const invMap = {}; // site -> best (oldest) invoice
   if (INVOICES.length > 0) {
-    // Live Apps Script data — filter by pending sites only
-    rows = INVOICES.filter(i =>
-      pendingSites.has(i.site) && (i.pending > 0.01 || i.totalInv > 0)
-    );
-  } else {
-    // Fallback when no invoice data — show pending sites from summary
-    rows = DATA.filter(r => r.pending > 0.01).map(r => ({
-      site: r.site, invNo: "—", invDate: "—",
-      daysOld: 0, totalInv: r.total,
-      payRcvd: 0, pending: r.pending
-    }));
+    INVOICES.forEach(i => {
+      if (!invMap[i.site] || i.daysOld > invMap[i.site].daysOld) {
+        invMap[i.site] = i;
+      }
+    });
   }
 
-  // Apply search / site / days filters
-  if (q)          rows = rows.filter(r => (r.site + r.invNo).toLowerCase().includes(q));
-  if (siteFilter) rows = rows.filter(r => r.site === siteFilter);
-  if (daysF) {
-    const df = parseInt(daysF);
-    if      (df === 30)  rows = rows.filter(r => r.daysOld <= 30);
-    else if (df === 60)  rows = rows.filter(r => r.daysOld > 30  && r.daysOld <= 60);
-    else if (df === 90)  rows = rows.filter(r => r.daysOld > 60  && r.daysOld <= 90);
-    else if (df === 999) rows = rows.filter(r => r.daysOld > 90);
-  }
+  let rows = pendingData.map(r => {
+    const inv = invMap[r.site];
+    return {
+      site:     r.site,
+      invNo:    inv ? inv.invNo    : "—",
+      invDate:  inv ? inv.invDate  : "Loading...",
+      daysOld:  inv ? inv.daysOld  : -1,
+      totalInv: inv ? inv.totalInv : r.total,
+      payRcvd:  inv ? inv.payRcvd  : 0,
+      pending:  r.pending,
+      hasInv:   !!inv
+    };
+  });
 
-  // Populate site dropdown — only pending sites
+  // Refresh dropdown — rebuild every time so it stays in sync
   const sel = document.getElementById("inv-filter");
-  if (sel && sel.options.length <= 1) {
+  if (sel) {
+    const curVal = sel.value;
+    sel.innerHTML = '<option value="">All Sites</option>';
     [...pendingSites].sort().forEach(s => {
       const o = document.createElement("option");
       o.value = s; o.textContent = s;
       sel.appendChild(o);
     });
+    if (curVal && pendingSites.has(curVal)) sel.value = curVal;
   }
 
-  // Sort: oldest first
-  rows.sort((a, b) => b.daysOld - a.daysOld);
+  // Apply filters
+  if (q)          rows = rows.filter(r => (r.site + r.invNo).toLowerCase().includes(q));
+  if (siteFilter) rows = rows.filter(r => r.site === siteFilter);
+  if (daysF) {
+    const df = parseInt(daysF);
+    if      (df === 30)  rows = rows.filter(r => r.daysOld >= 0 && r.daysOld <= 30);
+    else if (df === 60)  rows = rows.filter(r => r.daysOld > 30  && r.daysOld <= 60);
+    else if (df === 90)  rows = rows.filter(r => r.daysOld > 60  && r.daysOld <= 90);
+    else if (df === 999) rows = rows.filter(r => r.daysOld > 90);
+  }
+
+  // Sort: rows with invoice data first (oldest first), then rows without
+  rows.sort((a, b) => {
+    if (a.daysOld >= 0 && b.daysOld >= 0) return b.daysOld - a.daysOld;
+    if (a.daysOld >= 0) return -1;
+    if (b.daysOld >= 0) return 1;
+    return a.site.localeCompare(b.site);
+  });
 
   if (rows.length === 0) {
     document.getElementById("inv-tbody").innerHTML =
@@ -912,26 +965,31 @@ function renderInvoiceTable() {
   }
 
   const totalPending = rows.reduce((s,r) => s + (r.pending || 0), 0);
-  const avgDays = rows.filter(r=>r.daysOld>0).length > 0
-    ? Math.round(rows.filter(r=>r.daysOld>0).reduce((s,r) => s+r.daysOld, 0) / rows.filter(r=>r.daysOld>0).length)
+  const daysRows = rows.filter(r=>r.daysOld >= 0);
+  const avgDays = daysRows.length > 0
+    ? Math.round(daysRows.reduce((s,r) => s+r.daysOld, 0) / daysRows.length)
     : 0;
 
   document.getElementById("inv-tbody").innerHTML = rows.map(r => {
-    const dc = daysColor(r.daysOld);
-    const status = r.daysOld <= 0  ? "—"
+    const hasD = r.daysOld >= 0;
+    const dc = hasD ? daysColor(r.daysOld) : {bg:"#f0eeea",c:"#9a9a94"};
+    const status = !hasD          ? "Fetching..."
       : r.daysOld <= 30  ? "Fresh"
       : r.daysOld <= 60  ? "Follow up"
       : r.daysOld <= 90  ? "Urgent"
       : r.daysOld <= 180 ? "Critical"
       : "Very Critical";
+    const invDateDisplay = r.invDate === "Loading..." 
+      ? `<span style="color:var(--faint);font-size:11px;font-style:italic">Fetching...</span>`
+      : (r.invDate || "—");
     return `<tr>
       <td><span class="site-name">${r.site}</span></td>
       <td style="font-family:monospace;font-size:11px;color:var(--muted)">${r.invNo}</td>
-      <td style="font-size:12px">${r.invDate || "—"}</td>
+      <td style="font-size:12px">${invDateDisplay}</td>
       <td class="r">
-        ${r.daysOld > 0
+        ${hasD
           ? `<span class="days-badge" style="background:${dc.bg};color:${dc.c};font-weight:700">${r.daysOld} days</span>`
-          : `<span style="color:var(--faint)">—</span>`}
+          : `<span style="color:var(--faint);font-size:11px">—</span>`}
       </td>
       <td class="r">${r.totalInv > 0 ? "₹"+fmt(r.totalInv) : "—"}</td>
       <td class="r">${r.payRcvd  > 0 ? "₹"+fmt(r.payRcvd)  : "—"}</td>
@@ -944,7 +1002,7 @@ function renderInvoiceTable() {
       </td>
     </tr>`;
   }).join("") + `<tr class="total-row">
-    <td colspan="3">${rows.length} invoices${avgDays > 0 ? " | Avg: "+avgDays+" days" : ""}</td>
+    <td colspan="3">${rows.length} sites${daysRows.length > 0 ? " | Avg: "+avgDays+" days" : " | Invoice dates loading..."}</td>
     <td></td><td></td><td></td>
     <td class="r" style="color:#c81e1e">₹${fmt(totalPending)}</td>
     <td></td>
@@ -953,65 +1011,69 @@ function renderInvoiceTable() {
 
 
 function renderInvoiceChart() {
-  // ★ Sirf pending bill > 0 wali sites ★
-  const pendingSites = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site));
+  const pendingData = DATA.filter(r => r.pending > 0.01);
+  const pendingSites = new Set(pendingData.map(r => r.site));
   const siteMap = {};
 
+  // Always init from DATA (pending sites)
+  pendingData.forEach(r => {
+    siteMap[r.site] = {total: 0, count: 0, maxDays: 0, pending: r.pending};
+  });
+
+  // Overlay with INVOICES data if available
   if (INVOICES.length > 0) {
-    INVOICES.filter(i => pendingSites.has(i.site) && i.daysOld > 0).forEach(i => {
-      if (!siteMap[i.site]) siteMap[i.site] = {total:0, count:0, maxDays:0};
-      siteMap[i.site].total   += i.daysOld;
-      siteMap[i.site].count   += 1;
-      siteMap[i.site].maxDays  = Math.max(siteMap[i.site].maxDays, i.daysOld);
-    });
-  } else {
-    // Fallback: pending sites with 0 days (will show as unknown)
-    DATA.filter(r => r.pending > 0.01).forEach(r => {
-      siteMap[r.site] = {total:0, count:1, maxDays:0};
+    INVOICES.filter(i => pendingSites.has(i.site) && i.daysOld >= 0).forEach(i => {
+      if (siteMap[i.site]) {
+        siteMap[i.site].total   += i.daysOld;
+        siteMap[i.site].count   += 1;
+        siteMap[i.site].maxDays  = Math.max(siteMap[i.site].maxDays, i.daysOld);
+      }
     });
   }
 
   const sites = Object.keys(siteMap)
-    .map(s => ({site:s, avg:Math.round(siteMap[s].total/siteMap[s].count), max:siteMap[s].maxDays}))
-    .sort((a,b) => b.avg - a.avg)
-    .slice(0, 15);
+    .map(s => ({
+      site: s,
+      avg:  siteMap[s].count > 0 ? Math.round(siteMap[s].total / siteMap[s].count) : 0,
+      max:  siteMap[s].maxDays,
+      hasData: siteMap[s].count > 0
+    }))
+    .sort((a,b) => b.avg - a.avg);
 
   if (sites.length === 0) return;
 
-  if (charts.siteDays) charts.siteDays.destroy();
-  charts.siteDays = new Chart(document.getElementById("chart-site-days"), {
+  const labels = sites.map(s => s.site.length > 22 ? s.site.slice(0,22)+"…" : s.site);
+  const avgData = sites.map(s => s.avg);
+  const colors  = sites.map(s => s.hasData
+    ? (s.avg <= 30 ? "#059669" : s.avg <= 60 ? "#d97706" : s.avg <= 90 ? "#ea580c" : "#c81e1e")
+    : "#b0c4de"
+  );
+
+  if (charts.invChart) charts.invChart.destroy();
+  charts.invChart = new Chart(document.getElementById("chart-site-days"), {
     type: "bar",
     data: {
-      labels: sites.map(s => s.site.length>16 ? s.site.slice(0,16)+"…" : s.site),
+      labels,
       datasets: [{
-        label: "Avg days",
-        data: sites.map(s => s.avg),
-        backgroundColor: sites.map(s => s.avg>90?"#c81e1e":s.avg>60?"#d97706":s.avg>30?"#f59e0b":"#059669"),
-        borderWidth: 0
+        label: "Avg Days Outstanding",
+        data:  avgData,
+        backgroundColor: colors,
+        borderWidth: 0,
+        borderRadius: 3
       }]
     },
     options: {
-      indexAxis: "y", responsive:true, maintainAspectRatio:false,
+      indexAxis: "y",
+      responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: {display:false},
-        tooltip: {callbacks:{label:ctx=>` ${ctx.raw} days outstanding`}}
+        legend: {display: false},
+        tooltip: {callbacks: {label: ctx => ctx.raw > 0 ? ` ${ctx.raw} days` : " Invoice date pending"}}
       },
       scales: {
-        x: {ticks:{callback:v=>v+" days",font:{size:10},color:"#9a9a94"}, grid:{color:"rgba(0,0,0,0.05)"}},
-        y: {ticks:{font:{size:10},color:"#6b6b66"}, grid:{display:false}}
+        x: {beginAtZero: true, ticks: {callback: v => v+" days"}, grid: {color: "rgba(0,0,0,0.04)"}},
+        y: {ticks: {font: {size: 11}}}
       }
     }
-  });
-}
-
-// ═══════════════ DEBTOR TABLE ═══════════════
-function matchSiteInvoices(debtorName) {
-  if (INVOICES.length === 0) return [];
-  const name = debtorName.toLowerCase().trim();
-  const words = name.split(' ').filter(w => w.length > 3);
-  return INVOICES.filter(i => {
-    const s = i.site.toLowerCase();
-    return words.some(w => s.includes(w));
   });
 }
 
