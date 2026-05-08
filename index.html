@@ -110,6 +110,24 @@ tr:last-child td{border-bottom:none}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:4px}
 @media(max-width:900px){.sidebar{width:56px}.sb-name,.sb-sub,.nav-sec,.nav-item span,.sb-footer .data-pill span{display:none}.main{margin-left:56px}.charts-row{grid-template-columns:1fr}.day-grid{grid-template-columns:1fr 1fr}.metrics-grid{grid-template-columns:repeat(2,1fr)}.ai-window{width:calc(100vw - 40px)}}
+/* STOCK PAGE */
+.ageing-badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surface);border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.18);width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;padding:24px}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:0 4px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.form-input{padding:8px 11px;border:0.5px solid var(--border2);border-radius:var(--rs);font-size:13px;background:var(--surface2);color:var(--text);font-family:inherit;outline:none}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:14px;border-top:0.5px solid var(--border)}
+.stock-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;background:var(--accent-bg);color:var(--accent);font-weight:500}
+.manual-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;background:#f0fdf4;color:#15803d;font-weight:500}
+.wip-bar{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;min-width:50px;margin-top:3px}
+.wip-fill{height:100%;border-radius:2px;background:var(--accent)}
 </style>
 </head>
 <body>
@@ -154,6 +172,11 @@ const CONFIG = {
     <button class="nav-item" onclick="showPage('deductions',this)">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       <span>Deduction Analysis</span>
+    </button>
+    <div class="nav-sec">Inventory</div>
+    <button class="nav-item" onclick="showPage('stock',this)">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      <span>Stock Register</span>
     </button>
   </nav>
   <div class="sb-footer">
@@ -313,8 +336,93 @@ const CONFIG = {
       </div>
     </div>
 
+    <!-- PAGE: STOCK REGISTER -->
+    <div class="page" id="page-stock">
+      <div class="notice notice-info" id="stock-notice" style="margin-bottom:14px">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+        <span id="stock-notice-text">Stock data load ho raha hai...</span>
+      </div>
+      <div class="metrics-grid" id="stock-metrics"></div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Stock Register — Site-wise WIP</div><div class="card-sub" id="stock-sub">Live from Google Sheets + Manual entries</div></div>
+          <div style="display:flex;gap:8px">
+            <input type="text" class="search-input" placeholder="Search site..." id="stock-search" oninput="renderStockTable()" style="width:180px">
+            <button class="btn btn-primary" onclick="openStockModal()">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Entry
+            </button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table><thead><tr>
+            <th>#</th><th>Site Name</th><th>Tab</th>
+            <th class="r">Stock Value</th><th class="r">Site Expenses</th><th class="r">Net WIP</th>
+            <th class="r">Day Ageing</th><th>WIP Share</th><th>Status</th>
+          </tr></thead><tbody id="stock-tbody"></tbody></table>
+        </div>
+      </div>
+      <div class="charts-row">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Top sites by Net WIP</div></div>
+          <div class="chart-wrap h260"><canvas id="chart-stock-wip" role="img" aria-label="Stock WIP chart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Ageing distribution</div></div>
+          <div class="chart-wrap h260"><canvas id="chart-stock-age" role="img" aria-label="Stock ageing"></canvas></div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </main>
+</div>
+
+<!-- MANUAL STOCK ENTRY MODAL -->
+<div class="modal-overlay" id="stock-modal">
+  <div class="modal-box">
+    <div class="modal-title">
+      <span>➕ New Stock / Project Entry</span>
+      <button class="modal-close" onclick="closeStockModal()">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group full">
+        <label class="form-label">Site / Project Name *</label>
+        <input type="text" class="form-input" id="m-site" placeholder="e.g. IOCL Raipur DO">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Stock Value (₹) *</label>
+        <input type="number" class="form-input" id="m-stock" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Site Expenses (₹)</label>
+        <input type="number" class="form-input" id="m-exp" placeholder="0" min="0">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Day Ageing (days)</label>
+        <input type="number" class="form-input" id="m-days" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tab / Sheet Name</label>
+        <input type="text" class="form-input" id="m-tab" placeholder="e.g. IOCL Raipur">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group full">
+        <label class="form-label">Remarks</label>
+        <input type="text" class="form-input" id="m-remarks" placeholder="Optional notes...">
+      </div>
+    </div>
+    <div id="m-edit-id" style="display:none"></div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeStockModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStockEntry()">💾 Save Entry</button>
+    </div>
+  </div>
 </div>
 
 <!-- AI CHAT PANEL -->
@@ -511,7 +619,6 @@ const SITE_GIDS = {
   "IOCL Mumbai DO":           387496523,
   "IOCL Sarpara":             323328787,
   "IOCL Moradabad DO":        493192291,
-  "IOCL Barabanki":           1725908395,
   "Transrail Lighting Ltd":   1199190624,
   "IOCL Vijaywada":           1110433204,
   "GAIL Vijaipur":            606059273,
@@ -637,12 +744,6 @@ async function loadInvoicesFromSheets(pendingSites) {
       continue;
     }
 
-    // ★ Skip gid=0 sites — these have no individual tab/sheet
-    if (gid === 0) {
-      console.log("Skipping gid=0 site (no sheet tab):", siteName);
-      continue;
-    }
-
     const invs = await fetchInvDateFromSheet(siteName, gid);
     invs.forEach(inv => allInvoices.push(inv));
   }
@@ -685,10 +786,9 @@ async function loadData() {
     return;
   }
 
-  // ── Step 2: Sirf total > 0 wali sites ki invoice dates fetch karo (pending ya LD/SD koi bhi)
-  // Zero outstanding wali sites ka invoice BILKUL fetch nahi hoga
-  const pendingSites = new Set(DATA.filter(r => r.total > 0.01).map(r => r.site));
-  setNotice(`✓ Summary loaded. ${pendingSites.size} active sites ki Inv. Date fetch ho rahi hai...`, "info");
+  // ── Step 2: Sirf pending > 0 wali sites ki invoice dates fetch karo ──
+  const pendingSites = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site));
+  setNotice(`✓ Summary loaded. ${pendingSites.size} pending sites ki Inv. Date fetch ho rahi hai...`, "info");
   setSidebar("loading");
 
   try {
@@ -710,7 +810,7 @@ async function loadData() {
 }
 
 // ═══════════════ NAVIGATION ═══════════════
-const PAGE_TITLES = {overview:"Overview",sitewise:"Site-wise Breakup",invoices:"Invoice Days",debtors:"Debtor Days",deductions:"Deduction Analysis"};
+const PAGE_TITLES = {overview:"Overview",sitewise:"Site-wise Breakup",invoices:"Invoice Days",debtors:"Debtor Days",deductions:"Deduction Analysis",stock:"Stock Register"};
 function showPage(id, btn) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
@@ -731,6 +831,7 @@ function renderAll() {
   renderDebtorTable();
   renderDeductionTable();
   renderDeductionCharts();
+  renderStockPage();
 }
 
 // ═══════════════ METRICS ═══════════════
@@ -869,19 +970,18 @@ function renderInvoiceTable() {
   const siteFilter =  document.getElementById("inv-filter")?.value  || "";
   const daysF      =  document.getElementById("inv-days-filter")?.value || "";
 
-  // ★ Show invoices for ALL sites with total > 0 in SUMMARY
-  // Zero outstanding sites ka koi bhi invoice show nahi hoga
-  const pendingSites = new Set(DATA.filter(r => r.total > 0.01).map(r => r.site));
+  // ★ ONLY sites where Pending Bill Amount > 0 in SUMMARY ★
+  const pendingSites = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site));
 
   let rows = [];
   if (INVOICES.length > 0) {
-    // Live data — only sites with outstanding > 0, only invoices with pending amount > 0
+    // Live Apps Script data — filter by pending sites only
     rows = INVOICES.filter(i =>
-      pendingSites.has(i.site) && i.pending > 0.01
+      pendingSites.has(i.site) && (i.pending > 0.01 || i.totalInv > 0)
     );
   } else {
-    // Fallback when no invoice data — show all active sites from summary
-    rows = DATA.filter(r => r.total > 0.01).map(r => ({
+    // Fallback when no invoice data — show pending sites from summary
+    rows = DATA.filter(r => r.pending > 0.01).map(r => ({
       site: r.site, invNo: "—", invDate: "—",
       daysOld: 0, totalInv: r.total,
       payRcvd: 0, pending: r.pending
@@ -899,7 +999,7 @@ function renderInvoiceTable() {
     else if (df === 999) rows = rows.filter(r => r.daysOld > 90);
   }
 
-  // Populate site dropdown — all active sites (total > 0)
+  // Populate site dropdown — only pending sites
   const sel = document.getElementById("inv-filter");
   if (sel && sel.options.length <= 1) {
     [...pendingSites].sort().forEach(s => {
@@ -962,8 +1062,8 @@ function renderInvoiceTable() {
 
 
 function renderInvoiceChart() {
-  // ★ Sirf total > 0 wali sites ★
-  const pendingSites = new Set(DATA.filter(r => r.total > 0.01).map(r => r.site));
+  // ★ Sirf pending bill > 0 wali sites ★
+  const pendingSites = new Set(DATA.filter(r => r.pending > 0.01).map(r => r.site));
   const siteMap = {};
 
   if (INVOICES.length > 0) {
@@ -974,8 +1074,8 @@ function renderInvoiceChart() {
       siteMap[i.site].maxDays  = Math.max(siteMap[i.site].maxDays, i.daysOld);
     });
   } else {
-    // Fallback: active sites with 0 days (will show as unknown)
-    DATA.filter(r => r.total > 0.01).forEach(r => {
+    // Fallback: pending sites with 0 days (will show as unknown)
+    DATA.filter(r => r.pending > 0.01).forEach(r => {
       siteMap[r.site] = {total:0, count:1, maxDays:0};
     });
   }
@@ -1025,18 +1125,15 @@ function matchSiteInvoices(debtorName) {
 }
 
 function renderDebtorTable() {
-  // ★ KEY FIX: Only show debtors with total > 0
-  // Actual days = from invoice date, NOT from DAYWISE sheet buckets
-  const rows = DEBTORS
-    .filter(r => r.total > 0.01)   // ← zero-amount debtors SKIP
-    .map(r => {
-      const invs = matchSiteInvoices(r.name).filter(i => i.daysOld > 0);
-      // Actual days = max days among matched invoices (oldest unpaid invoice date se)
-      const actualDays = invs.length > 0
-        ? Math.max(...invs.map(i => i.daysOld))
-        : null; // null = no invoice data fetched yet
-      return { ...r, actualDays, hasLive: invs.length > 0 };
-    });
+  // Build rows with ACTUAL days from invoice data
+  const rows = DEBTORS.map(r => {
+    const invs = matchSiteInvoices(r.name).filter(i => i.daysOld > 0);
+    // Actual days = max days among matched invoices (oldest invoice)
+    const actualDays = invs.length > 0
+      ? Math.max(...invs.map(i => i.daysOld))
+      : null; // null = no invoice data, show as unknown
+    return { ...r, actualDays, hasLive: invs.length > 0 };
+  });
 
   const gt  = rows.reduce((s,r) => s + r.total, 0);
   // Weighted avg using actual days where available
@@ -1178,15 +1275,14 @@ function A() {
   const top5       = [...active].sort((a,b) => b.total - a.total).slice(0,5);
   const topLD      = [...d].filter(r=>r.ld>0).sort((a,b)=>b.ld-a.ld).slice(0,5);
   const topSD      = [...d].filter(r=>r.sd>0).sort((a,b)=>b.sd-a.sd).slice(0,5);
-  const pendInv    = iv.filter(i => i.pending > 0 && i.daysOld > 0);
-  const allActiveInv = iv.filter(i => i.daysOld > 0);
+  const pendInv    = iv.filter(i => i.pending > 0);
   const critical   = pendInv.filter(i => i.daysOld > 180).sort((a,b)=>b.daysOld-a.daysOld);
   const veryOld    = pendInv.filter(i => i.daysOld > 90 && i.daysOld <=180).sort((a,b)=>b.daysOld-a.daysOld);
   const urgent     = pendInv.filter(i => i.daysOld > 60 && i.daysOld <= 90);
   const avgDays    = pendInv.length > 0
     ? Math.round(pendInv.reduce((s,i)=>s+i.daysOld,0) / pendInv.length) : 0;
   return {d,iv,totalOut,totalPend,totalLD,totalSD,totalGST,totalWit,totalOth,
-    active,pendSites,top5,topLD,topSD,pendInv,allActiveInv,critical,veryOld,urgent,avgDays};
+    active,pendSites,top5,topLD,topSD,pendInv,critical,veryOld,urgent,avgDays};
 }
 
 function findSite(keyword) {
@@ -1430,13 +1526,293 @@ function addMsg(text, cls) {
   return div;
 }
 
-// ═══════════════ AUTO REFRESH ═══════════════
+// ═══════════════ STOCK REGISTER ═══════════════
+
+const STOCK_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqUldVOAs1WBX0ZYs5IVybfaw5G622vD0csYtcZvQa-A3GhkTcTBG9joLlzOp5E-J0NIW3GkM_ulEH/pub?output=csv";
+
+const STOCK_FALLBACK = [
+  {sno:1,site:"IOCL JATNI",tab:"IOCL Jatni",stockValue:1250424.84,siteExp:10060,netWIP:1260484.84,dayAgeing:135.6,remarks:"",manual:false},
+  {sno:2,site:"IOCL PARADEEP HM",tab:"IOCL Paradeep HM",stockValue:520258.6,siteExp:16390,netWIP:536648.6,dayAgeing:274,remarks:"",manual:false},
+  {sno:3,site:"IOCL TRICHY",tab:"IOCL Trichy",stockValue:330730,siteExp:15174,netWIP:345904,dayAgeing:405.5,remarks:"",manual:false},
+  {sno:4,site:"IOCL BANGALORE DO",tab:"IOCL Bangalore Do",stockValue:372125,siteExp:426885,netWIP:799010,dayAgeing:241.7,remarks:"",manual:false},
+  {sno:5,site:"IOCL WARANGAL",tab:"IOCL WARANGAL",stockValue:13800,siteExp:68534,netWIP:82334,dayAgeing:0,remarks:"",manual:false},
+  {sno:6,site:"PARADEEP PORT AUTHORITY",tab:"Paradip Port Authority",stockValue:303831.05,siteExp:131114,netWIP:434945.05,dayAgeing:0,remarks:"",manual:false},
+  {sno:7,site:"IOCL JHARSUGUDA",tab:"IOCL JHARSUGUDA",stockValue:1422446.2,siteExp:0,netWIP:1422446.2,dayAgeing:0,remarks:"",manual:false},
+  {sno:8,site:"UPSIDCO",tab:"UPSIDCO",stockValue:5610481.44,siteExp:0,netWIP:5610481.44,dayAgeing:0,remarks:"",manual:false},
+  {sno:9,site:"Transrail Lighting Ltd",tab:"Transil Punjab",stockValue:117734.67,siteExp:0,netWIP:117734.67,dayAgeing:171.8,remarks:"",manual:false},
+  {sno:10,site:"IOCL MUMBAI DO (VTPL)",tab:"IOCL MUMBAI DO",stockValue:728695.5,siteExp:63839,netWIP:792534.5,dayAgeing:291.3,remarks:"",manual:false},
+  {sno:11,site:"GAIL VIJAYPUR",tab:"GAIL VIJAYPUR",stockValue:402338.56,siteExp:0,netWIP:402338.56,dayAgeing:0,remarks:"",manual:false},
+  {sno:12,site:"NFC HYDERABAD",tab:"NFC HYDRABAD",stockValue:73882,siteExp:0,netWIP:73882,dayAgeing:0,remarks:"",manual:false}
+];
+
+let STOCK_DATA = [...STOCK_FALLBACK];
+let MANUAL_STOCK = JSON.parse(localStorage.getItem("ve_manual_stock") || "[]");
+let stockEditId = null;
+
+function saveManual() {
+  localStorage.setItem("ve_manual_stock", JSON.stringify(MANUAL_STOCK));
+}
+
+function openStockModal(id) {
+  stockEditId = id !== undefined ? id : null;
+  const modal = document.getElementById("stock-modal");
+  // Clear fields
+  ["m-site","m-stock","m-exp","m-days","m-tab","m-remarks"].forEach(f => document.getElementById(f).value = "");
+  if (stockEditId !== null) {
+    const r = MANUAL_STOCK[stockEditId];
+    document.getElementById("m-site").value    = r.site || "";
+    document.getElementById("m-stock").value   = r.stockValue || 0;
+    document.getElementById("m-exp").value     = r.siteExp || 0;
+    document.getElementById("m-days").value    = r.dayAgeing || 0;
+    document.getElementById("m-tab").value     = r.tab || "";
+    document.getElementById("m-remarks").value = r.remarks || "";
+  }
+  modal.classList.add("open");
+}
+
+function closeStockModal() {
+  document.getElementById("stock-modal").classList.remove("open");
+  stockEditId = null;
+}
+
+function saveStockEntry() {
+  const site = document.getElementById("m-site").value.trim();
+  if (!site) { document.getElementById("m-site").focus(); return; }
+  const entry = {
+    site,
+    tab:        document.getElementById("m-tab").value.trim() || site,
+    stockValue: parseFloat(document.getElementById("m-stock").value) || 0,
+    siteExp:    parseFloat(document.getElementById("m-exp").value) || 0,
+    netWIP:     (parseFloat(document.getElementById("m-stock").value)||0) + (parseFloat(document.getElementById("m-exp").value)||0),
+    dayAgeing:  parseFloat(document.getElementById("m-days").value) || 0,
+    remarks:    document.getElementById("m-remarks").value.trim(),
+    manual:     true,
+    addedAt:    new Date().toLocaleDateString("en-IN")
+  };
+  if (stockEditId !== null) {
+    MANUAL_STOCK[stockEditId] = entry;
+  } else {
+    MANUAL_STOCK.push(entry);
+  }
+  saveManual();
+  closeStockModal();
+  renderStockPage();
+}
+
+function deleteManualEntry(idx) {
+  if (!confirm("Delete this manual entry?")) return;
+  MANUAL_STOCK.splice(idx, 1);
+  saveManual();
+  renderStockPage();
+}
+
+function parseStockCSV(csv) {
+  const lines = csv.trim().split("\n");
+  const out = [];
+  // Find header row
+  let headerRow = -1;
+  for (let i = 0; i < Math.min(lines.length, 10); i++) {
+    const cols = splitCSVRow(lines[i]);
+    if (cols.some(c => c.toLowerCase().includes("site name") || c.toLowerCase().includes("net wip"))) {
+      headerRow = i; break;
+    }
+  }
+  if (headerRow < 0) return [];
+  const hcols = splitCSVRow(lines[headerRow]).map(c => c.trim().toLowerCase());
+  const ci = {
+    sno:   hcols.findIndex(c => c.includes("s.no") || c === "sno" || c === "#"),
+    site:  hcols.findIndex(c => c.includes("site name")),
+    tab:   hcols.findIndex(c => c.includes("tab")),
+    stock: hcols.findIndex(c => c.includes("stock value")),
+    exp:   hcols.findIndex(c => c.includes("site exp")),
+    wip:   hcols.findIndex(c => c.includes("net wip")),
+    age:   hcols.findIndex(c => c.includes("ageing") || c.includes("aging") || c.includes("day")),
+    rem:   hcols.findIndex(c => c.includes("remark"))
+  };
+  for (let i = headerRow + 1; i < lines.length; i++) {
+    const cols = splitCSVRow(lines[i]);
+    const sno = parseInt(cols[ci.sno] || "");
+    if (isNaN(sno) || sno <= 0) continue;
+    const site = (cols[ci.site] || "").trim();
+    if (!site || site.toLowerCase() === "total") continue;
+    out.push({
+      sno,
+      site,
+      tab:        ci.tab  >= 0 ? (cols[ci.tab]  || "").trim() : "",
+      stockValue: ci.stock >= 0 ? toN(cols[ci.stock]) : 0,
+      siteExp:    ci.exp   >= 0 ? toN(cols[ci.exp])   : 0,
+      netWIP:     ci.wip   >= 0 ? toN(cols[ci.wip])   : 0,
+      dayAgeing:  ci.age   >= 0 ? toN(cols[ci.age])   : 0,
+      remarks:    ci.rem   >= 0 ? (cols[ci.rem] || "").trim() : "",
+      manual:     false
+    });
+  }
+  return out;
+}
+
+async function loadStockCSV() {
+  try {
+    const resp = await fetch(STOCK_CSV_URL + "&t=" + Date.now());
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const csv  = await resp.text();
+    const rows = parseStockCSV(csv);
+    if (rows.length >= 3) {
+      STOCK_DATA = rows;
+      document.getElementById("stock-notice-text").textContent = `✓ Stock live — ${rows.length} sites + ${MANUAL_STOCK.length} manual entries`;
+      document.getElementById("stock-notice").className = "notice notice-success";
+      document.getElementById("stock-sub").textContent = `Live Google Sheets — Updated: ${new Date().toLocaleTimeString("en-IN")}`;
+    } else {
+      throw new Error("Too few rows");
+    }
+  } catch(e) {
+    STOCK_DATA = [...STOCK_FALLBACK];
+    document.getElementById("stock-notice-text").textContent = `⚠ Sheet load nahi hua (${e.message}). Static data + manual entries.`;
+    document.getElementById("stock-notice").className = "notice notice-warn";
+  }
+  renderStockPage();
+}
+
+function stockAgeColor(d) {
+  if (!d || d <= 0)  return {bg:"var(--surface2)",c:"var(--faint)"};
+  if (d <= 90)  return {bg:"#ecfdf5",c:"#065f46"};
+  if (d <= 180) return {bg:"#fffbeb",c:"#92400e"};
+  if (d <= 365) return {bg:"#fff7ed",c:"#9a3412"};
+  return {bg:"#fdf2f2",c:"#c81e1e"};
+}
+
+function renderStockPage() {
+  const combined = [
+    ...STOCK_DATA,
+    ...MANUAL_STOCK.map((r,i) => ({...r, _manualIdx: i}))
+  ];
+
+  const totalStock = combined.reduce((s,r) => s + r.stockValue, 0);
+  const totalExp   = combined.reduce((s,r) => s + r.siteExp, 0);
+  const totalWIP   = combined.reduce((s,r) => s + r.netWIP, 0);
+  const activeCount = combined.filter(r => r.netWIP > 0).length;
+  const agingRows  = combined.filter(r => r.dayAgeing > 0);
+  const avgAge     = agingRows.length > 0
+    ? Math.round(agingRows.reduce((s,r) => s + r.dayAgeing, 0) / agingRows.length) : 0;
+
+  document.getElementById("stock-metrics").innerHTML = `
+    <div class="metric-card"><div class="metric-label">Total Stock Value</div><div class="metric-value accent">${fmtCr(totalStock)}</div><div class="metric-sub">₹${fmt(totalStock)}</div></div>
+    <div class="metric-card"><div class="metric-label">Total Net WIP</div><div class="metric-value" style="color:#7c3aed">${fmtCr(totalWIP)}</div><div class="metric-sub">₹${fmt(totalWIP)}</div></div>
+    <div class="metric-card"><div class="metric-label">Site Expenses</div><div class="metric-value amber">${fmtL(totalExp)}</div><div class="metric-sub">₹${fmt(totalExp)}</div></div>
+    <div class="metric-card"><div class="metric-label">Active Sites</div><div class="metric-value">${activeCount}</div><div class="metric-sub">${MANUAL_STOCK.length} manual entries</div></div>
+    <div class="metric-card"><div class="metric-label">Avg Day Ageing</div><div class="metric-value ${avgAge>180?"red":avgAge>90?"amber":"green"}">${avgAge > 0 ? avgAge : "—"}</div><div class="metric-sub">Among sites with ageing data</div></div>
+  `;
+
+  renderStockTable(combined);
+  renderStockCharts(combined);
+}
+
+function renderStockTable(combined) {
+  if (!combined) {
+    combined = [
+      ...STOCK_DATA,
+      ...MANUAL_STOCK.map((r,i) => ({...r, _manualIdx: i}))
+    ];
+  }
+  const q = (document.getElementById("stock-search")?.value || "").toLowerCase();
+  const rows = combined.filter(r => r.site.toLowerCase().includes(q) || (r.tab||"").toLowerCase().includes(q));
+  const maxWIP = Math.max(...rows.map(r => r.netWIP), 1);
+  const totalWIP = rows.reduce((s,r) => s + r.netWIP, 0);
+
+  document.getElementById("stock-tbody").innerHTML = rows.map((r, i) => {
+    const ac   = stockAgeColor(r.dayAgeing);
+    const ageLabel = r.dayAgeing > 0
+      ? `<span class="ageing-badge" style="background:${ac.bg};color:${ac.c}">${Math.round(r.dayAgeing)} days</span>`
+      : `<span style="color:var(--faint)">—</span>`;
+    const tag  = r.manual
+      ? `<span class="manual-tag">Manual</span>`
+      : `<span class="stock-tag">Sheet</span>`;
+    const share = totalWIP > 0 ? ((r.netWIP / totalWIP)*100).toFixed(1) : 0;
+    const editBtn = r.manual
+      ? `<button onclick="openStockModal(${r._manualIdx})" title="Edit" style="border:none;background:none;cursor:pointer;color:var(--accent);font-size:12px;padding:0 3px">✏</button>
+         <button onclick="deleteManualEntry(${r._manualIdx})" title="Delete" style="border:none;background:none;cursor:pointer;color:var(--red);font-size:12px;padding:0 3px">✕</button>`
+      : "";
+    return `<tr>
+      <td style="color:var(--faint);font-size:11px">${i+1}</td>
+      <td><span class="site-name">${r.site}</span>${r.remarks ? `<div style="font-size:10px;color:var(--faint)">${r.remarks}</div>` : ""}</td>
+      <td style="font-size:11px;color:var(--muted)">${r.tab || "—"}</td>
+      <td class="r">${r.stockValue > 0 ? "₹"+fmt(r.stockValue) : "–"}</td>
+      <td class="r">${r.siteExp > 0 ? "₹"+fmt(r.siteExp) : "–"}</td>
+      <td class="r" style="font-weight:600">${r.netWIP > 0 ? "₹"+fmt(r.netWIP) : "–"}</td>
+      <td class="r">${ageLabel}</td>
+      <td style="min-width:90px">
+        <div style="font-size:10px;color:var(--faint);margin-bottom:2px">${share}%</div>
+        <div class="wip-bar"><div class="wip-fill" style="width:${Math.min(100,(r.netWIP/maxWIP)*100).toFixed(1)}%"></div></div>
+      </td>
+      <td>${tag}${editBtn}</td>
+    </tr>`;
+  }).join("") + `<tr class="total-row">
+    <td></td><td>Grand Total (${rows.length} sites)</td><td></td>
+    <td class="r">₹${fmt(rows.reduce((s,r)=>s+r.stockValue,0))}</td>
+    <td class="r">₹${fmt(rows.reduce((s,r)=>s+r.siteExp,0))}</td>
+    <td class="r">₹${fmt(rows.reduce((s,r)=>s+r.netWIP,0))}</td>
+    <td></td><td></td><td></td>
+  </tr>`;
+}
+
+function renderStockCharts(combined) {
+  if (!combined) combined = [...STOCK_DATA, ...MANUAL_STOCK];
+  const top10 = [...combined].filter(r=>r.netWIP>0).sort((a,b)=>b.netWIP-a.netWIP).slice(0,10);
+  const sh = s => s.length>15 ? s.slice(0,15)+"…" : s;
+
+  if (charts.stockWip) charts.stockWip.destroy();
+  charts.stockWip = new Chart(document.getElementById("chart-stock-wip"), {
+    type:"bar",
+    data:{
+      labels: top10.map(r=>sh(r.site)),
+      datasets:[
+        {label:"Stock Value", data:top10.map(r=>r.stockValue), backgroundColor:"#1a56db", borderWidth:0},
+        {label:"Site Expenses", data:top10.map(r=>r.siteExp), backgroundColor:"#d97706", borderWidth:0}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:"bottom",labels:{font:{size:10},padding:10,usePointStyle:true}},
+        tooltip:{callbacks:{label:ctx=>" ₹"+fmt(ctx.raw)}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9},color:"#9a9a94",maxRotation:35},grid:{display:false}},
+        y:{stacked:true,ticks:{callback:v=>"₹"+(v/1e5).toFixed(0)+"L",font:{size:10},color:"#9a9a94"},grid:{color:"rgba(0,0,0,0.05)"}}}}
+  });
+
+  // Ageing distribution donut
+  const a0  = combined.filter(r=>r.dayAgeing>0&&r.dayAgeing<=90).length;
+  const a90 = combined.filter(r=>r.dayAgeing>90&&r.dayAgeing<=180).length;
+  const a180= combined.filter(r=>r.dayAgeing>180&&r.dayAgeing<=365).length;
+  const a365= combined.filter(r=>r.dayAgeing>365).length;
+  const aNo = combined.filter(r=>!r.dayAgeing||r.dayAgeing<=0).length;
+
+  if (charts.stockAge) charts.stockAge.destroy();
+  charts.stockAge = new Chart(document.getElementById("chart-stock-age"), {
+    type:"doughnut",
+    data:{
+      labels:["0–90 days","90–180 days","180–365 days",">365 days","No ageing data"],
+      datasets:[{
+        data:[a0,a90,a180,a365,aNo],
+        backgroundColor:["#059669","#d97706","#c81e1e","#991b1b","#e5e4df"],
+        borderWidth:2,borderColor:"#fff",hoverOffset:6
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,cutout:"58%",
+      plugins:{legend:{position:"bottom",labels:{font:{size:10},padding:10,usePointStyle:true}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw} sites`}}}}
+  });
+}
+
+// ═══════════════ STOCK MODAL OVERLAY CLOSE ON OUTSIDE CLICK ═══════════════
+document.getElementById("stock-modal").addEventListener("click", function(e) {
+  if (e.target === this) closeStockModal();
+});
+
+// ═══════════════ AUTO REFRESH — ALSO RELOAD STOCK ═══════════════
 if(CONFIG.AUTO_REFRESH_MINUTES>0){
-  setInterval(()=>loadData(),CONFIG.AUTO_REFRESH_MINUTES*60*1000);
+  setInterval(()=>{loadData();loadStockCSV();},CONFIG.AUTO_REFRESH_MINUTES*60*1000);
 }
 
 // ═══════════════ INIT ═══════════════
 loadData();
+loadStockCSV();
 </script>
 </body>
 </html>
