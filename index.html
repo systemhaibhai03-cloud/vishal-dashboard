@@ -415,12 +415,9 @@ tr:hover{background:#f8fafc}
 const STOCK_API = 'https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
 const STOCK_CSV = 'https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
 const PAY_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv';
-
-// 45 Sites GIDs for Debtors
 const PAY_SHEET_ID = '1iHrPxhvsFnedO2Js7u3wmFbPAxLeC4F1WP71MBv5gcw';
 const SITE_GIDS = [174412694,118852844,548407335,751444077,1347791283,321034887,1979702996,1893067828,1234783628,977030954,1642019228,1920245490,2004258151,1666678437,458687889,178072507,1087865048,1871920534,1053026690,1485879867,1545839474,477557482,279843949,671962254,387496523,323328787,1725908395,493192291,1199190624,1110433204,606059273,1612881510,1855046779,980845244,989690966,0,2070489175,776970165,1201529354,1729965160,131840235,923489850,996674553,2095150463,22890483];
 
-// ==================== DATA STORE ====================
 const D = {
   pending:[], sd:[], ld:[], hold:[], otherDed:[], gst:[], withheld:[],
   salesVE:[], salesVTPL:[], entries:[], boqItems:[],
@@ -430,7 +427,6 @@ const D = {
   parties:[], sites:[]
 };
 
-// ==================== HELPERS ====================
 const load = () => { try { const s = localStorage.getItem('veERP'); if(s) { const d = JSON.parse(s); Object.keys(d).forEach(k => { if(D[k]!==undefined) D[k]=d[k] }) } } catch(e){} };
 const save = () => localStorage.setItem('veERP', JSON.stringify(D));
 const fc = n => { if(!n) return '₹0'; const num=Number(n); if(num>=10000000) return '₹'+(num/10000000).toFixed(2)+'Cr'; if(num>=100000) return '₹'+(num/100000).toFixed(1)+'L'; if(num>=1000) return '₹'+(num/1000).toFixed(0)+'K'; return '₹'+num.toLocaleString('en-IN'); };
@@ -443,36 +439,21 @@ const ageColor = d => d>365?'#dc2626':d>180?'#f59e0b':d>90?'#3b82f6':'#22c55e';
 const getParties = () => [...new Set([...D.parties,...D.entries.map(e=>e.party)])].filter(Boolean);
 const getSites = () => [...new Set([...D.sites,...D.entries.map(e=>e.site),...D.outstanding.map(o=>o.site)])].filter(Boolean);
 
-// Parse DD.MM.YYYY or DD/MM/YYYY date
 function parseDate(s) {
   if(!s) return null;
   s = String(s).trim();
-  // Try DD.MM.YYYY or DD/MM/YYYY
   let m = s.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})$/);
-  if(m) {
-    let d=parseInt(m[1]), mo=parseInt(m[2])-1, y=parseInt(m[3]);
-    if(y<100) y+=2000;
-    return new Date(y, mo, d);
-  }
-  // Try YYYY-MM-DD
+  if(m) { let d=parseInt(m[1]), mo=parseInt(m[2])-1, y=parseInt(m[3]); if(y<100) y+=2000; return new Date(y, mo, d) }
   m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
   if(m) return new Date(parseInt(m[1]), parseInt(m[2])-1, parseInt(m[3]));
-  // Fallback
   const dt = new Date(s);
   return isNaN(dt.getTime()) ? null : dt;
 }
+function calcDays(dateStr) { const dt = parseDate(dateStr); if(!dt) return 0; return Math.floor((new Date() - dt) / 864e5) }
 
-function calcDays(dateStr) {
-  const dt = parseDate(dateStr);
-  if(!dt) return 0;
-  return Math.floor((new Date() - dt) / 864e5);
-}
-
-// ==================== SIDEBAR ====================
 function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sbOverlay').classList.add('show') }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sbOverlay').classList.remove('show') }
 
-// ==================== NAVIGATION ====================
 function goPage(id, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(s => s.classList.remove('active'));
@@ -489,7 +470,6 @@ function oTab(id, el) { const pg=document.getElementById('pg-outstanding'); pg.q
 function sTab(id, el) { const pg=document.getElementById('pg-sales'); pg.querySelectorAll('.tab-body').forEach(t=>t.classList.remove('active')); pg.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('st-'+id).classList.add('active'); if(el) el.classList.add('active'); if(id==='mw') drawMW() }
 function dbTab(id, el) { document.querySelectorAll('#pg-debtors .tab').forEach(t=>t.classList.remove('active')); if(el) el.classList.add('active'); D.debtorFilter=id; drawDebtors() }
 
-// ==================== DROPDOWN ====================
 function ddSrch(inp, ddId, items) {
   const dd = document.getElementById(ddId);
   const v = inp.value.toLowerCase();
@@ -500,14 +480,11 @@ function ddSrch(inp, ddId, items) {
 function ddPick(iId, dId, v) { document.getElementById(iId).value=v; document.getElementById(dId).classList.remove('show'); if(iId==='py_party'||iId==='py_site') updateInvDropdown() }
 document.addEventListener('click', e => { if(!e.target.closest('.dds')) document.querySelectorAll('.ddl').forEach(d=>d.classList.remove('show')) });
 
-// ==================== FILTERS ====================
 function filterT(tId, v) { const t=document.getElementById(tId); if(!t) return; t.querySelectorAll('tbody tr').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(v.toLowerCase()) ? '' : 'none' }) }
 function globalSearch(v) { document.querySelectorAll('.page.active table tbody tr').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(v.toLowerCase()) ? '' : 'none' }) }
 
-// ==================== RENDER ALL ====================
 function renderAll() { drawReport(); drawOutstanding(); drawSales(); drawEntries(); drawPayments(); drawRecoveries(); drawStock(); drawDebtors(); updateStats() }
 
-// ==================== REPORT ====================
 function drawReport() {
   let tot=0;
   document.getElementById('tbPend').innerHTML = D.pending.map((b,i) => { tot+=b.amount; const d=cd(b.date); const st=d>60?'b-over':d>30?'b-pend':'b-paid'; return `<tr><td>${i+1}</td><td><strong>${b.site}</strong></td><td>${b.date||'-'}</td><td class="amt">${fc(b.amount)}</td><td><strong style="color:${ageColor(d)}">${d}d</strong></td><td><span class="badge ${st}">${d>60?'Over':d>30?'Due':'OK'}</span></td></tr>` }).join('');
@@ -520,19 +497,11 @@ function drawReport() {
   let whT=0; document.getElementById('tbWH').innerHTML=D.withheld.map((w,i)=>{whT+=w.amount;return `<tr><td>${i+1}</td><td><strong>${w.site}</strong></td><td>${w.date||'-'}</td><td class="amt">${fc(w.amount)}</td><td><strong>${cd(w.date)}d</strong></td><td>${w.reason||'-'}</td></tr>`}).join(''); document.getElementById('tWHTot').textContent=fc(whT);
 }
 
-// ==================== OUTSTANDING ====================
 function drawOutstanding() {
-  if(!D.outstanding.length) {
-    document.getElementById('heroOut').innerHTML='';
-    document.getElementById('tbOutAll').innerHTML='<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--tl)">🔄 Click Sync to load...</td></tr>';
-    return;
-  }
+  if(!D.outstanding.length) { document.getElementById('heroOut').innerHTML=''; document.getElementById('tbOutAll').innerHTML='<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--tl)">🔄 Click Sync to load...</td></tr>'; return; }
   const today = new Date().toISOString().slice(0,10);
   let tP=0,tSD=0,tLD=0,tGST=0,tOD=0,tWH=0;
-  document.getElementById('tbOutAll').innerHTML = D.outstanding.map((o,i) => {
-    tP+=o.pending; tSD+=o.sd; tLD+=o.ld; tGST+=o.gst; tOD+=o.other; tWH+=o.wh;
-    return `<tr><td><strong>${o.sno}</strong></td><td><strong>${o.site}</strong></td><td class="amt">${o.pending>0?fc(o.pending):'-'}</td><td class="amt" style="color:#2563eb">${o.sd>0?fc(o.sd):'-'}</td><td class="amt" style="color:var(--d)">${o.ld>0?fc(o.ld):'-'}</td><td class="amt" style="color:#059669">${o.gst>0?fc(o.gst):'-'}</td><td class="amt" style="color:#7c3aed">${o.other>0?fc(o.other):'-'}</td><td class="amt" style="color:#be185d">${o.wh>0?fc(o.wh):'-'}</td><td class="amt" style="font-weight:800;color:var(--d)">${fc(o.total)}</td></tr>`;
-  }).join('');
+  document.getElementById('tbOutAll').innerHTML = D.outstanding.map((o,i) => { tP+=o.pending; tSD+=o.sd; tLD+=o.ld; tGST+=o.gst; tOD+=o.other; tWH+=o.wh; return `<tr><td><strong>${o.sno}</strong></td><td><strong>${o.site}</strong></td><td class="amt">${o.pending>0?fc(o.pending):'-'}</td><td class="amt" style="color:#2563eb">${o.sd>0?fc(o.sd):'-'}</td><td class="amt" style="color:var(--d)">${o.ld>0?fc(o.ld):'-'}</td><td class="amt" style="color:#059669">${o.gst>0?fc(o.gst):'-'}</td><td class="amt" style="color:#7c3aed">${o.other>0?fc(o.other):'-'}</td><td class="amt" style="color:#be185d">${o.wh>0?fc(o.wh):'-'}</td><td class="amt" style="font-weight:800;color:var(--d)">${fc(o.total)}</td></tr>` }).join('');
   document.getElementById('ttPend').textContent=fc(tP); document.getElementById('ttSD').textContent=fc(tSD);
   document.getElementById('ttLD').textContent=fc(tLD); document.getElementById('ttGST').textContent=fc(tGST);
   document.getElementById('ttOD').textContent=fc(tOD); document.getElementById('ttWH').textContent=fc(tWH);
@@ -550,14 +519,13 @@ function drawOutstanding() {
   document.getElementById('heroOut').innerHTML = `<div class="hero red"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px"><h3>💼 Outstanding Break-up</h3><span style="font-size:10px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px">🔴 ${D.outstanding.length} sites</span></div><div class="hg"><div class="hb"><div class="hl-txt">📋 Pending</div><div class="hv">${fc(tP)}</div></div><div class="hb"><div class="hl-txt">🔒 SD</div><div class="hv">${fc(tSD)}</div></div><div class="hb"><div class="hl-txt">⚠️ LD</div><div class="hv">${fc(tLD)}</div></div><div class="hb"><div class="hl-txt">📄 GST</div><div class="hv">${fc(tGST)}</div></div><div class="hb"><div class="hl-txt">📑 Other</div><div class="hv">${fc(tOD)}</div></div><div class="hb"><div class="hl-txt">🔐 WH</div><div class="hv">${fc(tWH)}</div></div><div class="hb hl"><div class="hl-txt">🏆 TOTAL</div><div class="hv">${fc(grand)}</div></div></div></div>`;
 }
 
-// ==================== DEBTORS AGEING (NEW) ====================
+// ==================== DEBTORS AGEING (FIXED) ====================
 async function fetchDebtors() {
   document.getElementById('debtorProgress').style.display='block';
   document.getElementById('dbBar').style.width='0%';
   document.getElementById('dbStatus').textContent='Starting...';
   D.debtors=[];
   let done=0, total=SITE_GIDS.length;
-  
   for(let gid of SITE_GIDS) {
     try {
       const url = `https://docs.google.com/spreadsheets/d/${PAY_SHEET_ID}/gviz/tq?tqx=out:csv&gid=${gid}&t=${Date.now()}`;
@@ -566,15 +534,12 @@ async function fetchDebtors() {
       const t = await r.text();
       const rows = t.split('\n').map(csvRow);
       parseDebtorSheet(rows, gid);
-    } catch(e) {
-      console.warn('Failed GID:', gid, e.message);
-    }
+    } catch(e) { console.warn('Failed GID:', gid, e.message) }
     done++;
     const pct = Math.round((done/total)*100);
     document.getElementById('dbBar').style.width = pct+'%';
-    document.getElementById('dbStatus').textContent = `Fetching ${done}/${total} sites... (${D.debtors.length} pending invoices found)`;
+    document.getElementById('dbStatus').textContent = `Fetching ${done}/${total} sites... (${D.debtors.length} pending found)`;
   }
-  
   document.getElementById('debtorProgress').style.display='none';
   D.debtors.sort((a,b)=>b.days-a.days);
   save();
@@ -587,54 +552,62 @@ function parseDebtorSheet(rows, gid) {
   if(!rows||rows.length<3) return;
   let siteName = 'GID-'+gid;
   let headerRow = -1;
-  
-  // Find party name (column B usually)
+  let invNoCol = 2, invDateCol = 3, totalAmtCol = 6, shortPayCol = 17;
+
+  // Find party name
   for(let i=0;i<Math.min(rows.length,10);i++) {
     const r=rows[i]; if(!r) continue;
     for(let j=0;j<r.length;j++) {
       const v=String(r[j]||'').trim();
-      if(v.length>5 && (v.toUpperCase().includes('LIMITED')||v.toUpperCase().includes('LTD')||v.toUpperCase().includes('IOCL')||v.toUpperCase().includes('GAIL')||v.toUpperCase().includes('HPCL')||v.toUpperCase().includes('NFC')||v.toUpperCase().includes('INDIAN'))) {
+      if(v.length>5 && (v.toUpperCase().includes('LIMITED')||v.toUpperCase().includes('LTD')||v.toUpperCase().includes('IOCL')||v.toUpperCase().includes('GAIL')||v.toUpperCase().includes('HPCL')||v.toUpperCase().includes('NFC')||v.toUpperCase().includes('INDIAN')||v.toUpperCase().includes('CORPORATION')||v.toUpperCase().includes('NUCLEAR'))) {
         siteName = v;
         break;
       }
     }
     if(siteName !== 'GID-'+gid) break;
   }
-  
-  // Find header row (Invoice No / Inv. Date / Short Payment)
-  for(let i=0;i<Math.min(rows.length,10);i++) {
-    const txt = (rows[i]||[]).join(' ').toUpperCase();
-    if(txt.includes('INVOICE') && txt.includes('DATE') && (txt.includes('SHORT')||txt.includes('PAYMENT'))) {
+
+  // Find header row & auto-detect columns
+  for(let i=0;i<Math.min(rows.length,15);i++) {
+    const r = rows[i]; if(!r) continue;
+    const txt = r.join(' ').toUpperCase();
+    if(txt.includes('INVOICE') && (txt.includes('DATE')||txt.includes('SHORT'))) {
       headerRow = i;
+      // Auto-detect column positions
+      for(let j=0;j<r.length;j++) {
+        const colName = String(r[j]||'').toUpperCase().trim();
+        if(colName === 'INVOICE NO' || colName === 'INVOICE NO.' || (colName.includes('INVOICE') && colName.includes('NO'))) invNoCol = j;
+        else if(colName.includes('INV') && colName.includes('DATE')) invDateCol = j;
+        else if(colName.includes('TOTAL') && colName.includes('INVOICE')) totalAmtCol = j;
+        else if(colName.includes('SHORT') && colName.includes('PAY')) shortPayCol = j;
+      }
+      console.log(`GID ${gid}: Header at row ${i}, InvNo=${invNoCol}, Date=${invDateCol}, Total=${totalAmtCol}, ShortPay=${shortPayCol}`);
       break;
     }
   }
-  if(headerRow<0) headerRow=4; // default
-  
+  if(headerRow<0) headerRow=4;
+
   // Process invoice rows
   for(let i=headerRow+1;i<rows.length;i++) {
     const r=rows[i]; if(!r||!r.length) continue;
-    
-    // Stop at "Total" row
     const txt = r.join(' ').toUpperCase();
-    if(txt.includes('TOTAL') && !txt.includes('TOTAL INVOICE')) break;
     
-    // Get values - flexible column detection
-    let invNo='', invDate='', totalAmt=0, shortPay=0;
+    // Stop at total/footer rows
+    if(txt.includes('NET SD DEDUCTION') || txt.includes('FOLLOW-UP')) break;
     
-    // Common positions: B=Party, C=Invoice, D=Date, G=Total, Q=Short Payment
-    invNo = String(r[2]||r[1]||'').trim(); // Column C or B
-    invDate = String(r[3]||'').trim(); // Column D
-    totalAmt = pn(r[6]); // Column G
-    shortPay = pn(r[16]); // Column Q (last column)
-    
-    // Skip if no invoice or short payment is 0
+    const invNo = String(r[invNoCol]||'').trim();
+    const invDate = String(r[invDateCol]||'').trim();
+    const totalAmt = pn(r[totalAmtCol]);
+    const shortPay = pn(r[shortPayCol]);
+
+    // Skip if no invoice number
     if(!invNo || invNo.length<3) continue;
     if(invNo.toUpperCase().includes('TOTAL')) continue;
+    
+    // Skip if short payment is 0 or negative
     if(shortPay<=0) continue;
-    
+
     const days = calcDays(invDate);
-    
     D.debtors.push({
       id: nid(),
       site: siteName,
@@ -655,14 +628,11 @@ function drawDebtors() {
     document.getElementById('heroDebtors').innerHTML = '';
     return;
   }
-  
-  // Filter
   let filtered = D.debtors;
   if(D.debtorFilter==='critical') filtered = D.debtors.filter(d=>d.days>180);
   else if(D.debtorFilter==='overdue') filtered = D.debtors.filter(d=>d.days>=90 && d.days<=180);
   else if(D.debtorFilter==='due') filtered = D.debtors.filter(d=>d.days>=30 && d.days<90);
   else if(D.debtorFilter==='current') filtered = D.debtors.filter(d=>d.days<30);
-  
   let totalInv=0, totalShort=0;
   tb.innerHTML = filtered.map((d,i) => {
     totalInv += d.totalAmount;
@@ -671,11 +641,8 @@ function drawDebtors() {
     const status = d.days>180?'🔴 Critical':d.days>=90?'🟠 Overdue':d.days>=30?'🟡 Due':'🟢 Current';
     return `<tr><td>${i+1}</td><td><strong>${d.site}</strong></td><td>${d.invoiceNo}</td><td>${d.invoiceDate}</td><td class="amt">${fc(d.totalAmount)}</td><td class="amt" style="color:var(--d);font-weight:800">${fc(d.shortPayment)}</td><td><span class="age-b" style="background:${ageBg}">${d.days}d</span></td><td><strong style="font-size:10px">${status}</strong></td></tr>`;
   }).join('');
-  
   document.getElementById('dbInvTot').textContent = fc(totalInv);
   document.getElementById('dbShortTot').textContent = fc(totalShort);
-  
-  // Stats
   const totalAmt = D.debtors.reduce((s,d)=>s+d.shortPayment,0);
   const uniqueSites = new Set(D.debtors.map(d=>d.site)).size;
   const critical = D.debtors.filter(d=>d.days>180).length;
@@ -683,8 +650,6 @@ function drawDebtors() {
   document.getElementById('dbAmt').textContent = fc(totalAmt);
   document.getElementById('dbSites').textContent = uniqueSites;
   document.getElementById('dbCrit').textContent = critical;
-  
-  // Hero
   const c1 = D.debtors.filter(d=>d.days<30).reduce((s,d)=>s+d.shortPayment,0);
   const c2 = D.debtors.filter(d=>d.days>=30 && d.days<90).reduce((s,d)=>s+d.shortPayment,0);
   const c3 = D.debtors.filter(d=>d.days>=90 && d.days<=180).reduce((s,d)=>s+d.shortPayment,0);
@@ -706,7 +671,6 @@ function exportDebtors() {
   a.click();
 }
 
-// ==================== SALES ====================
 function drawSales() {
   let veT=0;
   document.getElementById('tbVE').innerHTML = D.salesVE.map((s,i) => { veT+=pn(s.amount); return `<tr><td>${i+1}</td><td>${s.month}</td><td>${s.party}</td><td>${s.site}</td><td>${s.invoice}</td><td>${s.date}</td><td class="amt">${fc(s.amount)}</td><td><span class="badge ${s.code==='N'?'b-new':'b-rep'}">${s.code}</span></td><td><button class="del" onclick="delItem('salesVE',${s.id})">🗑</button></td></tr>` }).join('');
@@ -743,7 +707,6 @@ function saveSaleModal() {
   save(); renderAll(); closeModal('saleModal');
 }
 
-// ==================== DATA ENTRY ====================
 function loadBOQ(inp) {
   if(!inp.files[0]) return;
   const reader=new FileReader();
@@ -759,9 +722,7 @@ function loadBOQ(inp) {
   };
   reader.readAsArrayBuffer(inp.files[0]);
 }
-
 function addBOQRow() { D.boqItems.push({sr:D.boqItems.length+1,desc:'',unit:'Nos',qty:0,rate:0,amt:0}); drawBOQ() }
-
 function drawBOQ() {
   let tot=0;
   document.getElementById('tbBOQ').innerHTML = D.boqItems.map((b,i) => { const a=b.qty*b.rate; tot+=a; return `<tr><td>${b.sr}</td><td><input value="${b.desc}" onchange="D.boqItems[${i}].desc=this.value" style="width:120px;border:1px solid #e2e8f0;padding:4px;border-radius:4px;font-size:11px"></td><td><input value="${b.unit}" onchange="D.boqItems[${i}].unit=this.value" style="width:50px;border:1px solid #e2e8f0;padding:4px;border-radius:4px;font-size:11px"></td><td><input type="number" inputmode="decimal" value="${b.qty}" onchange="D.boqItems[${i}].qty=pn(this.value);drawBOQ()" style="width:50px;border:1px solid #e2e8f0;padding:4px;border-radius:4px;font-size:11px"></td><td><input type="number" inputmode="decimal" value="${b.rate}" onchange="D.boqItems[${i}].rate=pn(this.value);drawBOQ()" style="width:70px;border:1px solid #e2e8f0;padding:4px;border-radius:4px;font-size:11px"></td><td class="amt">${fc(a)}</td><td><button class="del" onclick="D.boqItems.splice(${i},1);drawBOQ()">🗑</button></td></tr>` }).join('');
@@ -788,14 +749,9 @@ function saveSaleEntry() {
   save(); renderAll(); clearDE();
   alert('✅ Saved!');
 }
-
 function clearDE() { ['de_party','de_site','de_inv','de_amt'].forEach(id=>document.getElementById(id).value=''); document.getElementById('de_date').value=''; D.boqItems=[]; drawBOQ() }
+function drawEntries() { document.getElementById('tbEntries').innerHTML = D.entries.map((e,i) => `<tr><td>${i+1}</td><td><span class="badge ${e.company==='VE'?'b-new':'b-rep'}">${e.company}</span></td><td>${e.party}</td><td>${e.site}</td><td>${e.invoice||'-'}</td><td>${e.date}</td><td class="amt">${fc(e.amount)}</td><td><span class="badge ${e.code==='N'?'b-new':'b-rep'}">${e.code}</span></td><td>${e.boqCount||0}</td><td><button class="del" onclick="D.entries=D.entries.filter(x=>x.id!==${e.id});save();renderAll()">🗑</button></td></tr>`).join('') }
 
-function drawEntries() {
-  document.getElementById('tbEntries').innerHTML = D.entries.map((e,i) => `<tr><td>${i+1}</td><td><span class="badge ${e.company==='VE'?'b-new':'b-rep'}">${e.company}</span></td><td>${e.party}</td><td>${e.site}</td><td>${e.invoice||'-'}</td><td>${e.date}</td><td class="amt">${fc(e.amount)}</td><td><span class="badge ${e.code==='N'?'b-new':'b-rep'}">${e.code}</span></td><td>${e.boqCount||0}</td><td><button class="del" onclick="D.entries=D.entries.filter(x=>x.id!==${e.id});save();renderAll()">🗑</button></td></tr>`).join('');
-}
-
-// ==================== PAYMENT ====================
 function updateInvDropdown() {
   const party=document.getElementById('py_party').value;
   const site=document.getElementById('py_site').value;
@@ -804,7 +760,6 @@ function updateInvDropdown() {
   const unique=[...new Map(invs.filter(i=>i.invoice).map(i=>[i.invoice,i])).values()];
   sel.innerHTML='<option value="">-- Select --</option>'+unique.map(i=>`<option value="${i.invoice}" data-amt="${i.amount}">${i.invoice} (${fc(i.amount)})</option>`).join('');
 }
-
 function fillInvoice() { const sel=document.getElementById('py_inv'); const opt=sel.options[sel.selectedIndex]; const amt=opt?.dataset?.amt||0; document.getElementById('py_invAmt').value=fcFull(amt); document.getElementById('sm_inv').textContent=fc(amt) }
 
 function calcPayment() {
@@ -822,7 +777,6 @@ function calcPayment() {
   document.getElementById('sm_hold').textContent=fc(th); document.getElementById('sm_net').textContent=fc(net);
   document.getElementById('sm_bal').textContent=fc(invAmt-rec);
 }
-
 function savePayment() {
   const party=document.getElementById('py_party').value; const site=document.getElementById('py_site').value;
   const inv=document.getElementById('py_inv').value; const date=document.getElementById('py_date').value;
@@ -844,12 +798,8 @@ function savePayment() {
   save(); renderAll(); clearPayment();
   alert('✅ Saved!');
 }
-
 function clearPayment() { ['py_party','py_site','py_amt','py_invAmt','dd_it','dd_gst','dd_lc','dd_bd','dd_oth','hd_sd','hd_ld','hd_gst','hd_wh','hd_oth','dd_tot','hd_tot'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=''}); document.getElementById('py_date').value=''; document.getElementById('py_inv').innerHTML='<option value="">-- Select --</option>'; calcPayment() }
-
-function drawPayments() {
-  document.getElementById('tbPay').innerHTML = D.payments.map((p,i) => `<tr><td>${i+1}</td><td>${p.date}</td><td>${p.party}</td><td>${p.site}</td><td>${p.invoice||'-'}</td><td class="amt">${fc(p.invAmt)}</td><td class="amt" style="color:var(--s)">${fc(p.received)}</td><td class="amt" style="color:var(--d)">${fc(p.totalDed)}</td><td class="amt" style="color:#7c3aed">${fc(p.totalHold)}</td><td class="amt" style="color:var(--s);font-weight:800">${fc(p.net)}</td><td><button class="del" onclick="D.payments=D.payments.filter(x=>x.id!==${p.id});save();renderAll()">🗑</button></td></tr>`).join('');
-}
+function drawPayments() { document.getElementById('tbPay').innerHTML = D.payments.map((p,i) => `<tr><td>${i+1}</td><td>${p.date}</td><td>${p.party}</td><td>${p.site}</td><td>${p.invoice||'-'}</td><td class="amt">${fc(p.invAmt)}</td><td class="amt" style="color:var(--s)">${fc(p.received)}</td><td class="amt" style="color:var(--d)">${fc(p.totalDed)}</td><td class="amt" style="color:#7c3aed">${fc(p.totalHold)}</td><td class="amt" style="color:var(--s);font-weight:800">${fc(p.net)}</td><td><button class="del" onclick="D.payments=D.payments.filter(x=>x.id!==${p.id});save();renderAll()">🗑</button></td></tr>`).join('') }
 
 function saveRecovery() {
   const v=document.getElementById('rv_vendor').value; const a=pn(document.getElementById('rv_amt').value);
@@ -859,16 +809,12 @@ function saveRecovery() {
   ['rv_vendor','rv_inv','rv_amt'].forEach(id=>document.getElementById(id).value='');
   alert('✅ Saved!');
 }
-
-function drawRecoveries() {
-  document.getElementById('tbRecov').innerHTML = D.recoveries.map((r,i) => `<tr><td>${i+1}</td><td>${r.date}</td><td>${r.vendor}</td><td>${r.invoice||'-'}</td><td class="amt" style="color:var(--s)">${fc(r.amount)}</td><td>${r.type}</td><td><button class="del" onclick="D.recoveries=D.recoveries.filter(x=>x.id!==${r.id});save();drawRecoveries()">🗑</button></td></tr>`).join('');
-}
+function drawRecoveries() { document.getElementById('tbRecov').innerHTML = D.recoveries.map((r,i) => `<tr><td>${i+1}</td><td>${r.date}</td><td>${r.vendor}</td><td>${r.invoice||'-'}</td><td class="amt" style="color:var(--s)">${fc(r.amount)}</td><td>${r.type}</td><td><button class="del" onclick="D.recoveries=D.recoveries.filter(x=>x.id!==${r.id});save();drawRecoveries()">🗑</button></td></tr>`).join('') }
 
 function updateStats() {
   const tP=D.pending.reduce((s,b)=>s+b.amount,0); const tSD=D.sd.reduce((s,b)=>s+b.amount,0);
   const tLD=D.ld.reduce((s,b)=>s+b.amount,0); const tH=D.hold.reduce((s,b)=>s+b.amount,0);
-  const tGST=D.gst.reduce((s,b)=>s+b.amount,0); const tOD=D.otherDed.reduce((s,b)=>s+b.amount,0);
-  const tWH=D.withheld.reduce((s,b)=>s+b.amount,0);
+  const tGST=D.gst.reduce((s,b)=>s+b.amount,0); const tOD=D.otherDed.reduce((s,b)=>s+b.amount,0); const tWH=D.withheld.reduce((s,b)=>s+b.amount,0);
   document.getElementById('rPend').textContent=fc(tP); document.getElementById('rSD').textContent=fc(tSD);
   document.getElementById('rLD').textContent=fc(tLD); document.getElementById('rHold').textContent=fc(tH);
   document.getElementById('rGST').textContent=fc(tGST); document.getElementById('rTotal').textContent=fc(tP+tSD+tLD+tH+tGST+tOD+tWH);
@@ -881,10 +827,8 @@ function updateStats() {
   document.getElementById('pRec').textContent=fc(pr); document.getElementById('pDed').textContent=fc(pd);
   document.getElementById('pHold').textContent=fc(ph); document.getElementById('pNet').textContent=fc(pr-pd-ph);
 }
-
 function delItem(type, id) { if(!confirm('Delete?')) return; D[type]=D[type].filter(x=>x.id!==id); save(); renderAll() }
 
-// ==================== LIVE SYNC ====================
 async function liveSync() {
   showSync('🔄 Syncing...','blue');
   let sOk=false, pOk=false;
@@ -928,7 +872,6 @@ function parsePaymentSheet(rows) {
     if(!D.sites.includes(site)) D.sites.push(site);
     count++;
   }
-  console.log(`✅ Outstanding: ${count} sites`);
 }
 
 function parseStockRaw(rows) {
@@ -950,7 +893,6 @@ function parseStockRaw(rows) {
   }
   storeStock(ve,vt,dt);
 }
-
 function parseStockObj(rows) {
   const ve=[],vt=[];let dt='',sec='';
   for(let r of rows) {
@@ -966,14 +908,12 @@ function parseStockObj(rows) {
   }
   storeStock(ve,vt,dt);
 }
-
 function storeStock(ve,vt,dt) {
   D.veStock=ve; D.vtplStock=vt;
   const veT=ve.reduce((s,x)=>s+x.stockValue,0), veE=ve.reduce((s,x)=>s+x.siteExpenses,0), veW=ve.reduce((s,x)=>s+x.netWIP,0);
   const vtT=vt.reduce((s,x)=>s+x.stockValue,0), vtE=vt.reduce((s,x)=>s+x.siteExpenses,0), vtW=vt.reduce((s,x)=>s+x.netWIP,0);
   D.stockSum={date:dt,veTotal:veT,veExp:veE,veWIP:veW,vtplTotal:vtT,vtplExp:vtE,vtplWIP:vtW,netTotal:veT+vtT,netWIP:veW+vtW};
 }
-
 function drawStock() {
   const tb=document.getElementById('tbStock'), sm=D.stockSum||{};
   const total=D.veStock.length+D.vtplStock.length;
@@ -999,7 +939,6 @@ function drawStock() {
   if(!D.fc) h+=`<tr class="g-total"><td colspan="4" style="text-align:right">🏆 NET STOCK ➤</td><td class="amt">${fc(sm.netTotal)}</td><td colspan="3"></td></tr>`;
   tb.innerHTML=h;
 }
-
 function stockTR(s) { return `<tr><td><strong>${s.sno}</strong></td><td><strong>${s.siteName}</strong></td><td class="amt">${fc(s.stockValue)}</td><td class="amt">${fc(s.siteExpenses)}</td><td class="amt" style="font-weight:700;color:var(--s)">${fc(s.netWIP)}</td><td style="font-size:10px">${s.remarks||'-'}</td><td>${s.driveLink&&s.driveLink.startsWith('http')?`<a href="${s.driveLink}" target="_blank" style="color:#3b82f6">📎</a>`:'-'}</td><td><span class="age-b" style="background:${ageColor(s.dayAgeing)}">${s.dayAgeing}d</span></td></tr>` }
 
 function csvRow(line) {
@@ -1009,7 +948,6 @@ function csvRow(line) {
   r.push(c.trim());
   return r.map(v=>v.replace(/^"|"$/g,''));
 }
-
 function showSync(t,c) {
   const el=document.getElementById('lastSync');
   if(el){el.textContent=t;el.style.color={green:'#22c55e',red:'#ef4444',blue:'#3b82f6',orange:'#f59e0b'}[c]||'#94a3b8'}
@@ -1017,7 +955,6 @@ function showSync(t,c) {
   if(dot) dot.style.background={green:'#22c55e',red:'#ef4444',blue:'#3b82f6'}[c]||'#22c55e';
 }
 
-// ==================== INIT ====================
 load();
 window.addEventListener('load', () => {
   renderAll();
@@ -1032,7 +969,7 @@ document.addEventListener('touchend',e=>{
   if(diff<-50) closeSidebar();
 });
 
-console.log('🔥 Vishal ERP - 45 Sites Debtors LIVE');
+console.log('🔥 Vishal ERP - 45 Sites Debtors LIVE - FIXED');
 </script>
 </body>
 </html>
