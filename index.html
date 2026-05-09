@@ -411,7 +411,6 @@ tr:hover{background:#f8fafc}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// ==================== 🔴 GOOGLE SHEETS URLs ====================
 const STOCK_API = 'https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
 const STOCK_CSV = 'https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
 const PAY_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv';
@@ -519,7 +518,7 @@ function drawOutstanding() {
   document.getElementById('heroOut').innerHTML = `<div class="hero red"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px"><h3>💼 Outstanding Break-up</h3><span style="font-size:10px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px">🔴 ${D.outstanding.length} sites</span></div><div class="hg"><div class="hb"><div class="hl-txt">📋 Pending</div><div class="hv">${fc(tP)}</div></div><div class="hb"><div class="hl-txt">🔒 SD</div><div class="hv">${fc(tSD)}</div></div><div class="hb"><div class="hl-txt">⚠️ LD</div><div class="hv">${fc(tLD)}</div></div><div class="hb"><div class="hl-txt">📄 GST</div><div class="hv">${fc(tGST)}</div></div><div class="hb"><div class="hl-txt">📑 Other</div><div class="hv">${fc(tOD)}</div></div><div class="hb"><div class="hl-txt">🔐 WH</div><div class="hv">${fc(tWH)}</div></div><div class="hb hl"><div class="hl-txt">🏆 TOTAL</div><div class="hv">${fc(grand)}</div></div></div></div>`;
 }
 
-// ==================== DEBTORS AGEING (FIXED) ====================
+// ==================== DEBTORS - FIXED v2 (NO DUPLICATES) ====================
 async function fetchDebtors() {
   document.getElementById('debtorProgress').style.display='block';
   document.getElementById('dbBar').style.width='0%';
@@ -545,7 +544,7 @@ async function fetchDebtors() {
   save();
   drawDebtors();
   updateStats();
-  console.log(`✅ Debtors: ${D.debtors.length} pending invoices from ${total} sites`);
+  console.log(`✅ Debtors: ${D.debtors.length} unique pending invoices from ${total} sites`);
 }
 
 function parseDebtorSheet(rows, gid) {
@@ -573,7 +572,6 @@ function parseDebtorSheet(rows, gid) {
     const txt = r.join(' ').toUpperCase();
     if(txt.includes('INVOICE') && (txt.includes('DATE')||txt.includes('SHORT'))) {
       headerRow = i;
-      // Auto-detect column positions
       for(let j=0;j<r.length;j++) {
         const colName = String(r[j]||'').toUpperCase().trim();
         if(colName === 'INVOICE NO' || colName === 'INVOICE NO.' || (colName.includes('INVOICE') && colName.includes('NO'))) invNoCol = j;
@@ -581,44 +579,67 @@ function parseDebtorSheet(rows, gid) {
         else if(colName.includes('TOTAL') && colName.includes('INVOICE')) totalAmtCol = j;
         else if(colName.includes('SHORT') && colName.includes('PAY')) shortPayCol = j;
       }
-      console.log(`GID ${gid}: Header at row ${i}, InvNo=${invNoCol}, Date=${invDateCol}, Total=${totalAmtCol}, ShortPay=${shortPayCol}`);
+      console.log(`GID ${gid}: Header=${i}, InvNo=${invNoCol}, Date=${invDateCol}, Total=${totalAmtCol}, ShortPay=${shortPayCol}`);
       break;
     }
   }
   if(headerRow<0) headerRow=4;
 
-  // Process invoice rows
+  // Track unique invoices - combine multiple payments for same invoice
+  const invoiceMap = new Map();
+  let lastInvNo = '', lastInvDate = '', lastTotalAmt = 0;
+
   for(let i=headerRow+1;i<rows.length;i++) {
     const r=rows[i]; if(!r||!r.length) continue;
     const txt = r.join(' ').toUpperCase();
     
-    // Stop at total/footer rows
     if(txt.includes('NET SD DEDUCTION') || txt.includes('FOLLOW-UP')) break;
     
-    const invNo = String(r[invNoCol]||'').trim();
-    const invDate = String(r[invDateCol]||'').trim();
-    const totalAmt = pn(r[totalAmtCol]);
-    const shortPay = pn(r[shortPayCol]);
+    let invNo = String(r[invNoCol]||'').trim();
+    let invDate = String(r[invDateCol]||'').trim();
+    let totalAmt = pn(r[totalAmtCol]);
+    let shortPay = pn(r[shortPayCol]);
 
-    // Skip if no invoice number
-    if(!invNo || invNo.length<3) continue;
     if(invNo.toUpperCase().includes('TOTAL')) continue;
-    
-    // Skip if short payment is 0 or negative
+    if(invNo.toUpperCase().includes('NET')) continue;
+
+    // Continuation row - use previous invoice
+    if(!invNo || invNo.length<3) {
+      if(lastInvNo && shortPay>0) {
+        invNo = lastInvNo;
+        invDate = lastInvDate;
+        totalAmt = lastTotalAmt;
+      } else {
+        continue;
+      }
+    } else {
+      lastInvNo = invNo;
+      lastInvDate = invDate;
+      lastTotalAmt = totalAmt;
+    }
+
     if(shortPay<=0) continue;
 
-    const days = calcDays(invDate);
-    D.debtors.push({
-      id: nid(),
-      site: siteName,
-      gid: gid,
-      invoiceNo: invNo,
-      invoiceDate: invDate,
-      totalAmount: totalAmt,
-      shortPayment: shortPay,
-      days: days
-    });
+    // Combine multiple payment rows for same invoice
+    const key = siteName + '|' + invNo;
+    if(invoiceMap.has(key)) {
+      invoiceMap.get(key).shortPayment += shortPay;
+    } else {
+      const days = calcDays(invDate);
+      invoiceMap.set(key, {
+        id: nid(),
+        site: siteName,
+        gid: gid,
+        invoiceNo: invNo,
+        invoiceDate: invDate,
+        totalAmount: totalAmt,
+        shortPayment: shortPay,
+        days: days
+      });
+    }
   }
+
+  invoiceMap.forEach(inv => D.debtors.push(inv));
 }
 
 function drawDebtors() {
@@ -969,7 +990,7 @@ document.addEventListener('touchend',e=>{
   if(diff<-50) closeSidebar();
 });
 
-console.log('🔥 Vishal ERP - 45 Sites Debtors LIVE - FIXED');
+console.log('🔥 Vishal ERP - Debtors LIVE FIXED v2 (No Duplicates)');
 </script>
 </body>
 </html>
