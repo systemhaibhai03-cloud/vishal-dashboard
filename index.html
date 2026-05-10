@@ -3,12 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#1a56db">
+<meta name="theme-color" content="#7c3aed">
 <title>Vishal Electricals - ERP</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--p:#1a56db;--pd:#1e40af;--pl:#dbeafe;--s:#059669;--w:#d97706;--d:#dc2626;--bg:#f1f5f9;--wh:#fff;--tx:#1e293b;--tl:#64748b;--br:#e2e8f0;--sb:250px}
 body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:var(--tx)}
+
+/* ============ LOGIN PAGE - PURPLE WELCOME ============ */
+.login-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#b8a5d9 0%,#a594c7 50%,#9d8ac0 100%);z-index:9999;display:flex;align-items:center;justify-content:center;overflow:auto;padding:20px}
+.login-screen.hide{display:none}
+.login-screen::before{content:'';position:absolute;top:-100px;left:-100px;width:400px;height:400px;background:rgba(255,255,255,0.08);border-radius:50%;z-index:0}
+.login-screen::after{content:'';position:absolute;bottom:-150px;right:-150px;width:500px;height:500px;background:rgba(255,255,255,0.06);border-radius:50%;z-index:0}
+
+.login-card{background:#fff;border-radius:24px;width:100%;max-width:1100px;min-height:600px;display:flex;overflow:hidden;box-shadow:0 30px 80px rgba(76,29,149,0.3);position:relative;z-index:1}
+
+/* LEFT SIDE - Purple Welcome */
+.login-left{flex:1.2;background:linear-gradient(135deg,#7c3aed 0%,#6d28d9 50%,#5b21b6 100%);padding:40px;position:relative;overflow:hidden;display:flex;flex-direction:column;color:#fff;border-radius:24px 0 0 24px}
+.login-left::before{content:'';position:absolute;top:0;right:-100px;width:300px;height:300px;background:rgba(255,255,255,0.05);border-radius:50%}
+.login-left::after{content:'';position:absolute;bottom:-50px;left:-50px;width:200px;height:200px;background:rgba(255,255,255,0.05);border-radius:50%}
+
+.login-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;margin-bottom:30px;position:relative;z-index:2}
+.login-logo-icon{display:flex;flex-direction:column;gap:3px}
+.login-logo-icon span{width:18px;height:2px;background:#fff;border-radius:1px}
+
+.welcome-text{margin-bottom:30px;position:relative;z-index:2}
+.welcome-text h2{font-size:22px;font-weight:400;letter-spacing:3px;margin-bottom:5px}
+.welcome-text h1{font-size:42px;font-weight:800;letter-spacing:1px}
+
+.illustration-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;min-height:300px}
+.illust-bubble{position:absolute;width:90%;height:90%;background:rgba(255,255,255,0.08);border-radius:50%;top:5%;left:5%}
+
+.people-svg{width:100%;max-width:450px;height:auto;position:relative;z-index:3}
+
+.nav-arrows{display:flex;gap:10px;justify-content:center;margin-top:10px;position:relative;z-index:2}
+.nav-arrow{width:30px;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;opacity:0.7}
+.nav-arrow:hover{opacity:1}
+
+/* RIGHT SIDE - Login Form */
+.login-right{flex:1;background:#fff;padding:50px 50px;display:flex;flex-direction:column;justify-content:center;border-radius:0 24px 24px 0}
+.login-avatar-circle{width:130px;height:130px;border-radius:50%;background:#e8e3f0;margin:0 auto 35px;display:flex;align-items:center;justify-content:center}
+.login-avatar-circle svg{width:60px;height:60px}
+
+.input-wrap{position:relative;margin-bottom:18px}
+.input-wrap input{width:100%;padding:16px 50px 16px 22px;border:none;border-radius:30px;background:#e8e3f0;font-size:13px;outline:none;color:#5b21b6;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
+.input-wrap input::placeholder{color:#9b8eb5;font-weight:600}
+.input-wrap .input-icon{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:#9b8eb5}
+
+.options-row{display:flex;justify-content:space-between;align-items:center;margin:18px 5px 25px;font-size:11px;flex-wrap:wrap;gap:10px}
+.remember-me{display:flex;align-items:center;gap:6px;color:#22c55e;cursor:pointer}
+.remember-me .radio{width:14px;height:14px;border:2px solid #22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.remember-me .radio::after{content:'';width:6px;height:6px;background:#22c55e;border-radius:50%}
+.forgot-pass{display:flex;align-items:center;gap:6px;color:#6b7280;cursor:pointer}
+.forgot-pass .radio{width:14px;height:14px;border:2px solid #6b7280;border-radius:50%;flex-shrink:0}
+
+.login-error{background:#fee2e2;color:#991b1b;padding:10px 15px;border-radius:8px;margin-bottom:15px;font-size:12px;text-align:center;display:none;font-weight:600}
+.login-error.show{display:block}
+
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;border-radius:30px;font-size:13px;font-weight:700;letter-spacing:3px;cursor:pointer;text-transform:uppercase;box-shadow:0 8px 20px rgba(124,58,237,0.35);transition:.3s}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 12px 25px rgba(124,58,237,0.5)}
+.login-btn:active{transform:translateY(0)}
+
+.signup-text{text-align:center;margin-top:20px;font-size:13px;color:#9ca3af}
+.signup-text a{color:#ec4899;font-weight:700;text-decoration:none;cursor:pointer;display:block;margin-top:4px}
+
+@media(max-width:900px){
+  .login-card{flex-direction:column;max-width:480px;min-height:auto}
+  .login-left{border-radius:24px 24px 0 0;padding:25px;min-height:380px}
+  .login-right{border-radius:0 0 24px 24px;padding:35px 30px}
+  .welcome-text h1{font-size:32px}
+  .welcome-text h2{font-size:18px}
+  .illustration-area{min-height:200px}
+  .people-svg{max-width:280px}
+  .login-avatar-circle{width:100px;height:100px;margin-bottom:25px}
+  .login-avatar-circle svg{width:48px;height:48px}
+}
+@media(max-width:480px){
+  .login-screen{padding:10px}
+  .login-card{border-radius:18px}
+  .login-left{padding:20px;min-height:320px;border-radius:18px 18px 0 0}
+  .login-right{padding:25px 20px;border-radius:0 0 18px 18px}
+  .welcome-text h1{font-size:26px;letter-spacing:0}
+  .welcome-text h2{font-size:14px;letter-spacing:2px}
+  .input-wrap input{padding:14px 45px 14px 18px;font-size:12px}
+  .login-btn{padding:13px;font-size:12px}
+}
+
 .sb{position:fixed;left:0;top:0;bottom:0;width:var(--sb);background:linear-gradient(180deg,#0f172a,#1e293b);color:#fff;overflow-y:auto;z-index:200;transition:.3s}
 .sb-h{padding:18px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px}
 .sb-logo{width:42px;height:42px;background:var(--p);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0}
@@ -27,6 +107,7 @@ body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:
 .tb-search{display:flex;align-items:center;gap:6px;background:#f8fafc;border:1px solid var(--br);border-radius:10px;padding:8px 12px;flex:1;max-width:320px}
 .tb-search input{border:none;background:none;outline:none;font-size:13px;width:100%;min-width:0}
 .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.logout-btn{background:#fee2e2;color:#dc2626;border:none;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px}
 .main{margin-left:var(--sb);margin-top:56px;padding:16px;min-height:calc(100vh - 56px)}
 .page{display:none}.page.active{display:block}
 .card{background:#fff;border-radius:12px;border:1px solid var(--br);padding:16px;margin-bottom:14px}
@@ -138,6 +219,173 @@ tr:hover{background:#f8fafc}
 </style>
 </head>
 <body>
+
+<!-- ============ PURPLE LOGIN PAGE ============ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <!-- LEFT - Welcome with People -->
+    <div class="login-left">
+      <div class="login-logo">
+        <div class="login-logo-icon"><span></span><span></span><span></span></div>
+        LOGO
+      </div>
+      
+      <div class="welcome-text">
+        <h2>WELCOME TO THE</h2>
+        <h1>WEBSITE</h1>
+      </div>
+      
+      <div class="illustration-area">
+        <div class="illust-bubble"></div>
+        <svg class="people-svg" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- Decorative dots/crosses -->
+          <text x="220" y="120" fill="#fff" font-size="22" font-weight="700" opacity="0.7">+</text>
+          <text x="280" y="80" fill="#fff" font-size="14" opacity="0.5">+</text>
+          <text x="340" y="150" fill="#ef4444" font-size="18" font-weight="700">×</text>
+          <text x="400" y="280" fill="#ef4444" font-size="22" font-weight="700">×</text>
+          <text x="100" y="370" fill="#fff" font-size="16" opacity="0.6">×</text>
+          <circle cx="380" cy="100" r="3" fill="#fff" opacity="0.8"/>
+          <circle cx="120" cy="180" r="2" fill="#fff" opacity="0.7"/>
+          <circle cx="430" cy="200" r="2" fill="#fff" opacity="0.6"/>
+          <polygon points="180,300 192,310 168,310" fill="#ec4899" opacity="0.7"/>
+          
+          <!-- LEFT - Girl with pink shirt -->
+          <g transform="translate(80, 150)">
+            <!-- Hair back -->
+            <path d="M50,5 Q15,0 10,55 Q8,100 22,115 L80,115 Q95,55 75,5 Z" fill="#1a1a2e"/>
+            <!-- Face -->
+            <ellipse cx="48" cy="55" rx="26" ry="32" fill="#fbbf9e"/>
+            <!-- Hair front -->
+            <path d="M22,30 Q15,55 22,80 Q28,55 32,38 Z" fill="#1a1a2e"/>
+            <path d="M65,15 Q80,30 78,60 Q72,40 65,30 Z" fill="#1a1a2e"/>
+            <!-- Pink shirt/top -->
+            <path d="M22,110 Q15,165 30,200 L80,200 Q92,165 80,110 Z" fill="#ec4899"/>
+            <!-- Arms holding sign -->
+            <path d="M20,135 Q5,170 25,180 L40,170 Z" fill="#fbbf9e"/>
+            <path d="M82,135 Q95,165 85,178 L75,170 Z" fill="#fbbf9e"/>
+            <!-- Skirt purple -->
+            <path d="M28,200 Q22,255 30,295 L78,295 Q88,255 78,200 Z" fill="#831843"/>
+            <!-- Legs -->
+            <rect x="35" y="290" width="14" height="35" fill="#fbbf9e"/>
+            <rect x="58" y="290" width="14" height="35" fill="#fbbf9e"/>
+            <!-- Shoes pink -->
+            <ellipse cx="42" cy="328" rx="12" ry="6" fill="#ec4899"/>
+            <ellipse cx="65" cy="328" rx="12" ry="6" fill="#ec4899"/>
+          </g>
+          
+          <!-- RIGHT - Boy with blue shirt -->
+          <g transform="translate(290, 150)">
+            <!-- Hair -->
+            <path d="M48,10 Q18,5 15,50 Q12,85 25,100 L72,100 Q85,55 70,10 Z" fill="#1a1a2e"/>
+            <!-- Face -->
+            <ellipse cx="45" cy="50" rx="25" ry="30" fill="#fbbf9e"/>
+            <!-- Blue shirt -->
+            <path d="M22,100 Q15,160 28,200 L75,200 Q88,160 78,100 Z" fill="#3b82f6"/>
+            <!-- Arms -->
+            <path d="M20,125 Q5,160 22,175 L35,165 Z" fill="#fbbf9e"/>
+            <path d="M80,125 Q95,160 78,175 L65,165 Z" fill="#fbbf9e"/>
+            <!-- Pants dark -->
+            <path d="M28,200 Q22,260 30,310 L52,308 Q55,255 52,200 Z" fill="#1e293b"/>
+            <path d="M52,200 Q55,260 70,310 L85,305 Q80,255 75,200 Z" fill="#1e293b"/>
+            <!-- Shoes blue -->
+            <ellipse cx="40" cy="318" rx="13" ry="6" fill="#3b82f6"/>
+            <ellipse cx="78" cy="315" rx="13" ry="6" fill="#3b82f6"/>
+          </g>
+          
+          <!-- HELLO VISHAL GROUP Sign -->
+          <g transform="translate(155, 220)">
+            <rect x="0" y="0" width="200" height="80" fill="#fff" rx="3" stroke="#e8e3f0" stroke-width="2"/>
+            <text x="100" y="34" text-anchor="middle" fill="#1e3a8a" font-size="22" font-weight="800" font-family="Arial,sans-serif">HELLO</text>
+            <text x="100" y="58" text-anchor="middle" fill="#22c55e" font-size="13" font-weight="700" font-family="Arial,sans-serif">VISHAL GROUP</text>
+          </g>
+          
+          <!-- Cactus Plant Left -->
+          <g transform="translate(60, 290)">
+            <!-- Pot -->
+            <path d="M0,40 L30,40 L26,70 L4,70 Z" fill="#f59e0b"/>
+            <rect x="-2" y="36" width="34" height="6" fill="#d97706"/>
+            <!-- Cactus body -->
+            <ellipse cx="15" cy="20" rx="10" ry="22" fill="#22c55e"/>
+            <!-- Cactus arms -->
+            <ellipse cx="3" cy="15" rx="5" ry="10" fill="#22c55e"/>
+            <ellipse cx="27" cy="18" rx="5" ry="10" fill="#22c55e"/>
+            <!-- Spikes -->
+            <circle cx="15" cy="10" r="1.5" fill="#fff"/>
+            <circle cx="12" cy="20" r="1.5" fill="#fff"/>
+            <circle cx="18" cy="28" r="1.5" fill="#fff"/>
+          </g>
+          
+          <!-- Cactus Plant Center -->
+          <g transform="translate(220, 320)">
+            <path d="M0,30 L24,30 L21,55 L3,55 Z" fill="#f59e0b"/>
+            <rect x="-2" y="27" width="28" height="5" fill="#d97706"/>
+            <ellipse cx="12" cy="18" rx="8" ry="20" fill="#22c55e"/>
+            <circle cx="12" cy="8" r="1.5" fill="#fff"/>
+            <circle cx="9" cy="18" r="1.5" fill="#fff"/>
+            <circle cx="15" cy="25" r="1.5" fill="#fff"/>
+            <!-- Star on top -->
+            <text x="12" y="-2" text-anchor="middle" fill="#fff" font-size="10">✦</text>
+          </g>
+          
+          <!-- Cactus Plant Right -->
+          <g transform="translate(400, 290)">
+            <path d="M0,40 L30,40 L26,70 L4,70 Z" fill="#f59e0b"/>
+            <rect x="-2" y="36" width="34" height="6" fill="#d97706"/>
+            <ellipse cx="15" cy="20" rx="10" ry="22" fill="#22c55e"/>
+            <ellipse cx="3" cy="15" rx="5" ry="10" fill="#22c55e"/>
+            <ellipse cx="27" cy="18" rx="5" ry="10" fill="#22c55e"/>
+            <circle cx="15" cy="10" r="1.5" fill="#fff"/>
+            <circle cx="12" cy="20" r="1.5" fill="#fff"/>
+            <circle cx="18" cy="28" r="1.5" fill="#fff"/>
+          </g>
+        </svg>
+      </div>
+      
+      <div class="nav-arrows">
+        <div class="nav-arrow">‹</div>
+        <div class="nav-arrow">›</div>
+      </div>
+    </div>
+    
+    <!-- RIGHT - Login Form -->
+    <div class="login-right">
+      <div class="login-avatar-circle">
+        <svg viewBox="0 0 24 24" fill="#9b8eb5">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      </div>
+      
+      <div class="login-error" id="loginError">❌ Invalid credentials!</div>
+      
+      <div class="input-wrap">
+        <input type="text" id="loginUser" placeholder="USERNAME" autocomplete="username">
+        <span class="input-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#9b8eb5"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </span>
+      </div>
+      
+      <div class="input-wrap">
+        <input type="password" id="loginPass" placeholder="PASSWORD" autocomplete="current-password">
+        <span class="input-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#9b8eb5"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6z"/></svg>
+        </span>
+      </div>
+      
+      <div class="options-row">
+        <div class="remember-me"><div class="radio"></div>Remember me</div>
+        <div class="forgot-pass"><div class="radio"></div>Forgot Password</div>
+      </div>
+      
+      <button class="login-btn" onclick="doLogin()">LOGIN</button>
+      
+      <div class="signup-text">
+        Don't have an account yet ?
+        <a>Create an account</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
 <div class="sb" id="sidebar">
   <div class="sb-h"><div class="sb-logo">VE</div><div class="sb-brand">VISHAL GROUPS<span>ELECTRICALS & TRADING</span></div><button class="sb-x" onclick="closeSidebar()">✕</button></div>
@@ -157,6 +405,7 @@ tr:hover{background:#f8fafc}
   <div class="sb-item" onclick="toggleAI();closeSidebar()"><span class="icon">🤖</span> AI Chat<span class="live-dot"></span></div>
   <div class="sb-sec">TOOLS</div>
   <div class="sb-item" onclick="liveSync();closeSidebar()"><span class="icon">🔄</span> Sync All Sheets</div>
+  <div class="sb-item" onclick="doLogout()" style="color:#fca5a5"><span class="icon">🚪</span> Logout</div>
   <div class="sync-bar"><span class="sync-dot" id="syncDot"></span><div><div style="font-weight:600">Live Sync</div><div style="color:#94a3b8;font-size:9px" id="lastSync">Starting...</div></div></div>
 </div>
 <div class="tb">
@@ -165,6 +414,7 @@ tr:hover{background:#f8fafc}
   <div style="display:flex;gap:8px;align-items:center">
     <button class="btn btn-o btn-sm" onclick="liveSync()">🔄 Sync</button>
     <button class="btn btn-sm" onclick="toggleAI()" style="background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;border:none">🤖 AI</button>
+    <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
     <div style="display:flex;align-items:center;gap:6px"><div class="avatar">VS</div><div style="font-size:11px"><div style="font-weight:700">Vishal Group</div><div style="font-size:9px;color:#94a3b8">Admin</div></div></div>
   </div>
 </div>
@@ -206,13 +456,38 @@ tr:hover{background:#f8fafc}
 </div>
 <div class="modal-bg" id="saleModal"><div class="modal"><div class="modal-head"><h3 id="smTitle">Add Sale</h3><button class="modal-x" onclick="closeModal('saleModal')">✕</button></div><div class="fg"><div class="fi"><label>Company</label><input id="sm_co" readonly></div><div class="fi"><label>Party</label><input id="sm_party"></div><div class="fi"><label>Site</label><input id="sm_site"></div><div class="fi"><label>Invoice</label><input id="sm_invoice"></div><div class="fi"><label>Date</label><input type="date" id="sm_date"></div><div class="fi"><label>Amount</label><input type="number" inputmode="decimal" id="sm_amt"></div><div class="fi"><label>Code</label><select id="sm_code"><option value="N">N-New</option><option value="R">R-Repeat</option></select></div></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-p" onclick="saveSaleModal()">💾 Save</button><button class="btn btn-o" onclick="closeModal('saleModal')">Cancel</button></div></div></div>
 <button class="ai-fab" id="aiFab" onclick="toggleAI()">🤖<div class="ai-dot">AI</div></button>
-<div class="ai-chat" id="aiChat"><div class="ai-hdr"><div class="ai-av">🤖</div><div class="ai-inf"><h4>VG AI Assistant</h4><span>Online • ERP Connected</span></div><button class="ai-cls" onclick="toggleAI()">✕</button></div><div class="ai-body" id="aiBody"><div class="ai-msg bot"><div class="mh">🤖 VG AI</div><div>Namaste! 🙏 Main aapka <strong>ERP AI</strong> hoon.<br>📊 <strong>"Outstanding kitna hai?"</strong><br>💰 <strong>"Sales report do"</strong><br>📦 <strong>"Stock summary"</strong></div></div></div><div class="ai-qk"><button class="ai-qb" onclick="aiQ('Outstanding kitna hai?')">💼 Outstanding</button><button class="ai-qb" onclick="aiQ('Stock summary')">📦 Stock</button><button class="ai-qb" onclick="aiQ('Sales report')">💰 Sales</button><button class="ai-qb" onclick="aiQ('Critical debtors')">⏰ Debtors</button></div><div class="ai-ft"><input class="ai-inp" id="aiInput" placeholder="Type question..." onkeydown="if(event.key==='Enter')sendAI()"><button class="ai-snd" id="aiSend" onclick="sendAI()">➤</button></div></div>
+<div class="ai-chat" id="aiChat"><div class="ai-hdr"><div class="ai-av">🤖</div><div class="ai-inf"><h4>VG AI Assistant</h4><span>Online • ERP Connected</span></div><button class="ai-cls" onclick="toggleAI()">✕</button></div><div class="ai-body" id="aiBody"><div class="ai-msg bot"><div class="mh">🤖 VG AI</div>Namaste! 🙏 Main aapka <strong>ERP AI</strong> hoon.</div></div><div class="ai-qk"><button class="ai-qb" onclick="aiQ('Outstanding kitna hai?')">💼 Outstanding</button><button class="ai-qb" onclick="aiQ('Stock summary')">📦 Stock</button><button class="ai-qb" onclick="aiQ('Sales report')">💰 Sales</button><button class="ai-qb" onclick="aiQ('Critical debtors')">⏰ Debtors</button></div><div class="ai-ft"><input class="ai-inp" id="aiInput" placeholder="Type question..." onkeydown="if(event.key==='Enter')sendAI()"><button class="ai-snd" id="aiSend" onclick="sendAI()">➤</button></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// ============ CONFIG - YAHAN API KEY DAALO ============
-const AI_KEY = 'AIzaSyAtmgwAAHE-QctXDH1Bf9-O6hP7Vwx6lyw';
-// ============ ABOVE LINE MEIN APNI KEY DAALO ============
+// ============ LOGIN CONFIG ============
+const LOGIN_USER='admin';
+const LOGIN_PASS='vishal123';
 
+function checkLogin(){if(sessionStorage.getItem('vgLoggedIn')==='yes'){document.getElementById('loginScreen').classList.add('hide');return true}return false}
+
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value.trim();
+  const err=document.getElementById('loginError');
+  if(u===LOGIN_USER && p===LOGIN_PASS){
+    sessionStorage.setItem('vgLoggedIn','yes');
+    document.getElementById('loginScreen').classList.add('hide');
+    err.classList.remove('show');
+    document.getElementById('loginUser').value='';
+    document.getElementById('loginPass').value='';
+    setTimeout(()=>{renderAll();liveSync()},300);
+  }else{
+    err.classList.add('show');
+    err.textContent='❌ Invalid Username or Password!';
+    setTimeout(()=>err.classList.remove('show'),3000);
+  }
+}
+
+function doLogout(){if(confirm('Logout karna hai?')){sessionStorage.removeItem('vgLoggedIn');document.getElementById('loginScreen').classList.remove('hide');closeSidebar()}}
+
+document.addEventListener('keydown',e=>{if(e.key==='Enter' && !document.getElementById('loginScreen').classList.contains('hide'))doLogin()});
+
+const AI_KEY = 'AIzaSyAtmgwAAHE-QctXDH1Bf9-O6hP7Vwx6lyw';
 const STOCK_API='https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
 const STOCK_CSV='https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
 const PAY_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv';
@@ -591,7 +866,6 @@ function stockTR(s){return `<tr><td><strong>${s.sno}</strong></td><td><strong>${
 function csvRow(line){if(!line)return[];const r=[];let c='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){c+='"';i++}else q=!q}else if(ch===','&&!q){r.push(c.trim());c=''}else c+=ch}r.push(c.trim());return r.map(v=>v.replace(/^"|"$/g,''))}
 function showSync(t,c){const el=document.getElementById('lastSync');if(el){el.textContent=t;el.style.color={green:'#22c55e',red:'#ef4444',blue:'#3b82f6',orange:'#f59e0b'}[c]||'#94a3b8'}const dot=document.getElementById('syncDot');if(dot)dot.style.background={green:'#22c55e',red:'#ef4444',blue:'#3b82f6'}[c]||'#22c55e'}
 
-// ========== AI CHATBOT WITH MULTI-MODEL FALLBACK ==========
 let aiMessages=[];
 let aiRetryCount=0;
 
@@ -652,7 +926,6 @@ async function sendAI(){
   aiMessages.push({role:'user',parts:[{text:q}]});
   input.value='';sendBtn.disabled=true;showTyp();
 
-  // Try multiple models for limit fix
   const models=['gemini-1.5-flash','gemini-1.5-flash-latest','gemini-2.0-flash','gemini-1.5-flash-8b'];
   let success=false;
 
@@ -667,7 +940,6 @@ async function sendAI(){
         const err=await r.json().catch(()=>({}));
         const msg=err.error?.message||'';
         if(r.status===429||msg.includes('quota')||msg.includes('limit')||msg.includes('RATE')){
-          console.warn(`${model} rate limited, trying next...`);
           continue;
         }
         throw new Error(msg||'API Error');
@@ -682,28 +954,35 @@ async function sendAI(){
         aiRetryCount=0;
         success=true;
       }
-    }catch(e){console.warn(`${model} failed:`,e.message)}
+    }catch(e){}
   }
 
   if(!success){
     hideTyp();
     aiRetryCount++;
     if(aiRetryCount>=3){
-      addBot(`⚠️ <strong>API Limit Reached!</strong>\n\nThoda wait karo (1-2 min) phir try karo.\n\n💡 Tips:\n• Chhote questions puchho\n• Gap rakho\n• Page refresh karo\n\n🔄 Limit har minute reset hoti hai.`);
+      addBot(`⚠️ <strong>API Limit Reached!</strong>\n\nThoda wait karo (1-2 min) phir try karo.`);
       aiRetryCount=0;
     }else{
-      addBot(`⏳ Busy hai... ${3-aiRetryCount} retry baaki. 30 sec baad try karo.`);
+      addBot(`⏳ Busy hai... 30 sec baad try karo.`);
     }
   }
   sendBtn.disabled=false;input.focus();
 }
 
 load();
-window.addEventListener('load',()=>{renderAll();setTimeout(liveSync,800);setInterval(liveSync,5*60*1000)});
+window.addEventListener('load',()=>{
+  if(checkLogin()){
+    renderAll();
+    setTimeout(liveSync,800);
+    setInterval(liveSync,5*60*1000);
+  }
+});
+
 let touchStart=0;
 document.addEventListener('touchstart',e=>{touchStart=e.touches[0].clientX});
 document.addEventListener('touchend',e=>{const diff=e.changedTouches[0].clientX-touchStart;if(diff<-50)closeSidebar()});
-console.log('🔥 VE ERP + AI Ready');
+console.log('🔥 VE ERP + Purple Login + AI Ready');
 </script>
 </body>
 </html>
