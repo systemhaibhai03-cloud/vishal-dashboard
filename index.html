@@ -3,90 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#7c3aed">
+<meta name="theme-color" content="#1a56db">
 <title>Vishal Electricals - ERP</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--p:#1a56db;--pd:#1e40af;--pl:#dbeafe;--s:#059669;--w:#d97706;--d:#dc2626;--bg:#f1f5f9;--wh:#fff;--tx:#1e293b;--tl:#64748b;--br:#e2e8f0;--sb:250px}
 body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:var(--tx)}
 
-/* ============ LOGIN PAGE - PURPLE WELCOME ============ */
-.login-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#b8a5d9 0%,#a594c7 50%,#9d8ac0 100%);z-index:9999;display:flex;align-items:center;justify-content:center;overflow:auto;padding:20px}
+/* ============ LOGIN PAGE STYLES ============ */
+.login-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:#1a8fff;z-index:9999;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8vh}
 .login-screen.hide{display:none}
-.login-screen::before{content:'';position:absolute;top:-100px;left:-100px;width:400px;height:400px;background:rgba(255,255,255,0.08);border-radius:50%;z-index:0}
-.login-screen::after{content:'';position:absolute;bottom:-150px;right:-150px;width:500px;height:500px;background:rgba(255,255,255,0.06);border-radius:50%;z-index:0}
-
-.login-card{background:#fff;border-radius:24px;width:100%;max-width:1100px;min-height:600px;display:flex;overflow:hidden;box-shadow:0 30px 80px rgba(76,29,149,0.3);position:relative;z-index:1}
-
-/* LEFT SIDE - Purple Welcome */
-.login-left{flex:1.2;background:linear-gradient(135deg,#7c3aed 0%,#6d28d9 50%,#5b21b6 100%);padding:40px;position:relative;overflow:hidden;display:flex;flex-direction:column;color:#fff;border-radius:24px 0 0 24px}
-.login-left::before{content:'';position:absolute;top:0;right:-100px;width:300px;height:300px;background:rgba(255,255,255,0.05);border-radius:50%}
-.login-left::after{content:'';position:absolute;bottom:-50px;left:-50px;width:200px;height:200px;background:rgba(255,255,255,0.05);border-radius:50%}
-
-.login-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;margin-bottom:30px;position:relative;z-index:2}
-.login-logo-icon{display:flex;flex-direction:column;gap:3px}
-.login-logo-icon span{width:18px;height:2px;background:#fff;border-radius:1px}
-
-.welcome-text{margin-bottom:30px;position:relative;z-index:2}
-.welcome-text h2{font-size:22px;font-weight:400;letter-spacing:3px;margin-bottom:5px}
-.welcome-text h1{font-size:42px;font-weight:800;letter-spacing:1px}
-
-.illustration-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;min-height:300px}
-.illust-bubble{position:absolute;width:90%;height:90%;background:rgba(255,255,255,0.08);border-radius:50%;top:5%;left:5%}
-
-.people-svg{width:100%;max-width:450px;height:auto;position:relative;z-index:3}
-
-.nav-arrows{display:flex;gap:10px;justify-content:center;margin-top:10px;position:relative;z-index:2}
-.nav-arrow{width:30px;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;opacity:0.7}
-.nav-arrow:hover{opacity:1}
-
-/* RIGHT SIDE - Login Form */
-.login-right{flex:1;background:#fff;padding:50px 50px;display:flex;flex-direction:column;justify-content:center;border-radius:0 24px 24px 0}
-.login-avatar-circle{width:130px;height:130px;border-radius:50%;background:#e8e3f0;margin:0 auto 35px;display:flex;align-items:center;justify-content:center}
-.login-avatar-circle svg{width:60px;height:60px}
-
-.input-wrap{position:relative;margin-bottom:18px}
-.input-wrap input{width:100%;padding:16px 50px 16px 22px;border:none;border-radius:30px;background:#e8e3f0;font-size:13px;outline:none;color:#5b21b6;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
-.input-wrap input::placeholder{color:#9b8eb5;font-weight:600}
-.input-wrap .input-icon{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:#9b8eb5}
-
-.options-row{display:flex;justify-content:space-between;align-items:center;margin:18px 5px 25px;font-size:11px;flex-wrap:wrap;gap:10px}
-.remember-me{display:flex;align-items:center;gap:6px;color:#22c55e;cursor:pointer}
-.remember-me .radio{width:14px;height:14px;border:2px solid #22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.remember-me .radio::after{content:'';width:6px;height:6px;background:#22c55e;border-radius:50%}
-.forgot-pass{display:flex;align-items:center;gap:6px;color:#6b7280;cursor:pointer}
-.forgot-pass .radio{width:14px;height:14px;border:2px solid #6b7280;border-radius:50%;flex-shrink:0}
-
-.login-error{background:#fee2e2;color:#991b1b;padding:10px 15px;border-radius:8px;margin-bottom:15px;font-size:12px;text-align:center;display:none;font-weight:600}
+.login-window{position:relative;background:#3b82f6;border-radius:6px;width:90%;max-width:500px;padding:0;box-shadow:0 15px 40px rgba(0,0,0,0.25);z-index:10}
+.login-titlebar{background:#1e3a8a;padding:10px 16px;border-radius:6px 6px 0 0;display:flex;gap:6px}
+.login-titlebar span{width:9px;height:9px;border-radius:50%;background:#1a8fff;opacity:0.6}
+.login-body{padding:35px 35px 35px}
+.login-avatar{width:90px;height:90px;border-radius:50%;background:#1e3a8a;margin:0 auto 25px;display:flex;align-items:center;justify-content:center;color:#fff}
+.login-input{width:100%;padding:14px 18px;border:none;border-radius:3px;background:#f1f5f9;font-size:14px;margin-bottom:14px;outline:none;color:#475569}
+.login-input::placeholder{color:#94a3b8}
+.login-btn{width:100%;padding:14px;background:#3b82f6;color:#fff;border:none;border-radius:3px;font-size:13px;font-weight:700;letter-spacing:3px;cursor:pointer;text-transform:uppercase;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.login-btn:hover,.login-btn:active{background:#2563eb}
+.login-error{background:rgba(220,38,38,0.25);color:#fff;padding:10px;border-radius:3px;margin-bottom:12px;text-align:center;font-size:12px;display:none;font-weight:600}
 .login-error.show{display:block}
-
-.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;border-radius:30px;font-size:13px;font-weight:700;letter-spacing:3px;cursor:pointer;text-transform:uppercase;box-shadow:0 8px 20px rgba(124,58,237,0.35);transition:.3s}
-.login-btn:hover{transform:translateY(-2px);box-shadow:0 12px 25px rgba(124,58,237,0.5)}
-.login-btn:active{transform:translateY(0)}
-
-.signup-text{text-align:center;margin-top:20px;font-size:13px;color:#9ca3af}
-.signup-text a{color:#ec4899;font-weight:700;text-decoration:none;cursor:pointer;display:block;margin-top:4px}
-
-@media(max-width:900px){
-  .login-card{flex-direction:column;max-width:480px;min-height:auto}
-  .login-left{border-radius:24px 24px 0 0;padding:25px;min-height:380px}
-  .login-right{border-radius:0 0 24px 24px;padding:35px 30px}
-  .welcome-text h1{font-size:32px}
-  .welcome-text h2{font-size:18px}
-  .illustration-area{min-height:200px}
-  .people-svg{max-width:280px}
-  .login-avatar-circle{width:100px;height:100px;margin-bottom:25px}
-  .login-avatar-circle svg{width:48px;height:48px}
+.people-container{position:fixed;bottom:0;left:0;right:0;width:100%;height:auto;pointer-events:none;z-index:5}
+.people-svg{width:100%;height:auto;display:block}
+@media(max-width:768px){
+  .login-screen{padding-top:12vh}
+  .login-window{max-width:92%}
+  .login-body{padding:25px 25px 30px}
+  .login-avatar{width:70px;height:70px;margin-bottom:20px}
+  .login-avatar svg{width:40px;height:40px}
+  .login-input{padding:12px 15px;font-size:13px;margin-bottom:12px}
+  .login-btn{padding:12px;font-size:12px;letter-spacing:2px}
 }
 @media(max-width:480px){
-  .login-screen{padding:10px}
-  .login-card{border-radius:18px}
-  .login-left{padding:20px;min-height:320px;border-radius:18px 18px 0 0}
-  .login-right{padding:25px 20px;border-radius:0 0 18px 18px}
-  .welcome-text h1{font-size:26px;letter-spacing:0}
-  .welcome-text h2{font-size:14px;letter-spacing:2px}
-  .input-wrap input{padding:14px 45px 14px 18px;font-size:12px}
-  .login-btn{padding:13px;font-size:12px}
+  .login-screen{padding-top:8vh}
+  .login-window{max-width:94%}
 }
 
 .sb{position:fixed;left:0;top:0;bottom:0;width:var(--sb);background:linear-gradient(180deg,#0f172a,#1e293b);color:#fff;overflow-y:auto;z-index:200;transition:.3s}
@@ -220,169 +171,99 @@ tr:hover{background:#f8fafc}
 </head>
 <body>
 
-<!-- ============ PURPLE LOGIN PAGE ============ -->
+<!-- ============ LOGIN SCREEN - WITH AUTO CAPITAL FIX ============ -->
 <div class="login-screen" id="loginScreen">
-  <div class="login-card">
-    <!-- LEFT - Welcome with People -->
-    <div class="login-left">
-      <div class="login-logo">
-        <div class="login-logo-icon"><span></span><span></span><span></span></div>
-        LOGO
-      </div>
-      
-      <div class="welcome-text">
-        <h2>WELCOME TO THE</h2>
-        <h1>WEBSITE</h1>
-      </div>
-      
-      <div class="illustration-area">
-        <div class="illust-bubble"></div>
-        <svg class="people-svg" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
-          <!-- Decorative dots/crosses -->
-          <text x="220" y="120" fill="#fff" font-size="22" font-weight="700" opacity="0.7">+</text>
-          <text x="280" y="80" fill="#fff" font-size="14" opacity="0.5">+</text>
-          <text x="340" y="150" fill="#ef4444" font-size="18" font-weight="700">×</text>
-          <text x="400" y="280" fill="#ef4444" font-size="22" font-weight="700">×</text>
-          <text x="100" y="370" fill="#fff" font-size="16" opacity="0.6">×</text>
-          <circle cx="380" cy="100" r="3" fill="#fff" opacity="0.8"/>
-          <circle cx="120" cy="180" r="2" fill="#fff" opacity="0.7"/>
-          <circle cx="430" cy="200" r="2" fill="#fff" opacity="0.6"/>
-          <polygon points="180,300 192,310 168,310" fill="#ec4899" opacity="0.7"/>
-          
-          <!-- LEFT - Girl with pink shirt -->
-          <g transform="translate(80, 150)">
-            <!-- Hair back -->
-            <path d="M50,5 Q15,0 10,55 Q8,100 22,115 L80,115 Q95,55 75,5 Z" fill="#1a1a2e"/>
-            <!-- Face -->
-            <ellipse cx="48" cy="55" rx="26" ry="32" fill="#fbbf9e"/>
-            <!-- Hair front -->
-            <path d="M22,30 Q15,55 22,80 Q28,55 32,38 Z" fill="#1a1a2e"/>
-            <path d="M65,15 Q80,30 78,60 Q72,40 65,30 Z" fill="#1a1a2e"/>
-            <!-- Pink shirt/top -->
-            <path d="M22,110 Q15,165 30,200 L80,200 Q92,165 80,110 Z" fill="#ec4899"/>
-            <!-- Arms holding sign -->
-            <path d="M20,135 Q5,170 25,180 L40,170 Z" fill="#fbbf9e"/>
-            <path d="M82,135 Q95,165 85,178 L75,170 Z" fill="#fbbf9e"/>
-            <!-- Skirt purple -->
-            <path d="M28,200 Q22,255 30,295 L78,295 Q88,255 78,200 Z" fill="#831843"/>
-            <!-- Legs -->
-            <rect x="35" y="290" width="14" height="35" fill="#fbbf9e"/>
-            <rect x="58" y="290" width="14" height="35" fill="#fbbf9e"/>
-            <!-- Shoes pink -->
-            <ellipse cx="42" cy="328" rx="12" ry="6" fill="#ec4899"/>
-            <ellipse cx="65" cy="328" rx="12" ry="6" fill="#ec4899"/>
-          </g>
-          
-          <!-- RIGHT - Boy with blue shirt -->
-          <g transform="translate(290, 150)">
-            <!-- Hair -->
-            <path d="M48,10 Q18,5 15,50 Q12,85 25,100 L72,100 Q85,55 70,10 Z" fill="#1a1a2e"/>
-            <!-- Face -->
-            <ellipse cx="45" cy="50" rx="25" ry="30" fill="#fbbf9e"/>
-            <!-- Blue shirt -->
-            <path d="M22,100 Q15,160 28,200 L75,200 Q88,160 78,100 Z" fill="#3b82f6"/>
-            <!-- Arms -->
-            <path d="M20,125 Q5,160 22,175 L35,165 Z" fill="#fbbf9e"/>
-            <path d="M80,125 Q95,160 78,175 L65,165 Z" fill="#fbbf9e"/>
-            <!-- Pants dark -->
-            <path d="M28,200 Q22,260 30,310 L52,308 Q55,255 52,200 Z" fill="#1e293b"/>
-            <path d="M52,200 Q55,260 70,310 L85,305 Q80,255 75,200 Z" fill="#1e293b"/>
-            <!-- Shoes blue -->
-            <ellipse cx="40" cy="318" rx="13" ry="6" fill="#3b82f6"/>
-            <ellipse cx="78" cy="315" rx="13" ry="6" fill="#3b82f6"/>
-          </g>
-          
-          <!-- HELLO VISHAL GROUP Sign -->
-          <g transform="translate(155, 220)">
-            <rect x="0" y="0" width="200" height="80" fill="#fff" rx="3" stroke="#e8e3f0" stroke-width="2"/>
-            <text x="100" y="34" text-anchor="middle" fill="#1e3a8a" font-size="22" font-weight="800" font-family="Arial,sans-serif">HELLO</text>
-            <text x="100" y="58" text-anchor="middle" fill="#22c55e" font-size="13" font-weight="700" font-family="Arial,sans-serif">VISHAL GROUP</text>
-          </g>
-          
-          <!-- Cactus Plant Left -->
-          <g transform="translate(60, 290)">
-            <!-- Pot -->
-            <path d="M0,40 L30,40 L26,70 L4,70 Z" fill="#f59e0b"/>
-            <rect x="-2" y="36" width="34" height="6" fill="#d97706"/>
-            <!-- Cactus body -->
-            <ellipse cx="15" cy="20" rx="10" ry="22" fill="#22c55e"/>
-            <!-- Cactus arms -->
-            <ellipse cx="3" cy="15" rx="5" ry="10" fill="#22c55e"/>
-            <ellipse cx="27" cy="18" rx="5" ry="10" fill="#22c55e"/>
-            <!-- Spikes -->
-            <circle cx="15" cy="10" r="1.5" fill="#fff"/>
-            <circle cx="12" cy="20" r="1.5" fill="#fff"/>
-            <circle cx="18" cy="28" r="1.5" fill="#fff"/>
-          </g>
-          
-          <!-- Cactus Plant Center -->
-          <g transform="translate(220, 320)">
-            <path d="M0,30 L24,30 L21,55 L3,55 Z" fill="#f59e0b"/>
-            <rect x="-2" y="27" width="28" height="5" fill="#d97706"/>
-            <ellipse cx="12" cy="18" rx="8" ry="20" fill="#22c55e"/>
-            <circle cx="12" cy="8" r="1.5" fill="#fff"/>
-            <circle cx="9" cy="18" r="1.5" fill="#fff"/>
-            <circle cx="15" cy="25" r="1.5" fill="#fff"/>
-            <!-- Star on top -->
-            <text x="12" y="-2" text-anchor="middle" fill="#fff" font-size="10">✦</text>
-          </g>
-          
-          <!-- Cactus Plant Right -->
-          <g transform="translate(400, 290)">
-            <path d="M0,40 L30,40 L26,70 L4,70 Z" fill="#f59e0b"/>
-            <rect x="-2" y="36" width="34" height="6" fill="#d97706"/>
-            <ellipse cx="15" cy="20" rx="10" ry="22" fill="#22c55e"/>
-            <ellipse cx="3" cy="15" rx="5" ry="10" fill="#22c55e"/>
-            <ellipse cx="27" cy="18" rx="5" ry="10" fill="#22c55e"/>
-            <circle cx="15" cy="10" r="1.5" fill="#fff"/>
-            <circle cx="12" cy="20" r="1.5" fill="#fff"/>
-            <circle cx="18" cy="28" r="1.5" fill="#fff"/>
-          </g>
-        </svg>
-      </div>
-      
-      <div class="nav-arrows">
-        <div class="nav-arrow">‹</div>
-        <div class="nav-arrow">›</div>
-      </div>
+  <div class="login-window">
+    <div class="login-titlebar">
+      <span></span><span></span><span></span>
     </div>
-    
-    <!-- RIGHT - Login Form -->
-    <div class="login-right">
-      <div class="login-avatar-circle">
-        <svg viewBox="0 0 24 24" fill="#9b8eb5">
+    <div class="login-body">
+      <div class="login-avatar">
+        <svg width="55" height="55" viewBox="0 0 24 24" fill="#fff">
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
         </svg>
       </div>
-      
       <div class="login-error" id="loginError">❌ Invalid credentials!</div>
-      
-      <div class="input-wrap">
-        <input type="text" id="loginUser" placeholder="USERNAME" autocomplete="username">
-        <span class="input-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#9b8eb5"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        </span>
-      </div>
-      
-      <div class="input-wrap">
-        <input type="password" id="loginPass" placeholder="PASSWORD" autocomplete="current-password">
-        <span class="input-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#9b8eb5"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6z"/></svg>
-        </span>
-      </div>
-      
-      <div class="options-row">
-        <div class="remember-me"><div class="radio"></div>Remember me</div>
-        <div class="forgot-pass"><div class="radio"></div>Forgot Password</div>
-      </div>
-      
-      <button class="login-btn" onclick="doLogin()">LOGIN</button>
-      
-      <div class="signup-text">
-        Don't have an account yet ?
-        <a>Create an account</a>
-      </div>
+      <input type="text" class="login-input" id="loginUser" placeholder="Username" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="text">
+      <input type="password" class="login-input" id="loginPass" placeholder="●●●●●" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
+      <button class="login-btn" onclick="doLogin()">CONTINUE</button>
     </div>
+  </div>
+  
+  <div class="people-container">
+    <svg class="people-svg" viewBox="0 0 1500 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYEnd meet">
+      <path d="M0,440 Q300,420 600,430 T1500,425 L1500,500 L0,500 Z" fill="#1577d8" opacity="0.5"/>
+      <circle cx="1380" cy="180" r="20" fill="#ffffff" opacity="0.9"/>
+      <g transform="translate(50, 320)">
+        <path d="M0,120 Q-12,70 -25,30 Q-22,55 -8,80 Q-12,40 0,15 Q4,50 13,85 Q22,50 26,25 Q22,65 8,115 Z" fill="#a0c4f7"/>
+        <line x1="0" y1="120" x2="0" y2="150" stroke="#a0c4f7" stroke-width="3"/>
+      </g>
+      <g transform="translate(1310, 310)">
+        <path d="M0,130 Q-15,75 -28,35 Q-25,55 -10,85 Q-15,45 0,15 Q5,50 14,85 Q24,50 28,28 Q24,68 10,125 Z" fill="#a0c4f7"/>
+        <line x1="0" y1="130" x2="0" y2="160" stroke="#a0c4f7" stroke-width="3"/>
+      </g>
+      <g transform="translate(1420, 340)">
+        <path d="M0,110 Q-10,60 -22,28 Q-19,48 -7,72 Q-11,38 0,12 Q3,42 11,70 Q19,42 22,22 Q19,58 7,100 Z" fill="#a0c4f7"/>
+        <line x1="0" y1="110" x2="0" y2="135" stroke="#a0c4f7" stroke-width="3"/>
+      </g>
+      <g transform="translate(180, 230)">
+        <path d="M30,15 Q10,10 5,45 Q0,90 18,105 L60,100 Q72,45 50,15 Z" fill="#c97464"/>
+        <ellipse cx="38" cy="55" rx="22" ry="28" fill="#e8a896"/>
+        <path d="M18,30 Q12,55 18,80 Q22,60 28,40 Z" fill="#a85a4a"/>
+        <path d="M15,90 Q10,145 22,185 L75,185 Q85,145 75,90 Z" fill="#1e293b"/>
+        <path d="M70,95 Q88,75 95,55 Q100,48 96,44 Q92,48 87,60 Q82,72 65,92 Z" fill="#e8a896"/>
+        <path d="M22,100 Q12,140 30,170 Q38,165 32,135 Z" fill="#1e293b"/>
+        <path d="M22,185 Q15,235 18,285 L48,283 Q53,235 48,185 Z" fill="#5c5c6e"/>
+        <path d="M52,185 Q58,235 78,283 L98,278 Q92,228 78,185 Z" fill="#5c5c6e"/>
+        <ellipse cx="105" cy="278" rx="18" ry="6" fill="#1a1a2e"/>
+        <rect x="-30" y="195" width="75" height="48" fill="#d4d4dc" rx="2"/>
+        <rect x="-30" y="240" width="75" height="6" fill="#9ca3af"/>
+      </g>
+      <g transform="translate(330, 200)">
+        <path d="M40,10 Q15,5 12,50 Q8,100 28,120 L72,115 Q85,55 60,10 Z" fill="#3a4055"/>
+        <ellipse cx="48" cy="60" rx="24" ry="30" fill="#d4877a"/>
+        <path d="M25,28 Q18,55 24,82 Q30,58 38,38 Z" fill="#2a3045"/>
+        <path d="M20,108 Q15,165 28,210 L82,210 Q92,165 82,108 Z" fill="#a85a4a"/>
+        <path d="M20,135 Q5,175 8,215 Q18,218 28,185 Z" fill="#d4877a"/>
+        <path d="M82,135 Q97,175 95,215 Q85,218 75,185 Z" fill="#d4877a"/>
+        <path d="M28,210 Q18,265 22,310 L52,308 Q57,258 52,210 Z" fill="#e2e8f0"/>
+        <path d="M52,210 Q60,265 80,308 L102,303 Q92,253 75,210 Z" fill="#e2e8f0"/>
+        <ellipse cx="32" cy="312" rx="12" ry="5" fill="#d4877a"/>
+        <ellipse cx="106" cy="305" rx="13" ry="5" fill="#d4877a"/>
+      </g>
+      <g transform="translate(440, 290)">
+        <ellipse cx="50" cy="35" rx="26" ry="30" fill="#3a4055"/>
+        <ellipse cx="48" cy="48" rx="20" ry="24" fill="#c47a68"/>
+        <path d="M30,20 Q50,8 70,25 Q70,35 60,30 Q50,22 35,30 Z" fill="#2a3045"/>
+        <path d="M60,55 Q75,60 80,80 Q70,82 58,72 Z" fill="#c47a68"/>
+        <path d="M75,55 Q160,52 230,75 Q240,95 230,108 Q160,93 78,82 Z" fill="#9c5a4c"/>
+        <path d="M195,90 Q275,100 330,128 L335,148 Q275,123 188,108 Z" fill="#3a4055"/>
+        <path d="M225,108 Q285,135 335,168 L330,185 Q280,155 218,128 Z" fill="#3a4055"/>
+        <ellipse cx="345" cy="170" rx="18" ry="6" fill="#1a1a2e"/>
+        <ellipse cx="340" cy="190" rx="18" ry="6" fill="#1a1a2e"/>
+        <rect x="170" y="48" width="68" height="42" fill="#d4d4dc" rx="2"/>
+        <rect x="170" y="86" width="68" height="6" fill="#9ca3af"/>
+      </g>
+      <g transform="translate(990, 230)">
+        <path d="M40,12 Q15,8 12,50 Q8,98 28,115 L72,110 Q85,52 60,12 Z" fill="#3a4055"/>
+        <ellipse cx="44" cy="58" rx="23" ry="29" fill="#e8a896"/>
+        <path d="M22,30 Q16,58 22,82 Q28,58 34,38 Z" fill="#2a3045"/>
+        <path d="M18,108 Q12,165 26,205 L78,205 Q88,165 78,108 Z" fill="#c4b39a"/>
+        <path d="M18,148 Q5,178 12,205 Q22,210 32,185 Z" fill="#c4b39a"/>
+        <path d="M78,148 Q92,178 88,205 Q78,210 68,185 Z" fill="#c4b39a"/>
+        <path d="M26,205 Q18,255 22,300 L52,298 Q57,250 52,205 Z" fill="#a85a4a"/>
+        <path d="M52,205 Q58,255 78,298 L98,295 Q88,245 75,205 Z" fill="#a85a4a"/>
+        <path d="M24,300 Q20,330 26,355 L46,353 Q48,328 46,300 Z" fill="#e8a896"/>
+        <path d="M80,298 Q86,330 92,355 L108,350 Q100,328 98,298 Z" fill="#e8a896"/>
+        <ellipse cx="36" cy="358" rx="14" ry="5" fill="#1a1a2e"/>
+        <ellipse cx="103" cy="352" rx="14" ry="5" fill="#1a1a2e"/>
+        <g transform="translate(-35, 215)">
+          <rect x="0" y="0" width="98" height="58" fill="#e2e8f0" rx="2"/>
+          <rect x="0" y="55" width="98" height="7" fill="#94a3b8"/>
+          <rect x="4" y="4" width="90" height="46" fill="#5d8fc7"/>
+        </g>
+      </g>
+    </svg>
   </div>
 </div>
 
@@ -456,20 +337,27 @@ tr:hover{background:#f8fafc}
 </div>
 <div class="modal-bg" id="saleModal"><div class="modal"><div class="modal-head"><h3 id="smTitle">Add Sale</h3><button class="modal-x" onclick="closeModal('saleModal')">✕</button></div><div class="fg"><div class="fi"><label>Company</label><input id="sm_co" readonly></div><div class="fi"><label>Party</label><input id="sm_party"></div><div class="fi"><label>Site</label><input id="sm_site"></div><div class="fi"><label>Invoice</label><input id="sm_invoice"></div><div class="fi"><label>Date</label><input type="date" id="sm_date"></div><div class="fi"><label>Amount</label><input type="number" inputmode="decimal" id="sm_amt"></div><div class="fi"><label>Code</label><select id="sm_code"><option value="N">N-New</option><option value="R">R-Repeat</option></select></div></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-p" onclick="saveSaleModal()">💾 Save</button><button class="btn btn-o" onclick="closeModal('saleModal')">Cancel</button></div></div></div>
 <button class="ai-fab" id="aiFab" onclick="toggleAI()">🤖<div class="ai-dot">AI</div></button>
-<div class="ai-chat" id="aiChat"><div class="ai-hdr"><div class="ai-av">🤖</div><div class="ai-inf"><h4>VG AI Assistant</h4><span>Online • ERP Connected</span></div><button class="ai-cls" onclick="toggleAI()">✕</button></div><div class="ai-body" id="aiBody"><div class="ai-msg bot"><div class="mh">🤖 VG AI</div>Namaste! 🙏 Main aapka <strong>ERP AI</strong> hoon.</div></div><div class="ai-qk"><button class="ai-qb" onclick="aiQ('Outstanding kitna hai?')">💼 Outstanding</button><button class="ai-qb" onclick="aiQ('Stock summary')">📦 Stock</button><button class="ai-qb" onclick="aiQ('Sales report')">💰 Sales</button><button class="ai-qb" onclick="aiQ('Critical debtors')">⏰ Debtors</button></div><div class="ai-ft"><input class="ai-inp" id="aiInput" placeholder="Type question..." onkeydown="if(event.key==='Enter')sendAI()"><button class="ai-snd" id="aiSend" onclick="sendAI()">➤</button></div></div>
+<div class="ai-chat" id="aiChat"><div class="ai-hdr"><div class="ai-av">🤖</div><div class="ai-inf"><h4>VG AI Assistant</h4><span>Online • ERP Connected</span></div><button class="ai-cls" onclick="toggleAI()">✕</button></div><div class="ai-body" id="aiBody"><div class="ai-msg bot"><div class="mh">🤖 VG AI</div>Namaste! 🙏 Main aapka <strong>ERP AI</strong> hoon.<br>📊 <strong>"Outstanding kitna hai?"</strong><br>💰 <strong>"Sales report do"</strong><br>📦 <strong>"Stock summary"</strong></div></div><div class="ai-qk"><button class="ai-qb" onclick="aiQ('Outstanding kitna hai?')">💼 Outstanding</button><button class="ai-qb" onclick="aiQ('Stock summary')">📦 Stock</button><button class="ai-qb" onclick="aiQ('Sales report')">💰 Sales</button><button class="ai-qb" onclick="aiQ('Critical debtors')">⏰ Debtors</button></div><div class="ai-ft"><input class="ai-inp" id="aiInput" placeholder="Type question..." onkeydown="if(event.key==='Enter')sendAI()"><button class="ai-snd" id="aiSend" onclick="sendAI()">➤</button></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 // ============ LOGIN CONFIG ============
-const LOGIN_USER='ADMIN';
-const LOGIN_PASS='VISHAL12';
+const LOGIN_USER='admin';
+const LOGIN_PASS='vishal123';
 
-function checkLogin(){if(sessionStorage.getItem('vgLoggedIn')==='yes'){document.getElementById('loginScreen').classList.add('hide');return true}return false}
+function checkLogin(){
+  if(sessionStorage.getItem('vgLoggedIn')==='yes'){
+    document.getElementById('loginScreen').classList.add('hide');
+    return true;
+  }
+  return false;
+}
 
 function doLogin(){
-  const u=document.getElementById('loginUser').value.trim();
+  // toLowerCase() lagaya hai taki capital/small ka issue na ho
+  const u=document.getElementById('loginUser').value.trim().toLowerCase();
   const p=document.getElementById('loginPass').value.trim();
   const err=document.getElementById('loginError');
-  if(u===LOGIN_USER && p===LOGIN_PASS){
+  if(u===LOGIN_USER.toLowerCase() && p===LOGIN_PASS){
     sessionStorage.setItem('vgLoggedIn','yes');
     document.getElementById('loginScreen').classList.add('hide');
     err.classList.remove('show');
@@ -483,11 +371,34 @@ function doLogin(){
   }
 }
 
-function doLogout(){if(confirm('Logout karna hai?')){sessionStorage.removeItem('vgLoggedIn');document.getElementById('loginScreen').classList.remove('hide');closeSidebar()}}
+function doLogout(){
+  if(confirm('Logout karna hai?')){
+    sessionStorage.removeItem('vgLoggedIn');
+    document.getElementById('loginScreen').classList.remove('hide');
+    closeSidebar();
+  }
+}
 
-document.addEventListener('keydown',e=>{if(e.key==='Enter' && !document.getElementById('loginScreen').classList.contains('hide'))doLogin()});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && !document.getElementById('loginScreen').classList.contains('hide')){
+    doLogin();
+  }
+});
+
+// Auto-fix capital letter issue on input
+document.addEventListener('DOMContentLoaded',function(){
+  const userInput=document.getElementById('loginUser');
+  if(userInput){
+    userInput.addEventListener('input',function(e){
+      // Yahan kuch nahi karte - user free type karega
+    });
+    // Force lowercase styling
+    userInput.style.textTransform='none';
+  }
+});
 
 const AI_KEY = 'AIzaSyAtmgwAAHE-QctXDH1Bf9-O6hP7Vwx6lyw';
+
 const STOCK_API='https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
 const STOCK_CSV='https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
 const PAY_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv';
@@ -982,7 +893,7 @@ window.addEventListener('load',()=>{
 let touchStart=0;
 document.addEventListener('touchstart',e=>{touchStart=e.touches[0].clientX});
 document.addEventListener('touchend',e=>{const diff=e.changedTouches[0].clientX-touchStart;if(diff<-50)closeSidebar()});
-console.log('🔥 VE ERP + Purple Login + AI Ready');
+console.log('🔥 VE ERP + Login + AI Ready');
 </script>
 </body>
 </html>
