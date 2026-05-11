@@ -11,9 +11,6 @@
 :root{--p:#1a56db;--pd:#1e40af;--pl:#dbeafe;--s:#059669;--w:#d97706;--d:#dc2626;--bg:#f1f5f9;--wh:#fff;--tx:#1e293b;--tl:#64748b;--br:#e2e8f0;--sb:250px}
 body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:var(--tx)}
 
-/*══════════════════════════════════════════
-  PREMIUM LOGIN - VISHAL GROUP INDIA
-══════════════════════════════════════════*/
 .login-wrap{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;font-family:'Nunito',sans-serif;z-index:9999}
 .login-wrap.hide{display:none}
 
@@ -186,9 +183,6 @@ body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:
   .top-bar-wrap,.bottom-bar-wrap{left:8px;right:8px}
 }
 
-/*══════════════════════════════════════════
-  ERP STYLES
-══════════════════════════════════════════*/
 .sb{position:fixed;left:0;top:0;bottom:0;width:var(--sb);background:linear-gradient(180deg,#0f172a,#1e293b);color:#fff;overflow-y:auto;z-index:200;transition:.3s}
 .sb-h{padding:18px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px}
 .sb-logo{width:42px;height:42px;background:var(--p);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0}
@@ -220,7 +214,7 @@ body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:
 .stat-ic.bl{background:#dbeafe;color:#2563eb}.stat-ic.gr{background:#d1fae5;color:#059669}
 .stat-ic.or{background:#fef3c7;color:#d97706}.stat-ic.rd{background:#fee2e2;color:#dc2626}
 .stat-ic.pu{background:#ede9fe;color:#7c3aed}.stat-ic.pk{background:#fce7f3;color:#be185d}
-.stat-val{font-size:16px;font-weight:800}.stat-lbl{font-size:10px;color:var(--tl);margin-top:2px}
+.stat-val{font-size:14px;font-weight:800;word-break:break-all}.stat-lbl{font-size:10px;color:var(--tl);margin-top:2px}
 .hero{border-radius:12px;padding:16px;margin-bottom:14px;color:#fff}
 .hero.red{background:linear-gradient(135deg,#dc2626,#f59e0b)}
 .hero.blue{background:linear-gradient(135deg,#1a56db,#7c3aed)}
@@ -230,7 +224,7 @@ body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:
 .hero .hb{background:rgba(255,255,255,.15);padding:10px;border-radius:8px}
 .hero .hb.hl{background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.5)}
 .hero .hl-txt{font-size:9px;opacity:.9;text-transform:uppercase;letter-spacing:.5px}
-.hero .hv{font-size:14px;font-weight:800;margin-top:3px}
+.hero .hv{font-size:13px;font-weight:800;margin-top:3px;word-break:break-all}
 .hero .hs{font-size:9px;opacity:.7;margin-top:2px}
 .tw{overflow-x:auto;max-height:500px;-webkit-overflow-scrolling:touch;border-radius:8px;border:1px solid var(--br)}
 table{width:100%;border-collapse:collapse;font-size:11px;min-width:600px}
@@ -315,12 +309,11 @@ tr:hover{background:#f8fafc}
 .ai-inp:focus{border-color:var(--p);background:#fff}
 .ai-snd{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px}
 .ai-snd:disabled{opacity:.4}
-@media(max-width:768px){.sb{transform:translateX(-100%);width:260px;box-shadow:4px 0 20px rgba(0,0,0,.2)}.sb.open{transform:translateX(0)}.sb-x{display:block}.main{margin-left:0;padding:12px}.tb{left:0}.tb-burger{display:block}.tb-search{display:none}.stats{grid-template-columns:1fr 1fr;gap:8px}.fg{grid-template-columns:1fr}.sync-bar{display:none}.ai-chat{bottom:76px;right:10px;left:10px;width:auto;height:calc(100vh - 96px);max-height:none}.ai-fab{bottom:14px;right:14px;width:48px;height:48px;font-size:18px}}
+@media(max-width:768px){.sb{transform:translateX(-100%);width:260px;box-shadow:4px 0 20px rgba(0,0,0,.2)}.sb.open{transform:translateX(0)}.sb-x{display:block}.main{margin-left:0;padding:12px}.tb{left:0}.tb-burger{display:block}.tb-search{display:none}.stats{grid-template-columns:1fr 1fr;gap:8px}.fg{grid-template-columns:1fr}.sync-bar{display:none}.ai-chat{bottom:76px;right:10px;left:10px;width:auto;height:calc(100vh - 96px);max-height:none}.ai-fab{bottom:14px;right:14px;width:48px;height:48px;font-size:18px}.stat-val{font-size:12px}}
 </style>
 </head>
 <body>
 
-<!-- ════════ PREMIUM LOGIN SCREEN ════════ -->
 <div class="login-wrap" id="loginWrap">
   <div id="wipeStage">
     <div class="wipe-strip"></div><div class="wipe-strip"></div><div class="wipe-strip"></div>
@@ -438,7 +431,6 @@ tr:hover{background:#f8fafc}
   </div>
 </div>
 
-<!-- ════════ ERP DASHBOARD ════════ -->
 <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
 <div class="sb" id="sidebar">
   <div class="sb-h"><div class="sb-logo">VE</div><div class="sb-brand">VISHAL GROUPS<span>ELECTRICALS & TRADING</span></div><button class="sb-x" onclick="closeSidebar()">✕</button></div>
@@ -505,18 +497,125 @@ tr:hover{background:#f8fafc}
 <div class="page" id="pg-debtors"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:8px"><div><h2>⏰ Debtors Ageing <span class="badge b-live">🔴 LIVE</span></h2></div><button class="btn btn-p btn-sm" onclick="fetchDebtors()">🔄 Fetch All Sites</button></div><div class="stats"><div class="stat"><div class="stat-ic rd">📋</div><div><div class="stat-val" id="dbInv">0</div><div class="stat-lbl">Pending Invoices</div></div></div><div class="stat"><div class="stat-ic or">💰</div><div><div class="stat-val" id="dbAmt">₹0</div><div class="stat-lbl">Total Short Pay</div></div></div><div class="stat"><div class="stat-ic pu">🏢</div><div><div class="stat-val" id="dbSites">0</div><div class="stat-lbl">Sites</div></div></div><div class="stat"><div class="stat-ic rd">⚠️</div><div><div class="stat-val" id="dbCrit">0</div><div class="stat-lbl">Critical >180d</div></div></div></div><div id="heroDebtors"></div><div id="debtorProgress" style="display:none"><div class="card"><div class="card-title">⏳ Fetching...</div><div style="font-size:12px;color:var(--tl);margin-top:6px" id="dbStatus">Loading...</div><div class="progress"><div class="progress-bar" id="dbBar" style="width:0%"></div></div></div></div><div class="card"><div class="tabs"><button class="tab active" onclick="dbTab('all',this)">All</button><button class="tab" onclick="dbTab('critical',this)">🔴 >180d</button><button class="tab" onclick="dbTab('overdue',this)">🟠 90-180d</button><button class="tab" onclick="dbTab('due',this)">🟡 30-90d</button><button class="tab" onclick="dbTab('current',this)">🟢 0-30d</button></div><div class="fbar"><div class="srch"><span>🔍</span><input placeholder="Search..." onkeyup="filterT('tDebtors',this.value)"></div><button class="btn btn-o btn-sm" onclick="exportDebtors()">📥 Export</button></div><div class="tw"><table id="tDebtors"><thead><tr><th>#</th><th>Site</th><th>Inv No</th><th>Date</th><th>Inv Amt</th><th>Short Pay</th><th>Days</th><th>Status</th></tr></thead><tbody id="tbDebtors"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--tl)">🔄 Click Fetch...</td></tr></tbody><tfoot><tr class="g-total"><td colspan="4" style="text-align:right">TOTAL ➤</td><td class="amt" id="dbInvTot">₹0</td><td class="amt" id="dbShortTot">₹0</td><td colspan="2"></td></tr></tfoot></table></div></div></div>
 <div class="page" id="pg-sales"><h2>💰 Vishal Groups Sale</h2><p class="card-sub" style="margin-bottom:14px">VE & VTPL • Month Wise • N/R Code</p><div class="stats"><div class="stat"><div class="stat-ic bl">🏢</div><div><div class="stat-val" id="sVE">₹0</div><div class="stat-lbl">VE Sale</div></div></div><div class="stat"><div class="stat-ic pu">🏭</div><div><div class="stat-val" id="sVTPL">₹0</div><div class="stat-lbl">VTPL Sale</div></div></div><div class="stat"><div class="stat-ic gr">📈</div><div><div class="stat-val" id="sComb">₹0</div><div class="stat-lbl">Combined</div></div></div><div class="stat"><div class="stat-ic or">🆕</div><div><div class="stat-val" id="sNew">0</div><div class="stat-lbl">New (N)</div></div></div><div class="stat"><div class="stat-ic gr">🔄</div><div><div class="stat-val" id="sRep">0</div><div class="stat-lbl">Repeat (R)</div></div></div></div><div class="card"><div class="tabs"><button class="tab active" onclick="sTab('ve',this)">🏢 VE</button><button class="tab" onclick="sTab('vtpl',this)">🏭 VTPL</button><button class="tab" onclick="sTab('mw',this)">📅 Month Wise</button></div><div class="tab-body active" id="st-ve"><div class="fbar"><div class="srch"><span>🔍</span><input placeholder="Search..." onkeyup="filterT('tVE',this.value)"></div><button class="btn btn-p btn-sm" onclick="openSaleModal('VE')">+ Add VE</button></div><div class="tw"><table id="tVE"><thead><tr><th>#</th><th>Month</th><th>Party</th><th>Site</th><th>Invoice</th><th>Date</th><th>Amount</th><th>Code</th><th>✕</th></tr></thead><tbody id="tbVE"></tbody></table></div><div style="margin-top:10px;font-weight:700;font-size:13px">VE Total: <span id="veTot" class="amt" style="color:var(--s)">₹0</span></div></div><div class="tab-body" id="st-vtpl"><div class="fbar"><div class="srch"><span>🔍</span><input placeholder="Search..." onkeyup="filterT('tVTPL',this.value)"></div><button class="btn btn-p btn-sm" onclick="openSaleModal('VTPL')">+ Add VTPL</button></div><div class="tw"><table id="tVTPL"><thead><tr><th>#</th><th>Month</th><th>Party</th><th>Site</th><th>Invoice</th><th>Date</th><th>Amount</th><th>Code</th><th>✕</th></tr></thead><tbody id="tbVTPL"></tbody></table></div><div style="margin-top:10px;font-weight:700;font-size:13px">VTPL Total: <span id="vtplTot" class="amt" style="color:var(--s)">₹0</span></div></div><div class="tab-body" id="st-mw"><div class="tw"><table id="tMW"><thead><tr><th>Month</th><th>VE</th><th>VE(N)</th><th>VE(R)</th><th>VTPL</th><th>VTPL(N)</th><th>VTPL(R)</th><th>Total</th></tr></thead><tbody id="tbMW"></tbody><tfoot><tr style="font-weight:800;background:#f0f9ff"><td>TOTAL</td><td id="mVE">₹0</td><td id="mVN">0</td><td id="mVR">0</td><td id="mVT">₹0</td><td id="mTN">0</td><td id="mTR">0</td><td id="mC">₹0</td></tr></tfoot></table></div></div></div></div>
 <div class="page" id="pg-dataentry"><h2>📝 Data Entry - Sale</h2><div class="card"><div class="card-title" style="margin-bottom:14px">📄 New Sale Entry</div><div class="fg"><div class="fi"><label>Company</label><select id="de_co"><option value="VE">VE</option><option value="VTPL">VTPL</option></select></div><div class="fi dds"><label>Party Name</label><input id="de_party" placeholder="Type..." oninput="ddSrch(this,'ddP1',getParties())" onfocus="ddSrch(this,'ddP1',getParties())"><div class="ddl" id="ddP1"></div></div><div class="fi dds"><label>Site Name</label><input id="de_site" placeholder="Type..." oninput="ddSrch(this,'ddS1',getSites())" onfocus="ddSrch(this,'ddS1',getSites())"><div class="ddl" id="ddS1"></div></div><div class="fi"><label>Invoice No</label><input id="de_inv" placeholder="INV-001"></div><div class="fi"><label>Date</label><input type="date" id="de_date"></div><div class="fi"><label>Amount (₹)</label><input type="number" inputmode="decimal" id="de_amt" placeholder="0"></div><div class="fi"><label>Code</label><select id="de_code"><option value="N">N - New</option><option value="R">R - Repeat</option></select></div></div><div class="divider2"></div><div class="sec-title">📋 BOQ Items</div><div style="display:flex;gap:8px;margin-bottom:10px"><input type="file" id="boqFile" accept=".xlsx,.xls,.csv" onchange="loadBOQ(this)" style="font-size:11px"><button class="btn btn-o btn-sm" onclick="addBOQRow()">+ Row</button></div><div class="tw"><table id="tBOQ"><thead><tr><th>Sr</th><th>Desc</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Amount</th><th>✕</th></tr></thead><tbody id="tbBOQ"></tbody><tfoot><tr style="font-weight:700;background:#f0f9ff"><td colspan="5" style="text-align:right">TOTAL ➤</td><td class="amt" id="boqTotal">₹0</td><td></td></tr></tfoot></table></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-p" onclick="saveSaleEntry()">💾 Save</button><button class="btn btn-o" onclick="clearDE()">🔄 Clear</button></div></div><div class="card"><div class="card-title">📃 All Entries</div><div class="tw"><table><thead><tr><th>#</th><th>Co</th><th>Party</th><th>Site</th><th>Inv</th><th>Date</th><th>Amt</th><th>Code</th><th>BOQ</th><th>✕</th></tr></thead><tbody id="tbEntries"></tbody></table></div></div></div>
-<div class="page" id="pg-payrecv"><h2>💳 Payment Received</h2><div class="stats"><div class="stat"><div class="stat-ic gr">💰</div><div><div class="stat-val" id="pRec">₹0</div><div class="stat-lbl">Received</div></div></div><div class="stat"><div class="stat-ic rd">📉</div><div><div class="stat-val" id="pDed">₹0</div><div class="stat-lbl">Deductions</div></div></div><div class="stat"><div class="stat-ic pu">✋</div><div><div class="stat-val" id="pHold">₹0</div><div class="stat-lbl">Hold</div></div></div><div class="stat"><div class="stat-ic bl">✅</div><div><div class="stat-val" id="pNet">₹0</div><div class="stat-lbl">Net</div></div></div></div><div class="card"><div class="card-title">➕ New Payment</div><div class="sec-title">🔎 Party & Invoice</div><div class="fg"><div class="fi dds"><label>Party</label><input id="py_party" placeholder="Search..." oninput="ddSrch(this,'ddPP',getParties());updateInvDropdown()" onfocus="ddSrch(this,'ddPP',getParties())"><div class="ddl" id="ddPP"></div></div><div class="fi dds"><label>Site</label><input id="py_site" placeholder="Search..." oninput="ddSrch(this,'ddPS',getSites());updateInvDropdown()" onfocus="ddSrch(this,'ddPS',getSites())"><div class="ddl" id="ddPS"></div></div><div class="fi"><label>Invoice</label><select id="py_inv" onchange="fillInvoice()"><option value="">-- Select --</option></select></div><div class="fi"><label>Invoice Amt</label><input id="py_invAmt" readonly style="background:#f8fafc;font-weight:700"></div></div><div class="divider2"></div><div class="sec-title">💰 Amount</div><div class="fg"><div class="fi"><label>Date</label><input type="date" id="py_date"></div><div class="fi"><label>Received (₹)</label><input type="number" inputmode="decimal" id="py_amt" placeholder="0" oninput="calcPayment()"></div></div><div class="divider2"></div><div class="sec-title">📉 Deductions</div><div class="fg"><div class="fi"><label>IT TDS</label><input type="number" inputmode="decimal" id="dd_it" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>GST TDS</label><input type="number" inputmode="decimal" id="dd_gst" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Labour Cess</label><input type="number" inputmode="decimal" id="dd_lc" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Bill Discount</label><input type="number" inputmode="decimal" id="dd_bd" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Other Ded</label><input type="number" inputmode="decimal" id="dd_oth" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Total Ded</label><input id="dd_tot" readonly style="background:#fef3c7;font-weight:700"></div></div><div class="divider2"></div><div class="sec-title">✋ Hold Amount</div><div class="fg"><div class="fi"><label>SD</label><input type="number" inputmode="decimal" id="hd_sd" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>LD</label><input type="number" inputmode="decimal" id="hd_ld" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>GST Amt</label><input type="number" inputmode="decimal" id="hd_gst" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Withheld</label><input type="number" inputmode="decimal" id="hd_wh" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Other Hold</label><input type="number" inputmode="decimal" id="hd_oth" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Total Hold</label><input id="hd_tot" readonly style="background:#e0e7ff;font-weight:700"></div></div><div class="divider2"></div><div style="background:#f0fdf4;border-radius:10px;padding:14px;margin-bottom:14px"><div class="sec-title" style="color:#059669">📊 Summary</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;font-size:13px"><div>Invoice: <strong id="sm_inv">₹0</strong></div><div>Received: <strong id="sm_rec" style="color:var(--s)">₹0</strong></div><div>Deduction: <strong id="sm_ded" style="color:var(--d)">₹0</strong></div><div>Hold: <strong id="sm_hold" style="color:#7c3aed">₹0</strong></div><div>Net: <strong id="sm_net" style="color:var(--s)">₹0</strong></div><div>Balance: <strong id="sm_bal" style="color:var(--d)">₹0</strong></div></div></div><div style="display:flex;gap:8px"><button class="btn btn-p" onclick="savePayment()">💾 Save</button><button class="btn btn-o" onclick="clearPayment()">🔄 Clear</button></div></div><div class="card"><div class="card-title">🔓 Hold Recovery</div><div class="fg"><div class="fi"><label>Vendor</label><input id="rv_vendor"></div><div class="fi"><label>Invoice</label><input id="rv_inv"></div><div class="fi"><label>Date</label><input type="date" id="rv_date"></div><div class="fi"><label>Amount</label><input type="number" inputmode="decimal" id="rv_amt" placeholder="0"></div><div class="fi"><label>Type</label><select id="rv_type"><option>SD Recovery</option><option>LD Recovery</option><option>GST Recovery</option><option>Withheld Recovery</option><option>Other</option></select></div></div><button class="btn btn-s btn-sm" onclick="saveRecovery()">💾 Save</button></div><div class="card"><div class="card-title">📃 Payments</div><div class="tw"><table><thead><tr><th>#</th><th>Date</th><th>Party</th><th>Site</th><th>Inv</th><th>Inv Amt</th><th>Recv</th><th>Ded</th><th>Hold</th><th>Net</th><th>✕</th></tr></thead><tbody id="tbPay"></tbody></table></div></div><div class="card"><div class="card-title">🔓 Recoveries</div><div class="tw"><table><thead><tr><th>#</th><th>Date</th><th>Vendor</th><th>Inv</th><th>Amt</th><th>Type</th><th>✕</th></tr></thead><tbody id="tbRecov"></tbody></table></div></div></div>
+
+<div class="page" id="pg-payrecv">
+<h2>💳 Payment Received</h2>
+<div class="stats">
+<div class="stat"><div class="stat-ic gr">💰</div><div><div class="stat-val" id="pRec">₹0</div><div class="stat-lbl">Received</div></div></div>
+<div class="stat"><div class="stat-ic rd">📉</div><div><div class="stat-val" id="pDed">₹0</div><div class="stat-lbl">Deductions (Refundable)</div></div></div>
+<div class="stat"><div class="stat-ic pu">✋</div><div><div class="stat-val" id="pHold">₹0</div><div class="stat-lbl">Hold</div></div></div>
+<div class="stat"><div class="stat-ic bl">✅</div><div><div class="stat-val" id="pNet">₹0</div><div class="stat-lbl">Net Received</div></div></div>
+</div>
+
+<div class="card">
+  <div class="tabs">
+    <button class="tab active" onclick="payTab('recv',this)">💳 Payment Received</button>
+    <button class="tab" onclick="payTab('hold',this)">🔓 Hold Recovery</button>
+  </div>
+
+  <div class="tab-body active" id="pt-recv">
+    <div class="card-title">➕ New Payment</div>
+    <div class="sec-title">🔎 Party & Invoice</div>
+    <div class="fg">
+      <div class="fi dds"><label>Party</label><input id="py_party" placeholder="Search..." oninput="ddSrch(this,'ddPP',getParties());updateInvDropdown()" onfocus="ddSrch(this,'ddPP',getParties())"><div class="ddl" id="ddPP"></div></div>
+      <div class="fi dds"><label>Site</label><input id="py_site" placeholder="Search..." oninput="ddSrch(this,'ddPS',getSites());updateInvDropdown()" onfocus="ddSrch(this,'ddPS',getSites())"><div class="ddl" id="ddPS"></div></div>
+      <div class="fi"><label>Invoice</label><select id="py_inv" onchange="fillInvoice()"><option value="">-- Select --</option></select></div>
+      <div class="fi"><label>Invoice Amt</label><input id="py_invAmt" readonly style="background:#f8fafc;font-weight:700"></div>
+    </div>
+    <div class="divider2"></div>
+    <div class="sec-title">💰 Amount</div>
+    <div class="fg">
+      <div class="fi"><label>Date</label><input type="date" id="py_date"></div>
+      <div class="fi"><label>Received (₹)</label><input type="number" inputmode="decimal" id="py_amt" placeholder="0" oninput="calcPayment()"></div>
+    </div>
+    <div class="divider2"></div>
+    <div class="sec-title">📉 Deductions <span style="font-size:10px;color:var(--tl);font-weight:400">(Refundable - Tracked Only, NOT Less from Net)</span></div>
+    <div class="fg">
+      <div class="fi"><label>IT TDS</label><input type="number" inputmode="decimal" id="dd_it" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>GST TDS</label><input type="number" inputmode="decimal" id="dd_gst" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>Labour Cess</label><input type="number" inputmode="decimal" id="dd_lc" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>Bill Discount</label><input type="number" inputmode="decimal" id="dd_bd" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>Other Ded</label><input type="number" inputmode="decimal" id="dd_oth" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>Total Ded</label><input id="dd_tot" readonly style="background:#fef3c7;font-weight:700"></div>
+    </div>
+    <div class="divider2"></div>
+    <div class="sec-title">✋ Hold Amount <span style="font-size:10px;color:var(--tl);font-weight:400">(Less from Net)</span></div>
+    <div class="fg">
+      <div class="fi"><label>SD</label><input type="number" inputmode="decimal" id="hd_sd" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>LD</label><input type="number" inputmode="decimal" id="hd_ld" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>GST Amt</label><input type="number" inputmode="decimal" id="hd_gst" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>Withheld</label><input type="number" inputmode="decimal" id="hd_wh" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>Other Hold</label><input type="number" inputmode="decimal" id="hd_oth" placeholder="0" oninput="calcPayment()"></div>
+      <div class="fi"><label>Total Hold</label><input id="hd_tot" readonly style="background:#e0e7ff;font-weight:700"></div>
+    </div>
+    <div class="divider2"></div>
+    <div style="background:#f0fdf4;border-radius:10px;padding:14px;margin-bottom:14px">
+      <div class="sec-title" style="color:#059669">📊 Summary</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;font-size:13px">
+        <div>Invoice: <strong id="sm_inv">₹0</strong></div>
+        <div>Received: <strong id="sm_rec" style="color:var(--s)">₹0</strong></div>
+        <div>Deduction: <strong id="sm_ded" style="color:#f59e0b">₹0</strong></div>
+        <div>Hold: <strong id="sm_hold" style="color:#7c3aed">₹0</strong></div>
+        <div>Net Received: <strong id="sm_net" style="color:var(--s)">₹0</strong></div>
+        <div>Balance: <strong id="sm_bal" style="color:var(--d)">₹0</strong></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:18px">
+      <button class="btn btn-p" onclick="savePayment()">💾 Save</button>
+      <button class="btn btn-o" onclick="clearPayment()">🔄 Clear</button>
+    </div>
+
+    <div class="card-title">📃 Payments</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>#</th><th>Date</th><th>Party</th><th>Site</th><th>Inv</th><th>Inv Amt</th><th>Recv</th><th>Ded</th><th>Hold</th><th>Net</th><th>✕</th></tr></thead>
+        <tbody id="tbPay"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tab-body" id="pt-hold">
+    <div class="card-title">🔓 New Hold Recovery</div>
+    <div class="fg">
+      <div class="fi"><label>Vendor / Party</label><input id="rv_vendor" placeholder="Party name"></div>
+      <div class="fi"><label>Invoice No</label><input id="rv_inv" placeholder="Invoice"></div>
+      <div class="fi"><label>Date</label><input type="date" id="rv_date"></div>
+      <div class="fi"><label>Amount (₹)</label><input type="number" inputmode="decimal" id="rv_amt" placeholder="0"></div>
+      <div class="fi"><label>Recovery Type</label>
+        <select id="rv_type">
+          <option>SD Recovery</option>
+          <option>LD Recovery</option>
+          <option>GST Recovery</option>
+          <option>Withheld Recovery</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:18px">
+      <button class="btn btn-s" onclick="saveRecovery()">💾 Save Recovery</button>
+      <button class="btn btn-o" onclick="clearRecovery()">🔄 Clear</button>
+    </div>
+
+    <div class="card-title">🔓 Recoveries</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>#</th><th>Date</th><th>Vendor</th><th>Inv</th><th>Amt</th><th>Type</th><th>✕</th></tr></thead>
+        <tbody id="tbRecov"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
 </div>
 <div class="modal-bg" id="saleModal"><div class="modal"><div class="modal-head"><h3 id="smTitle">Add Sale</h3><button class="modal-x" onclick="closeModal('saleModal')">✕</button></div><div class="fg"><div class="fi"><label>Company</label><input id="sm_co" readonly></div><div class="fi"><label>Party</label><input id="sm_party"></div><div class="fi"><label>Site</label><input id="sm_site"></div><div class="fi"><label>Invoice</label><input id="sm_invoice"></div><div class="fi"><label>Date</label><input type="date" id="sm_date"></div><div class="fi"><label>Amount</label><input type="number" inputmode="decimal" id="sm_amt"></div><div class="fi"><label>Code</label><select id="sm_code"><option value="N">N-New</option><option value="R">R-Repeat</option></select></div></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-p" onclick="saveSaleModal()">💾 Save</button><button class="btn btn-o" onclick="closeModal('saleModal')">Cancel</button></div></div></div>
 <button class="ai-fab" id="aiFab" onclick="toggleAI()">🤖<div class="ai-dot">AI</div></button>
 <div class="ai-chat" id="aiChat"><div class="ai-hdr"><div class="ai-av">🤖</div><div class="ai-inf"><h4>VG AI Assistant</h4><span>Online • ERP Connected</span></div><button class="ai-cls" onclick="toggleAI()">✕</button></div><div class="ai-body" id="aiBody"><div class="ai-msg bot"><div class="mh">🤖 VG AI</div>Namaste! 🙏 Main aapka <strong>ERP AI</strong> hoon.<br>📊 <strong>"Outstanding kitna hai?"</strong><br>💰 <strong>"Sales report do"</strong><br>📦 <strong>"Stock summary"</strong></div></div><div class="ai-qk"><button class="ai-qb" onclick="aiQ('Outstanding kitna hai?')">💼 Outstanding</button><button class="ai-qb" onclick="aiQ('Stock summary')">📦 Stock</button><button class="ai-qb" onclick="aiQ('Sales report')">💰 Sales</button><button class="ai-qb" onclick="aiQ('Critical debtors')">⏰ Debtors</button></div><div class="ai-ft"><input class="ai-inp" id="aiInput" placeholder="Type question..." onkeydown="if(event.key==='Enter')sendAI()"><button class="ai-snd" id="aiSend" onclick="sendAI()">➤</button></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// ════════════════ LOGIN CONFIG ════════════════
 const LOGIN_USER='admin';
 const LOGIN_PASS='vishal123';
 
-// ════════════════ LOGIN ANIMATIONS ════════════════
 const strips=document.querySelectorAll('.wipe-strip');
 setTimeout(()=>{strips.forEach(s=>s.classList.add('exit'))},1000);
 
@@ -589,7 +688,6 @@ function handleLogin(e){
   }
   if(!ok)return;
 
-  // Check credentials
   const userVal=uid.value.trim().toLowerCase();
   const passVal=pwd.value;
 
@@ -600,7 +698,6 @@ function handleLogin(e){
 
   setTimeout(()=>{
     if(userVal===LOGIN_USER.toLowerCase() && passVal===LOGIN_PASS){
-      // SUCCESS
       ov.classList.remove('show');
       fill.style.width='0';
       document.getElementById('successOverlay').classList.add('show');
@@ -612,7 +709,6 @@ function handleLogin(e){
         liveSync();
       },1500);
     }else{
-      // FAIL
       ov.classList.remove('show');
       fill.style.width='0';
       pwd.classList.add('bad');pwd.classList.remove('ok');
@@ -645,7 +741,6 @@ function doLogout(){
   }
 }
 
-// ════════════════ ERP LOGIC (UNCHANGED) ════════════════
 const AI_KEY='AIzaSyAtmgwAAHE-QctXDH1Bf9-O6hP7Vwx6lyw';
 const STOCK_API='https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
 const STOCK_CSV='https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
@@ -659,6 +754,7 @@ const load=()=>{try{const s=localStorage.getItem('veERP');if(s){const d=JSON.par
 const save=()=>localStorage.setItem('veERP',JSON.stringify(D));
 const fc=n=>{if(!n)return'₹0';const num=Number(n);if(num>=10000000)return'₹'+(num/10000000).toFixed(2)+'Cr';if(num>=100000)return'₹'+(num/100000).toFixed(1)+'L';if(num>=1000)return'₹'+(num/1000).toFixed(0)+'K';return'₹'+num.toLocaleString('en-IN')};
 const fcFull=n=>n?'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:0}):'₹0';
+const fcF=n=>{if(!n&&n!==0)return'₹0';return'₹'+Math.round(Number(n)).toLocaleString('en-IN')};
 const pn=v=>{if(!v&&v!==0)return 0;if(typeof v==='number')return v;return Number(String(v).replace(/[₹,\s]/g,'').replace(/[^\d.-]/g,''))||0};
 const nid=()=>Date.now()+Math.floor(Math.random()*9999);
 const cd=d=>{if(!d)return 0;return Math.floor((new Date()-new Date(d))/864e5)};
@@ -668,7 +764,7 @@ const getParties=()=>[...new Set([...D.parties,...D.entries.map(e=>e.party)])].f
 const getSites=()=>[...new Set([...D.sites,...D.entries.map(e=>e.site),...D.outstanding.map(o=>o.site)])].filter(Boolean);
 
 function parseDate(s){if(!s)return null;s=String(s).trim();let m=s.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})$/);if(m){let d=parseInt(m[1]),mo=parseInt(m[2])-1,y=parseInt(m[3]);if(y<100)y+=2000;return new Date(y,mo,d)}m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);if(m)return new Date(parseInt(m[1]),parseInt(m[2])-1,parseInt(m[3]));const dt=new Date(s);return isNaN(dt.getTime())?null:dt}
-function calcDays(dateStr){const dt=parseDate(dateStr);if(!dt)return 0;return Math.floor((new Date()-dt)/864e5)}
+function calcDays(dateStr){const dt=parseDate(dateStr);if(!dt)return 0;return Math.round((new Date()-dt)/864e5)}
 
 function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sbOverlay').classList.add('show')}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').classList.remove('show')}
@@ -678,6 +774,7 @@ function goPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList
 function rTab(id,el){const pg=document.getElementById('pg-report');pg.querySelectorAll('.tab-body').forEach(t=>t.classList.remove('active'));pg.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('rt-'+id).classList.add('active');if(el)el.classList.add('active')}
 function sTab(id,el){const pg=document.getElementById('pg-sales');pg.querySelectorAll('.tab-body').forEach(t=>t.classList.remove('active'));pg.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('st-'+id).classList.add('active');if(el)el.classList.add('active');if(id==='mw')drawMW()}
 function dbTab(id,el){document.querySelectorAll('#pg-debtors .tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');D.debtorFilter=id;drawDebtors()}
+function payTab(id,el){const pg=document.getElementById('pg-payrecv');pg.querySelectorAll('.tab-body').forEach(t=>t.classList.remove('active'));pg.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('pt-'+id).classList.add('active');if(el)el.classList.add('active')}
 
 function ddSrch(inp,ddId,items){const dd=document.getElementById(ddId);const v=inp.value.toLowerCase();const f=items.filter(i=>i.toLowerCase().includes(v)).slice(0,15);dd.innerHTML=f.map(i=>`<div class="ddi" onclick="ddPick('${inp.id}','${ddId}','${i.replace(/'/g,"\\'")}')">${i}</div>`).join('');dd.classList.add('show')}
 function ddPick(iId,dId,v){document.getElementById(iId).value=v;document.getElementById(dId).classList.remove('show');if(iId==='py_party'||iId==='py_site')updateInvDropdown()}
@@ -703,16 +800,16 @@ function drawReport(){
 function drawOutstanding(){
   if(!D.outstanding.length){document.getElementById('heroOut').innerHTML='';document.getElementById('tbOutAll').innerHTML='<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--tl)">🔄 Click Sync...</td></tr>';return}
   let tP=0,tSD=0,tLD=0,tGST=0,tOD=0,tWH=0;
-  document.getElementById('tbOutAll').innerHTML=D.outstanding.map((o,i)=>{tP+=o.pending;tSD+=o.sd;tLD+=o.ld;tGST+=o.gst;tOD+=o.other;tWH+=o.wh;return `<tr><td><strong>${o.sno}</strong></td><td><strong>${o.site}</strong></td><td class="amt">${o.pending>0?fc(o.pending):'-'}</td><td class="amt" style="color:#2563eb">${o.sd>0?fc(o.sd):'-'}</td><td class="amt" style="color:var(--d)">${o.ld>0?fc(o.ld):'-'}</td><td class="amt" style="color:#059669">${o.gst>0?fc(o.gst):'-'}</td><td class="amt" style="color:#7c3aed">${o.other>0?fc(o.other):'-'}</td><td class="amt" style="color:#be185d">${o.wh>0?fc(o.wh):'-'}</td><td class="amt" style="font-weight:800;color:var(--d)">${fc(o.total)}</td></tr>`}).join('');
-  document.getElementById('ttPend').textContent=fc(tP);document.getElementById('ttSD').textContent=fc(tSD);
-  document.getElementById('ttLD').textContent=fc(tLD);document.getElementById('ttGST').textContent=fc(tGST);
-  document.getElementById('ttOD').textContent=fc(tOD);document.getElementById('ttWH').textContent=fc(tWH);
-  document.getElementById('ttGrand').textContent=fc(tP+tSD+tLD+tGST+tOD+tWH);
-  document.getElementById('oPend').textContent=fc(tP);document.getElementById('oSD').textContent=fc(tSD);
-  document.getElementById('oLD').textContent=fc(tLD);document.getElementById('oGST').textContent=fc(tGST);
-  document.getElementById('oOther').textContent=fc(tOD);document.getElementById('oWH').textContent=fc(tWH);
+  document.getElementById('tbOutAll').innerHTML=D.outstanding.map((o,i)=>{tP+=o.pending;tSD+=o.sd;tLD+=o.ld;tGST+=o.gst;tOD+=o.other;tWH+=o.wh;return `<tr><td><strong>${o.sno}</strong></td><td><strong>${o.site}</strong></td><td class="amt">${o.pending>0?fcF(o.pending):'-'}</td><td class="amt" style="color:#2563eb">${o.sd>0?fcF(o.sd):'-'}</td><td class="amt" style="color:var(--d)">${o.ld>0?fcF(o.ld):'-'}</td><td class="amt" style="color:#059669">${o.gst>0?fcF(o.gst):'-'}</td><td class="amt" style="color:#7c3aed">${o.other>0?fcF(o.other):'-'}</td><td class="amt" style="color:#be185d">${o.wh>0?fcF(o.wh):'-'}</td><td class="amt" style="font-weight:800;color:var(--d)">${fcF(o.total)}</td></tr>`}).join('');
+  document.getElementById('ttPend').textContent=fcF(tP);document.getElementById('ttSD').textContent=fcF(tSD);
+  document.getElementById('ttLD').textContent=fcF(tLD);document.getElementById('ttGST').textContent=fcF(tGST);
+  document.getElementById('ttOD').textContent=fcF(tOD);document.getElementById('ttWH').textContent=fcF(tWH);
+  document.getElementById('ttGrand').textContent=fcF(tP+tSD+tLD+tGST+tOD+tWH);
+  document.getElementById('oPend').textContent=fcF(tP);document.getElementById('oSD').textContent=fcF(tSD);
+  document.getElementById('oLD').textContent=fcF(tLD);document.getElementById('oGST').textContent=fcF(tGST);
+  document.getElementById('oOther').textContent=fcF(tOD);document.getElementById('oWH').textContent=fcF(tWH);
   const grand=tP+tSD+tLD+tGST+tOD+tWH;
-  document.getElementById('heroOut').innerHTML=`<div class="hero red"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px"><h3>💼 Outstanding Break-up</h3><span style="font-size:10px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px">🔴 ${D.outstanding.length} sites</span></div><div class="hg"><div class="hb"><div class="hl-txt">Pending</div><div class="hv">${fc(tP)}</div></div><div class="hb"><div class="hl-txt">SD</div><div class="hv">${fc(tSD)}</div></div><div class="hb"><div class="hl-txt">LD</div><div class="hv">${fc(tLD)}</div></div><div class="hb"><div class="hl-txt">GST</div><div class="hv">${fc(tGST)}</div></div><div class="hb"><div class="hl-txt">Other</div><div class="hv">${fc(tOD)}</div></div><div class="hb"><div class="hl-txt">WH</div><div class="hv">${fc(tWH)}</div></div><div class="hb hl"><div class="hl-txt">TOTAL</div><div class="hv">${fc(grand)}</div></div></div></div>`;
+  document.getElementById('heroOut').innerHTML=`<div class="hero red"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px"><h3>💼 Outstanding Break-up</h3><span style="font-size:10px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px">🔴 ${D.outstanding.length} sites</span></div><div class="hg"><div class="hb"><div class="hl-txt">Pending</div><div class="hv">${fcF(tP)}</div></div><div class="hb"><div class="hl-txt">SD</div><div class="hv">${fcF(tSD)}</div></div><div class="hb"><div class="hl-txt">LD</div><div class="hv">${fcF(tLD)}</div></div><div class="hb"><div class="hl-txt">GST</div><div class="hv">${fcF(tGST)}</div></div><div class="hb"><div class="hl-txt">Other</div><div class="hv">${fcF(tOD)}</div></div><div class="hb"><div class="hl-txt">WH</div><div class="hv">${fcF(tWH)}</div></div><div class="hb hl"><div class="hl-txt">TOTAL</div><div class="hv">${fcF(grand)}</div></div></div></div>`;
 }
 
 async function fetchDebtors(){
@@ -734,26 +831,96 @@ async function fetchDebtors(){
 
 function parseDebtorSheet(rows,gid){
   if(!rows||rows.length<3)return;
-  let siteName='GID-'+gid,headerRow=-1,invNoCol=2,invDateCol=3,totalAmtCol=6,shortPayCol=17;
-  for(let i=0;i<Math.min(rows.length,10);i++){const r=rows[i];if(!r)continue;for(let j=0;j<r.length;j++){const v=String(r[j]||'').trim();if(v.length>5&&(v.toUpperCase().includes('LIMITED')||v.toUpperCase().includes('LTD')||v.toUpperCase().includes('IOCL')||v.toUpperCase().includes('GAIL')||v.toUpperCase().includes('HPCL')||v.toUpperCase().includes('NFC')||v.toUpperCase().includes('INDIAN')||v.toUpperCase().includes('CORPORATION')||v.toUpperCase().includes('NUCLEAR'))){siteName=v;break}}if(siteName!=='GID-'+gid)break}
-  for(let i=0;i<Math.min(rows.length,15);i++){const r=rows[i];if(!r)continue;const txt=r.join(' ').toUpperCase();if(txt.includes('INVOICE')&&(txt.includes('DATE')||txt.includes('SHORT'))){headerRow=i;for(let j=0;j<r.length;j++){const cn=String(r[j]||'').toUpperCase().trim();if(cn==='INVOICE NO'||cn==='INVOICE NO.'||(cn.includes('INVOICE')&&cn.includes('NO')))invNoCol=j;else if(cn.includes('INV')&&cn.includes('DATE'))invDateCol=j;else if(cn.includes('TOTAL')&&cn.includes('INVOICE'))totalAmtCol=j;else if(cn.includes('SHORT')&&cn.includes('PAY'))shortPayCol=j}break}}
-  if(headerRow<0)headerRow=4;
-  const invoiceMap=new Map();let lastInvNo='',lastInvDate='',lastTotalAmt=0;
-  for(let i=headerRow+1;i<rows.length;i++){
-    const r=rows[i];if(!r||!r.length)continue;
+  let siteName='GID-'+gid,headerRow=-1;
+  let invNoCol=2,invDateCol=3,totalAmtCol=6,payDateCol=7,payAmtCol=8,shortPayCol=9;
+  
+  for(let i=0;i<Math.min(rows.length,10);i++){
+    const r=rows[i];if(!r)continue;
+    for(let j=0;j<r.length;j++){
+      const v=String(r[j]||'').trim();
+      if(v.length>5&&(v.toUpperCase().includes('LIMITED')||v.toUpperCase().includes('LTD')||v.toUpperCase().includes('IOCL')||v.toUpperCase().includes('GAIL')||v.toUpperCase().includes('HPCL')||v.toUpperCase().includes('NFC')||v.toUpperCase().includes('INDIAN')||v.toUpperCase().includes('CORPORATION')||v.toUpperCase().includes('NUCLEAR')||v.toUpperCase().includes('TRANSRAIL')||v.toUpperCase().includes('POWER')||v.toUpperCase().includes('ENERGY')||v.toUpperCase().includes('PROJECTS'))){
+        siteName=v;break;
+      }
+    }
+    if(siteName!=='GID-'+gid)break;
+  }
+  
+  for(let i=0;i<Math.min(rows.length,15);i++){
+    const r=rows[i];if(!r)continue;
     const txt=r.join(' ').toUpperCase();
-    if(txt.includes('NET SD DEDUCTION')||txt.includes('FOLLOW-UP'))break;
+    if(txt.includes('INVOICE NO')||txt.includes('INVOICE NO.')||txt.includes('INV NO')){
+      headerRow=i;
+      for(let j=0;j<r.length;j++){
+        const cn=String(r[j]||'').toUpperCase().trim();
+        if(cn==='INVOICE NO'||cn==='INVOICE NO.'||cn==='INV NO'||cn==='INV NO.'||cn==='INVOICE NUMBER')invNoCol=j;
+        else if((cn.includes('INV')&&cn.includes('DATE'))||cn==='INV. DATE'||cn==='INVOICE DATE')invDateCol=j;
+        else if(cn.includes('TOTAL')&&cn.includes('INVOICE'))totalAmtCol=j;
+        else if(cn.includes('PAYMENT')&&cn.includes('RECEIVED'))payAmtCol=j;
+        else if(cn.includes('SHORT')&&(cn.includes('PAY')||cn.includes('PAYMENT')))shortPayCol=j;
+      }
+      break;
+    }
+  }
+  
+  if(headerRow<0)headerRow=4;
+  
+  const invoiceMap=new Map();
+  let lastInvNo='',lastInvDate='',lastTotalAmt=0;
+  
+  for(let i=headerRow+1;i<rows.length;i++){
+    const r=rows[i];
+    if(!r||!r.length)continue;
+    
+    const txt=r.join(' ').toUpperCase();
+    if(txt.includes('NET SD')||txt.includes('FOLLOW-UP')||txt.includes('FOLLOWUP')||txt.includes('GRAND TOTAL'))break;
+    
     let invNo=String(r[invNoCol]||'').trim();
     let invDate=String(r[invDateCol]||'').trim();
     let totalAmt=pn(r[totalAmtCol]);
     let shortPay=pn(r[shortPayCol]);
-    if(invNo.toUpperCase().includes('TOTAL')||invNo.toUpperCase().includes('NET'))continue;
-    if(!invNo||invNo.length<3){if(lastInvNo&&shortPay>0){invNo=lastInvNo;invDate=lastInvDate;totalAmt=lastTotalAmt}else continue}else{lastInvNo=invNo;lastInvDate=invDate;lastTotalAmt=totalAmt}
+    
+    if(invNo.toUpperCase().includes('TOTAL')||invNo.toUpperCase().includes('NET')||invNo.toUpperCase()==='GRAND')continue;
+    
+    if(!invNo||invNo.length<3){
+      if(lastInvNo&&shortPay>0){
+        invNo=lastInvNo;
+        invDate=lastInvDate;
+        totalAmt=lastTotalAmt;
+      }else continue;
+    }else{
+      lastInvNo=invNo;
+      lastInvDate=invDate;
+      lastTotalAmt=totalAmt;
+    }
+    
     if(shortPay<=0)continue;
+    
+    if(totalAmt>0 && shortPay>totalAmt){
+      shortPay=totalAmt;
+    }
+    
     const key=siteName+'|'+invNo;
-    if(invoiceMap.has(key))invoiceMap.get(key).shortPayment+=shortPay;
-    else invoiceMap.set(key,{id:nid(),site:siteName,gid:gid,invoiceNo:invNo,invoiceDate:invDate,totalAmount:totalAmt,shortPayment:shortPay,days:calcDays(invDate)});
+    
+    if(!invoiceMap.has(key)){
+      invoiceMap.set(key,{
+        id:nid(),
+        site:siteName,
+        gid:gid,
+        invoiceNo:invNo,
+        invoiceDate:invDate,
+        totalAmount:totalAmt,
+        shortPayment:shortPay,
+        days:Math.round(calcDays(invDate))
+      });
+    }else{
+      const existing=invoiceMap.get(key);
+      if(shortPay>existing.shortPayment){
+        existing.shortPayment=shortPay;
+        existing.totalAmount=totalAmt||existing.totalAmount;
+      }
+    }
   }
+  
   invoiceMap.forEach(inv=>D.debtors.push(inv));
 }
 
@@ -766,19 +933,24 @@ function drawDebtors(){
   else if(D.debtorFilter==='due')filtered=D.debtors.filter(d=>d.days>=30&&d.days<90);
   else if(D.debtorFilter==='current')filtered=D.debtors.filter(d=>d.days<30);
   let totalInv=0,totalShort=0;
-  tb.innerHTML=filtered.map((d,i)=>{totalInv+=d.totalAmount;totalShort+=d.shortPayment;const status=d.days>180?'🔴 Critical':d.days>=90?'🟠 Overdue':d.days>=30?'🟡 Due':'🟢 Current';return `<tr><td>${i+1}</td><td><strong>${d.site}</strong></td><td>${d.invoiceNo}</td><td>${d.invoiceDate}</td><td class="amt">${fc(d.totalAmount)}</td><td class="amt" style="color:var(--d);font-weight:800">${fc(d.shortPayment)}</td><td><span class="age-b" style="background:${ageColor(d.days)}">${d.days}d</span></td><td><strong style="font-size:10px">${status}</strong></td></tr>`}).join('');
-  document.getElementById('dbInvTot').textContent=fc(totalInv);
-  document.getElementById('dbShortTot').textContent=fc(totalShort);
+  tb.innerHTML=filtered.map((d,i)=>{
+    totalInv+=d.totalAmount;
+    totalShort+=d.shortPayment;
+    const status=d.days>180?'🔴 Critical':d.days>=90?'🟠 Overdue':d.days>=30?'🟡 Due':'🟢 Current';
+    return `<tr><td>${i+1}</td><td><strong>${d.site}</strong></td><td>${d.invoiceNo}</td><td>${d.invoiceDate}</td><td class="amt">${fcF(d.totalAmount)}</td><td class="amt" style="color:var(--d);font-weight:800">${fcF(d.shortPayment)}</td><td><span class="age-b" style="background:${ageColor(d.days)}">${Math.round(d.days)}d</span></td><td><strong style="font-size:10px">${status}</strong></td></tr>`;
+  }).join('');
+  document.getElementById('dbInvTot').textContent=fcF(totalInv);
+  document.getElementById('dbShortTot').textContent=fcF(totalShort);
   const totalAmt=D.debtors.reduce((s,d)=>s+d.shortPayment,0);
   document.getElementById('dbInv').textContent=D.debtors.length;
-  document.getElementById('dbAmt').textContent=fc(totalAmt);
+  document.getElementById('dbAmt').textContent=fcF(totalAmt);
   document.getElementById('dbSites').textContent=new Set(D.debtors.map(d=>d.site)).size;
   document.getElementById('dbCrit').textContent=D.debtors.filter(d=>d.days>180).length;
   const c1=D.debtors.filter(d=>d.days<30).reduce((s,d)=>s+d.shortPayment,0);
   const c2=D.debtors.filter(d=>d.days>=30&&d.days<90).reduce((s,d)=>s+d.shortPayment,0);
   const c3=D.debtors.filter(d=>d.days>=90&&d.days<=180).reduce((s,d)=>s+d.shortPayment,0);
   const c4=D.debtors.filter(d=>d.days>180).reduce((s,d)=>s+d.shortPayment,0);
-  document.getElementById('heroDebtors').innerHTML=`<div class="hero red"><h3>⏰ Debtors Ageing</h3><div class="hg"><div class="hb"><div class="hl-txt">🟢 0-30d</div><div class="hv">${fc(c1)}</div></div><div class="hb"><div class="hl-txt">🟡 30-90d</div><div class="hv">${fc(c2)}</div></div><div class="hb"><div class="hl-txt">🟠 90-180d</div><div class="hv">${fc(c3)}</div></div><div class="hb"><div class="hl-txt">🔴 >180d</div><div class="hv">${fc(c4)}</div></div><div class="hb hl"><div class="hl-txt">TOTAL</div><div class="hv">${fc(totalAmt)}</div></div></div></div>`;
+  document.getElementById('heroDebtors').innerHTML=`<div class="hero red"><h3>⏰ Debtors Ageing</h3><div class="hg"><div class="hb"><div class="hl-txt">🟢 0-30d</div><div class="hv">${fcF(c1)}</div></div><div class="hb"><div class="hl-txt">🟡 30-90d</div><div class="hv">${fcF(c2)}</div></div><div class="hb"><div class="hl-txt">🟠 90-180d</div><div class="hv">${fcF(c3)}</div></div><div class="hb"><div class="hl-txt">🔴 >180d</div><div class="hv">${fcF(c4)}</div></div><div class="hb hl"><div class="hl-txt">TOTAL</div><div class="hv">${fcF(totalAmt)}</div></div></div></div>`;
 }
 
 function exportDebtors(){
@@ -880,12 +1052,16 @@ function calcPayment(){
   const td=it+gst+lc+bd+oth;
   const hsd=pn(document.getElementById('hd_sd').value),hld=pn(document.getElementById('hd_ld').value),hg=pn(document.getElementById('hd_gst').value),hw=pn(document.getElementById('hd_wh').value),ho=pn(document.getElementById('hd_oth').value);
   const th=hsd+hld+hg+hw+ho;
-  const net=rec-td-th;
+  const net=rec-th;
   const invAmt=pn(document.getElementById('py_inv').options[document.getElementById('py_inv').selectedIndex]?.dataset?.amt);
-  document.getElementById('dd_tot').value=fcFull(td);document.getElementById('hd_tot').value=fcFull(th);
-  document.getElementById('sm_rec').textContent=fc(rec);document.getElementById('sm_ded').textContent=fc(td);
-  document.getElementById('sm_hold').textContent=fc(th);document.getElementById('sm_net').textContent=fc(net);
-  document.getElementById('sm_bal').textContent=fc(invAmt-rec);
+  document.getElementById('dd_tot').value=fcFull(td);
+  document.getElementById('hd_tot').value=fcFull(th);
+  document.getElementById('sm_inv').textContent=fcFull(invAmt);
+  document.getElementById('sm_rec').textContent=fcFull(rec);
+  document.getElementById('sm_ded').textContent=fcFull(td);
+  document.getElementById('sm_hold').textContent=fcFull(th);
+  document.getElementById('sm_net').textContent=fcFull(net);
+  document.getElementById('sm_bal').textContent=fcFull(invAmt-rec);
 }
 
 function savePayment(){
@@ -899,7 +1075,7 @@ function savePayment(){
   const td=it+gst+lc+bd+oth;
   const hsd=pn(document.getElementById('hd_sd').value),hld=pn(document.getElementById('hd_ld').value),hg=pn(document.getElementById('hd_gst').value),hw=pn(document.getElementById('hd_wh').value),ho=pn(document.getElementById('hd_oth').value);
   const th=hsd+hld+hg+hw+ho;
-  D.payments.push({id:nid(),party,site,invoice:inv,date,invAmt,received:rec,itTds:it,gstTds:gst,labourCess:lc,billDisc:bd,otherDed:oth,totalDed:td,holdSD:hsd,holdLD:hld,holdGST:hg,holdWH:hw,holdOth:ho,totalHold:th,net:rec-td-th});
+  D.payments.push({id:nid(),party,site,invoice:inv,date,invAmt,received:rec,itTds:it,gstTds:gst,labourCess:lc,billDisc:bd,otherDed:oth,totalDed:td,holdSD:hsd,holdLD:hld,holdGST:hg,holdWH:hw,holdOth:ho,totalHold:th,net:rec-th});
   if(hsd>0)D.sd.push({id:nid(),site,party,date,amount:hsd});
   if(hld>0)D.ld.push({id:nid(),site,party,date,amount:hld,reason:'Payment'});
   if(hg>0)D.gst.push({id:nid(),site,party,invoice:inv,date,amount:hg});
@@ -907,17 +1083,18 @@ function savePayment(){
   save();renderAll();clearPayment();alert('✅ Saved!');
 }
 function clearPayment(){['py_party','py_site','py_amt','py_invAmt','dd_it','dd_gst','dd_lc','dd_bd','dd_oth','hd_sd','hd_ld','hd_gst','hd_wh','hd_oth','dd_tot','hd_tot'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});document.getElementById('py_date').value='';document.getElementById('py_inv').innerHTML='<option value="">-- Select --</option>';calcPayment()}
-function drawPayments(){document.getElementById('tbPay').innerHTML=D.payments.map((p,i)=>`<tr><td>${i+1}</td><td>${p.date}</td><td>${p.party}</td><td>${p.site}</td><td>${p.invoice||'-'}</td><td class="amt">${fc(p.invAmt)}</td><td class="amt" style="color:var(--s)">${fc(p.received)}</td><td class="amt" style="color:var(--d)">${fc(p.totalDed)}</td><td class="amt" style="color:#7c3aed">${fc(p.totalHold)}</td><td class="amt" style="color:var(--s);font-weight:800">${fc(p.net)}</td><td><button class="del" onclick="D.payments=D.payments.filter(x=>x.id!==${p.id});save();renderAll()">🗑</button></td></tr>`).join('')}
+function drawPayments(){document.getElementById('tbPay').innerHTML=D.payments.map((p,i)=>`<tr><td>${i+1}</td><td>${p.date}</td><td>${p.party}</td><td>${p.site}</td><td>${p.invoice||'-'}</td><td class="amt">${fcF(p.invAmt)}</td><td class="amt" style="color:var(--s)">${fcF(p.received)}</td><td class="amt" style="color:#f59e0b">${fcF(p.totalDed)}</td><td class="amt" style="color:#7c3aed">${fcF(p.totalHold)}</td><td class="amt" style="color:var(--s);font-weight:800">${fcF(p.received-p.totalHold)}</td><td><button class="del" onclick="D.payments=D.payments.filter(x=>x.id!==${p.id});save();renderAll()">🗑</button></td></tr>`).join('')}
 
 function saveRecovery(){
   const v=document.getElementById('rv_vendor').value;const a=pn(document.getElementById('rv_amt').value);
   if(!v||!a){alert('Fill Vendor & Amount');return}
   D.recoveries.push({id:nid(),vendor:v,invoice:document.getElementById('rv_inv').value,date:document.getElementById('rv_date').value,amount:a,type:document.getElementById('rv_type').value});
   save();drawRecoveries();
-  ['rv_vendor','rv_inv','rv_amt'].forEach(id=>document.getElementById(id).value='');
+  clearRecovery();
   alert('✅ Saved!');
 }
-function drawRecoveries(){document.getElementById('tbRecov').innerHTML=D.recoveries.map((r,i)=>`<tr><td>${i+1}</td><td>${r.date}</td><td>${r.vendor}</td><td>${r.invoice||'-'}</td><td class="amt" style="color:var(--s)">${fc(r.amount)}</td><td>${r.type}</td><td><button class="del" onclick="D.recoveries=D.recoveries.filter(x=>x.id!==${r.id});save();drawRecoveries()">🗑</button></td></tr>`).join('')}
+function clearRecovery(){['rv_vendor','rv_inv','rv_amt'].forEach(id=>document.getElementById(id).value='');document.getElementById('rv_date').value=''}
+function drawRecoveries(){document.getElementById('tbRecov').innerHTML=D.recoveries.map((r,i)=>`<tr><td>${i+1}</td><td>${r.date}</td><td>${r.vendor}</td><td>${r.invoice||'-'}</td><td class="amt" style="color:var(--s)">${fcF(r.amount)}</td><td>${r.type}</td><td><button class="del" onclick="D.recoveries=D.recoveries.filter(x=>x.id!==${r.id});save();drawRecoveries()">🗑</button></td></tr>`).join('')}
 
 function updateStats(){
   const tP=D.pending.reduce((s,b)=>s+b.amount,0),tSD=D.sd.reduce((s,b)=>s+b.amount,0),tLD=D.ld.reduce((s,b)=>s+b.amount,0),tH=D.hold.reduce((s,b)=>s+b.amount,0),tGST=D.gst.reduce((s,b)=>s+b.amount,0),tOD=D.otherDed.reduce((s,b)=>s+b.amount,0),tWH=D.withheld.reduce((s,b)=>s+b.amount,0);
@@ -930,8 +1107,8 @@ function updateStats(){
   document.getElementById('sNew').textContent=D.salesVE.filter(x=>x.code==='N').length+D.salesVTPL.filter(x=>x.code==='N').length;
   document.getElementById('sRep').textContent=D.salesVE.filter(x=>x.code==='R').length+D.salesVTPL.filter(x=>x.code==='R').length;
   const pr=D.payments.reduce((s,p)=>s+pn(p.received),0),pd=D.payments.reduce((s,p)=>s+pn(p.totalDed),0),ph=D.payments.reduce((s,p)=>s+pn(p.totalHold),0);
-  document.getElementById('pRec').textContent=fc(pr);document.getElementById('pDed').textContent=fc(pd);
-  document.getElementById('pHold').textContent=fc(ph);document.getElementById('pNet').textContent=fc(pr-pd-ph);
+  document.getElementById('pRec').textContent=fcF(pr);document.getElementById('pDed').textContent=fcF(pd);
+  document.getElementById('pHold').textContent=fcF(ph);document.getElementById('pNet').textContent=fcF(pr-ph);
 }
 function delItem(type,id){if(!confirm('Delete?'))return;D[type]=D[type].filter(x=>x.id!==id);save();renderAll()}
 
@@ -1008,19 +1185,19 @@ function storeStock(ve,vt,dt){
 function drawStock(){
   const tb=document.getElementById('tbStock'),sm=D.stockSum||{},total=D.veStock.length+D.vtplStock.length;
   document.getElementById('stSites').textContent=total;
-  document.getElementById('stVal').textContent=fc(sm.netTotal);
-  document.getElementById('stWIP').textContent=fc(sm.netWIP);
+  document.getElementById('stVal').textContent=fcF(sm.netTotal);
+  document.getElementById('stWIP').textContent=fcF(sm.netWIP);
   document.getElementById('stAge').textContent=[...D.veStock,...D.vtplStock].filter(s=>s.dayAgeing>180).length;
-  document.getElementById('heroStock').innerHTML=total>0?`<div class="hero blue"><h3>📊 WIP Stock ${sm.date?'• '+sm.date:''}</h3><div class="hg"><div class="hb"><div class="hl-txt">VE</div><div class="hv">${fc(sm.veTotal)}</div><div class="hs">${D.veStock.length} sites</div></div><div class="hb"><div class="hl-txt">VTPL</div><div class="hv">${fc(sm.vtplTotal)}</div><div class="hs">${D.vtplStock.length} sites</div></div><div class="hb"><div class="hl-txt">WIP</div><div class="hv">${fc(sm.netWIP)}</div></div><div class="hb hl"><div class="hl-txt">NET</div><div class="hv">${fc(sm.netTotal)}</div></div></div></div>`:'';
+  document.getElementById('heroStock').innerHTML=total>0?`<div class="hero blue"><h3>📊 WIP Stock ${sm.date?'• '+sm.date:''}</h3><div class="hg"><div class="hb"><div class="hl-txt">VE</div><div class="hv">${fcF(sm.veTotal)}</div><div class="hs">${D.veStock.length} sites</div></div><div class="hb"><div class="hl-txt">VTPL</div><div class="hv">${fcF(sm.vtplTotal)}</div><div class="hs">${D.vtplStock.length} sites</div></div><div class="hb"><div class="hl-txt">WIP</div><div class="hv">${fcF(sm.netWIP)}</div></div><div class="hb hl"><div class="hl-txt">NET</div><div class="hv">${fcF(sm.netTotal)}</div></div></div></div>`:'';
   if(!total){tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--tl)">🔄 Click Sync...</td></tr>';return}
   let h='';
   const sV=!D.fc||D.fc==='VE',sT=!D.fc||D.fc==='VTPL';
-  if(sV&&D.veStock.length){h+=`<tr class="sec-row ve"><td colspan="8">🏢 VE STOCK (${D.veStock.length})</td></tr>`;D.veStock.forEach(s=>h+=stockTR(s));h+=`<tr class="tot-row ve"><td colspan="2" style="text-align:right">VE TOTAL ➤</td><td class="amt">${fc(sm.veTotal)}</td><td class="amt">${fc(sm.veExp)}</td><td class="amt" style="color:var(--s)">${fc(sm.veWIP)}</td><td colspan="3"></td></tr>`}
-  if(sT&&D.vtplStock.length){h+=`<tr class="sec-row vtpl"><td colspan="8">🏭 VTPL STOCK (${D.vtplStock.length})</td></tr>`;D.vtplStock.forEach(s=>h+=stockTR(s));h+=`<tr class="tot-row vtpl"><td colspan="2" style="text-align:right">VTPL TOTAL ➤</td><td class="amt">${fc(sm.vtplTotal)}</td><td class="amt">${fc(sm.vtplExp)}</td><td class="amt" style="color:var(--s)">${fc(sm.vtplWIP)}</td><td colspan="3"></td></tr>`}
-  if(!D.fc)h+=`<tr class="g-total"><td colspan="4" style="text-align:right">🏆 NET ➤</td><td class="amt">${fc(sm.netTotal)}</td><td colspan="3"></td></tr>`;
+  if(sV&&D.veStock.length){h+=`<tr class="sec-row ve"><td colspan="8">🏢 VE STOCK (${D.veStock.length})</td></tr>`;D.veStock.forEach(s=>h+=stockTR(s));h+=`<tr class="tot-row ve"><td colspan="2" style="text-align:right">VE TOTAL ➤</td><td class="amt">${fcF(sm.veTotal)}</td><td class="amt">${fcF(sm.veExp)}</td><td class="amt" style="color:var(--s)">${fcF(sm.veWIP)}</td><td colspan="3"></td></tr>`}
+  if(sT&&D.vtplStock.length){h+=`<tr class="sec-row vtpl"><td colspan="8">🏭 VTPL STOCK (${D.vtplStock.length})</td></tr>`;D.vtplStock.forEach(s=>h+=stockTR(s));h+=`<tr class="tot-row vtpl"><td colspan="2" style="text-align:right">VTPL TOTAL ➤</td><td class="amt">${fcF(sm.vtplTotal)}</td><td class="amt">${fcF(sm.vtplExp)}</td><td class="amt" style="color:var(--s)">${fcF(sm.vtplWIP)}</td><td colspan="3"></td></tr>`}
+  if(!D.fc)h+=`<tr class="g-total"><td colspan="4" style="text-align:right">🏆 NET ➤</td><td class="amt">${fcF(sm.netTotal)}</td><td colspan="3"></td></tr>`;
   tb.innerHTML=h;
 }
-function stockTR(s){return `<tr><td><strong>${s.sno}</strong></td><td><strong>${s.siteName}</strong></td><td class="amt">${fc(s.stockValue)}</td><td class="amt">${fc(s.siteExpenses)}</td><td class="amt" style="color:var(--s)">${fc(s.netWIP)}</td><td style="font-size:10px">${s.remarks||'-'}</td><td>${s.driveLink&&s.driveLink.startsWith('http')?`<a href="${s.driveLink}" target="_blank">📎</a>`:'-'}</td><td><span class="age-b" style="background:${ageColor(s.dayAgeing)}">${s.dayAgeing}d</span></td></tr>`}
+function stockTR(s){return `<tr><td><strong>${s.sno}</strong></td><td><strong>${s.siteName}</strong></td><td class="amt">${fcF(s.stockValue)}</td><td class="amt">${fcF(s.siteExpenses)}</td><td class="amt" style="color:var(--s)">${fcF(s.netWIP)}</td><td style="font-size:10px">${s.remarks||'-'}</td><td>${s.driveLink&&s.driveLink.startsWith('http')?`<a href="${s.driveLink}" target="_blank">📎</a>`:'-'}</td><td><span class="age-b" style="background:${ageColor(Math.round(s.dayAgeing))}">${Math.round(s.dayAgeing)}d</span></td></tr>`}
 
 function csvRow(line){if(!line)return[];const r=[];let c='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){c+='"';i++}else q=!q}else if(ch===','&&!q){r.push(c.trim());c=''}else c+=ch}r.push(c.trim());return r.map(v=>v.replace(/^"|"$/g,''))}
 function showSync(t,c){const el=document.getElementById('lastSync');if(el){el.textContent=t;el.style.color={green:'#22c55e',red:'#ef4444',blue:'#3b82f6',orange:'#f59e0b'}[c]||'#94a3b8'}const dot=document.getElementById('syncDot');if(dot)dot.style.background={green:'#22c55e',red:'#ef4444',blue:'#3b82f6'}[c]||'#22c55e'}
@@ -1058,6 +1235,7 @@ STOCK: VE=${fcFull(sm.veTotal)} VTPL=${fcFull(sm.vtplTotal)} WIP=${fcFull(sm.net
 DEBTORS (${D.debtors.length}): ${fcFull(dbTotal)} Critical>180d: ${dbCrit.length}
 Top: ${topDeb||'no data'}
 PAYMENTS: ${fcFull(pr)} (${D.payments.length})
+NOTE: Deductions are refundable, NOT subtracted from net. Net = Received - Hold only.
 Be concise.`;
 }
 
@@ -1141,7 +1319,7 @@ window.addEventListener('load',()=>{
 let touchStart=0;
 document.addEventListener('touchstart',e=>{touchStart=e.touches[0].clientX});
 document.addEventListener('touchend',e=>{const diff=e.changedTouches[0].clientX-touchStart;if(diff<-50)closeSidebar()});
-console.log('🔥 VG ERP + Premium Login Ready');
+console.log('🔥 VG ERP + Premium Login Ready - All Updates Applied');
 </script>
 </body>
 </html>
