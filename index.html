@@ -4,70 +4,191 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1a56db">
-<title>Vishal Electricals - ERP</title>
+<title>Vishal Group India - ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--p:#1a56db;--pd:#1e40af;--pl:#dbeafe;--s:#059669;--w:#d97706;--d:#dc2626;--bg:#f1f5f9;--wh:#fff;--tx:#1e293b;--tl:#64748b;--br:#e2e8f0;--sb:250px}
 body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:var(--tx)}
 
-/* ============ LOGIN PAGE STYLES ============ */
-.login-wrapper{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#6b21a8 0%,#9333ea 50%,#c026d3 100%);display:flex;align-items:center;justify-content:center;z-index:9999;overflow:hidden;padding:20px}
-.login-wrapper.hidden{display:none}
-.login-bg-stars{position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden}
-.star{position:absolute;background:#fff;border-radius:50%;opacity:.6}
-.star.s1{width:3px;height:3px;top:10%;left:15%}
-.star.s2{width:2px;height:2px;top:20%;left:80%}
-.star.s3{width:4px;height:4px;top:35%;left:25%}
-.star.s4{width:2px;height:2px;top:50%;left:90%}
-.star.s5{width:3px;height:3px;top:70%;left:10%}
-.star.s6{width:2px;height:2px;top:85%;left:70%}
-.star.s7{width:3px;height:3px;top:15%;left:50%}
-.star.s8{width:2px;height:2px;top:60%;left:40%}
-.star.s9{width:4px;height:4px;top:80%;left:30%}
-.star.s10{width:2px;height:2px;top:25%;left:65%}
-.planet1{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#a78bfa,#7c3aed);top:-100px;left:-80px;opacity:.7}
-.planet2{position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#d8b4fe,#a855f7);top:5%;right:30%;opacity:.5}
-.wave{position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(180deg,transparent,#7c2d92);opacity:.6}
-.wave2{position:absolute;bottom:0;left:0;right:0;height:30%;background:linear-gradient(180deg,transparent,#831843);opacity:.5}
+/*══════════════════════════════════════════
+  PREMIUM LOGIN - VISHAL GROUP INDIA
+══════════════════════════════════════════*/
+.login-wrap{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;font-family:'Nunito',sans-serif;z-index:9999}
+.login-wrap.hide{display:none}
 
-.login-box{position:relative;width:100%;max-width:480px;z-index:2}
-.login-top{background:linear-gradient(135deg,rgba(107,33,168,.85),rgba(147,51,234,.85));backdrop-filter:blur(10px);padding:40px 40px 30px;border-radius:8px 8px 0 0;color:#fff;position:relative;overflow:hidden}
-.login-top-planet{position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#e9d5ff,#a855f7);opacity:.6}
-.login-top h1{font-size:13px;font-weight:300;letter-spacing:3px;margin-bottom:4px;position:relative;z-index:2}
-.login-top h2{font-size:32px;font-weight:800;letter-spacing:2px;margin-bottom:20px;position:relative;z-index:2}
-.login-top p{font-size:11px;opacity:.8;line-height:1.6;margin-bottom:6px;position:relative;z-index:2}
-.create-acc{text-align:right;margin-top:18px;position:relative;z-index:2}
-.create-acc a{color:#fff;font-size:11px;text-decoration:none;font-weight:600}
-.create-acc a:hover{text-decoration:underline}
+#wipeStage{position:fixed;inset:0;z-index:200;display:flex;pointer-events:none}
+.wipe-strip{flex:1;height:100%;transform:translateY(-100%);animation:wipeDown 0.55s cubic-bezier(.76,0,.24,1) forwards}
+.wipe-strip:nth-child(1){background:#FF5722;animation-delay:0s}
+.wipe-strip:nth-child(2){background:#FF9800;animation-delay:.06s}
+.wipe-strip:nth-child(3){background:#FFC107;animation-delay:.12s}
+.wipe-strip:nth-child(4){background:#003E8A;animation-delay:.18s}
+.wipe-strip:nth-child(5){background:#0072CE;animation-delay:.24s}
+.wipe-strip:nth-child(6){background:#00B4D8;animation-delay:.30s}
+.wipe-strip:nth-child(7){background:#06D6A0;animation-delay:.36s}
+.wipe-strip:nth-child(8){background:#FF5722;animation-delay:.42s}
+@keyframes wipeDown{0%{transform:translateY(-100%)}100%{transform:translateY(0)}}
+.wipe-strip.exit{animation:wipeUp 0.5s cubic-bezier(.76,0,.24,1) forwards}
+.wipe-strip.exit:nth-child(1){animation-delay:.42s}
+.wipe-strip.exit:nth-child(2){animation-delay:.36s}
+.wipe-strip.exit:nth-child(3){animation-delay:.30s}
+.wipe-strip.exit:nth-child(4){animation-delay:.24s}
+.wipe-strip.exit:nth-child(5){animation-delay:.18s}
+.wipe-strip.exit:nth-child(6){animation-delay:.12s}
+.wipe-strip.exit:nth-child(7){animation-delay:.06s}
+.wipe-strip.exit:nth-child(8){animation-delay:0s}
+@keyframes wipeUp{0%{transform:translateY(0)}100%{transform:translateY(-100%)}}
 
-.login-bottom{background:#fff;padding:35px 40px 40px;border-radius:0 0 8px 8px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.login-bottom h3{text-align:center;font-size:18px;font-weight:700;color:#1e293b;letter-spacing:3px;margin-bottom:25px}
+#bgSlider{position:fixed;inset:0;z-index:0}
+.bgslide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease}
+.bgslide.active{opacity:1}
+.bgslide-1{background:radial-gradient(ellipse 80% 60% at 20% 30%,#001d4a 0%,transparent 70%),radial-gradient(ellipse 60% 80% at 80% 70%,#0a1628 0%,transparent 60%),linear-gradient(135deg,#020a18 0%,#041228 100%)}
+.bgslide-2{background:radial-gradient(ellipse 70% 65% at 75% 25%,#1a0b00 0%,transparent 65%),radial-gradient(ellipse 55% 70% at 25% 75%,#0d1520 0%,transparent 60%),linear-gradient(160deg,#100500 0%,#040c18 100%)}
+.bgslide-3{background:radial-gradient(ellipse 75% 60% at 50% 80%,#001a14 0%,transparent 65%),radial-gradient(ellipse 60% 55% at 50% 10%,#030f1e 0%,transparent 55%),linear-gradient(180deg,#020c10 0%,#030f1a 100%)}
+.bgslide-4{background:radial-gradient(ellipse 65% 70% at 10% 60%,#1a0014 0%,transparent 60%),radial-gradient(ellipse 70% 55% at 90% 40%,#0a0015 0%,transparent 65%),linear-gradient(120deg,#0d0010 0%,#050815 100%)}
+.bgslide-text{position:absolute;bottom:10%;left:50%;transform:translateX(-50%);text-align:center;width:90%;pointer-events:none}
+.bgslide-text h2{font-family:'Rajdhani',sans-serif;font-size:clamp(38px,7vw,88px);font-weight:700;text-transform:uppercase;letter-spacing:4px;line-height:1;opacity:.12;color:#fff}
+.bgslide-text p{font-size:clamp(11px,1.5vw,16px);letter-spacing:5px;text-transform:uppercase;opacity:.18;margin-top:10px;color:#fff}
+.bgslide-1 .bgslide-text h2{color:#00B4D8;opacity:.13}
+.bgslide-2 .bgslide-text h2{color:#FF9800;opacity:.12}
+.bgslide-3 .bgslide-text h2{color:#06D6A0;opacity:.12}
+.bgslide-4 .bgslide-text h2{color:#CF6AFF;opacity:.12}
 
-.login-input-wrap{position:relative;margin-bottom:14px}
-.login-input-icon{position:absolute;left:0;top:0;width:42px;height:42px;background:linear-gradient(135deg,#9333ea,#c026d3);border-radius:30px 0 0 30px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;z-index:2}
-.login-input{width:100%;height:42px;padding:0 20px 0 55px;border:none;border-radius:30px;background:linear-gradient(90deg,#a855f7,#c026d3);color:#fff;font-size:13px;outline:none;font-weight:500}
-.login-input::placeholder{color:rgba(255,255,255,.85)}
-.login-input:focus{background:linear-gradient(90deg,#9333ea,#a21caf)}
+.side-bars{position:fixed;z-index:10;top:0;bottom:0;display:flex;gap:3px;pointer-events:none}
+.side-bars.left{left:0;flex-direction:row}
+.side-bars.right{right:0;flex-direction:row-reverse}
+.sbar{width:5px;height:100%;position:relative;overflow:hidden}
+.sbar:nth-child(1){background:linear-gradient(180deg,#FF5722,#FF9800,#FFC107,#FF5722);background-size:100% 300%;animation:sbarFlow 2s linear infinite}
+.sbar:nth-child(2){background:linear-gradient(180deg,#0072CE,#00B4D8,#06D6A0,#0072CE);background-size:100% 300%;animation:sbarFlow 2.4s linear infinite .3s}
+.sbar:nth-child(3){background:linear-gradient(180deg,#FFC107,#FF5722,#FF9800,#FFC107);background-size:100% 300%;animation:sbarFlow 1.8s linear infinite .6s}
+.sbar:nth-child(4){background:linear-gradient(180deg,#06D6A0,#0072CE,#00B4D8,#06D6A0);background-size:100% 300%;animation:sbarFlow 2.2s linear infinite .2s}
+.sbar:nth-child(5){background:linear-gradient(180deg,#FF9800,#FFC107,#FF5722,#FF9800);background-size:100% 300%;animation:sbarFlow 2s linear infinite .8s}
+@keyframes sbarFlow{0%{background-position:0 0}100%{background-position:0 300%}}
 
-.login-options{display:flex;justify-content:space-between;align-items:center;margin:18px 0 22px;padding:0 5px;font-size:11px}
-.remember-box{display:flex;align-items:center;gap:6px;color:#64748b;cursor:pointer}
-.remember-box input{width:13px;height:13px;cursor:pointer}
-.forgot-link{color:#64748b;text-decoration:none}
-.forgot-link:hover{color:#9333ea}
+.top-bar-wrap{position:fixed;top:0;left:30px;right:30px;z-index:10;display:flex;height:5px;gap:2px;pointer-events:none}
+.bottom-bar-wrap{position:fixed;bottom:0;left:30px;right:30px;z-index:10;display:flex;height:4px;gap:2px;pointer-events:none}
+.tbar{flex:1;height:100%;border-radius:0 0 3px 3px;position:relative;overflow:hidden;animation:barPulse 3s ease-in-out infinite}
+.bottom-bar-wrap .tbar{border-radius:3px 3px 0 0}
+.tbar:nth-child(1){background:#FF5722}.tbar:nth-child(2){background:#FF9800}
+.tbar:nth-child(3){background:#FFC107}.tbar:nth-child(4){background:#003E8A}
+.tbar:nth-child(5){background:#0072CE}.tbar:nth-child(6){background:#00B4D8}
+.tbar:nth-child(7){background:#06D6A0}.tbar:nth-child(8){background:#CF6AFF}
+.tbar:nth-child(9){background:#FF5722}.tbar:nth-child(10){background:#FFC107}
+.tbar:nth-child(11){background:#0072CE}.tbar:nth-child(12){background:#06D6A0}
+.tbar:nth-child(even){animation-delay:1.5s}
+@keyframes barPulse{0%,100%{opacity:.7;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.6)}}
 
-.login-btn{display:block;margin:0 auto;padding:12px 50px;background:linear-gradient(135deg,#1e293b,#334155);color:#fff;border:none;border-radius:30px;font-size:13px;font-weight:700;letter-spacing:3px;cursor:pointer;transition:.3s}
-.login-btn:hover{background:linear-gradient(135deg,#0f172a,#1e293b);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.2)}
-.login-error{color:#dc2626;font-size:11px;text-align:center;margin-top:12px;display:none}
-.login-error.show{display:block}
+#slideDots{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:10px}
+.sdot{width:28px;height:4px;border-radius:4px;background:rgba(255,255,255,.2);cursor:pointer;transition:all .4s;position:relative;overflow:hidden}
+.sdot.active{background:rgba(255,255,255,.5);width:48px}
 
-@media(max-width:520px){
-.login-top{padding:30px 25px 25px}
-.login-bottom{padding:25px 25px 30px}
-.login-top h2{font-size:24px}
-.login-input{font-size:12px}
+#loginStage{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:60px 40px}
+.lg-card{width:min(440px,95vw);background:rgba(5,12,28,0.88);backdrop-filter:blur(32px) saturate(1.6);border-radius:20px;border:1px solid rgba(255,255,255,.1);overflow:hidden;box-shadow:0 0 0 1px rgba(0,180,216,.15),0 30px 80px rgba(0,0,0,.8),0 0 60px rgba(0,114,206,.12),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(80px);opacity:0;animation:cardReveal .8s cubic-bezier(.34,1.2,.64,1) 1.8s forwards;position:relative}
+@keyframes cardReveal{to{transform:translateY(0);opacity:1}}
+.card-rainbow{height:4px;background:linear-gradient(90deg,#FF5722,#FF9800,#FFC107,#0072CE,#00B4D8,#06D6A0,#CF6AFF,#FF5722);background-size:400% 100%;animation:rainbowShift 4s linear infinite}
+@keyframes rainbowShift{0%{background-position:0 0}100%{background-position:400% 0}}
+.card-header{padding:30px 36px 0;opacity:0;animation:fadeSlideUp .6s ease 2.4s forwards}
+.brand-row{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.logo-badge{width:52px;height:52px;border-radius:12px;flex-shrink:0;background:linear-gradient(135deg,#FF9800 0%,#FFC107 100%);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#0a0500;box-shadow:0 6px 24px rgba(255,152,0,.45);animation:logoBreathe 3s ease-in-out 2.4s infinite}
+@keyframes logoBreathe{0%,100%{box-shadow:0 6px 24px rgba(255,152,0,.45)}50%{box-shadow:0 6px 40px rgba(255,193,7,.75),0 0 60px rgba(255,152,0,.2)}}
+.brand-info h1{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff;line-height:1.15;letter-spacing:.3px}
+.brand-info h1 em{color:#FFC107;font-style:normal}
+.brand-info span{font-size:9.5px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.35);display:block;margin-top:3px}
+.ticker-outer{overflow:hidden;height:20px;border-top:1px solid rgba(255,255,255,.06);padding-top:0}
+.ticker-inner{display:inline-flex;gap:0;animation:ticker 14s linear infinite;white-space:nowrap}
+.ticker-inner span{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:2px 28px}
+.ticker-inner span:nth-child(1){color:#FF9800}
+.ticker-inner span:nth-child(2){color:#00B4D8}
+.ticker-inner span:nth-child(3){color:#06D6A0}
+.ticker-inner span:nth-child(4){color:#FFC107}
+.ticker-inner span:nth-child(5){color:#CF6AFF}
+.ticker-inner span:nth-child(6){color:#FF9800}
+.ticker-inner span:nth-child(7){color:#00B4D8}
+.ticker-inner span:nth-child(8){color:#06D6A0}
+.ticker-inner span:nth-child(9){color:#FFC107}
+.ticker-inner span:nth-child(10){color:#CF6AFF}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.card-body{padding:24px 36px 28px}
+.field-group{margin-bottom:16px}
+.field-group:nth-child(1){opacity:0;animation:fadeSlideUp .6s ease 2.55s forwards}
+.field-group:nth-child(2){opacity:0;animation:fadeSlideUp .6s ease 2.7s forwards}
+.field-group:nth-child(3){opacity:0;animation:fadeSlideUp .6s ease 2.85s forwards}
+.field-group:nth-child(4){opacity:0;animation:fadeSlideUp .6s ease 3s forwards}
+.field-group:nth-child(5){opacity:0;animation:fadeSlideUp .6s ease 3.1s forwards}
+.field-group:nth-child(6){opacity:0;animation:fadeSlideUp .6s ease 3.2s forwards}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.f-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:8px;display:block}
+.f-wrap{position:relative;display:flex;align-items:center}
+.f-icon{position:absolute;left:15px;font-size:15px;color:rgba(255,255,255,.25);pointer-events:none;transition:color .3s}
+.f-wrap:focus-within .f-icon{color:#00B4D8}
+.f-input{width:100%;padding:14px 14px 14px 44px;background:rgba(255,255,255,.055);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:500;outline:none;transition:border-color .3s,background .3s,box-shadow .3s;text-transform:none}
+.f-input::placeholder{color:rgba(255,255,255,.2)}
+.f-input:focus{border-color:#00B4D8;background:rgba(0,180,216,.07);box-shadow:0 0 0 4px rgba(0,180,216,.12)}
+.f-input.ok{border-color:#06D6A0;box-shadow:0 0 0 3px rgba(6,214,160,.1)}
+.f-input.bad{border-color:#FF5722;box-shadow:0 0 0 3px rgba(255,87,34,.12);animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.eye-toggle{position:absolute;right:13px;background:none;border:none;color:rgba(255,255,255,.28);cursor:pointer;font-size:15px;padding:4px;transition:color .25s}
+.eye-toggle:hover{color:#00B4D8}
+.f-err{font-size:11px;color:#FF5722;margin-top:5px;display:none;padding-left:4px}
+.f-err.show{display:block}
+.row-opts{display:flex;justify-content:space-between;align-items:center}
+.chk{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.chk input{display:none}
+.chk-sq{width:16px;height:16px;border-radius:5px;flex-shrink:0;border:1.5px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.chk input:checked~.chk-sq{background:#00B4D8;border-color:#00B4D8}
+.chk input:checked~.chk-sq::after{content:'✓';font-size:10px;color:#000;font-weight:800;line-height:1}
+.chk-lbl{font-size:12px;color:rgba(255,255,255,.42)}
+.f-forgot{font-size:12px;color:#00B4D8;text-decoration:none;font-weight:600;transition:opacity .2s}
+.f-forgot:hover{opacity:.65}
+.btn-login{width:100%;padding:16px;background:linear-gradient(135deg,#003E8A 0%,#0072CE 100%);border:none;border-radius:11px;color:#fff;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;overflow:hidden;position:relative;transition:transform .2s,box-shadow .3s;box-shadow:0 8px 28px rgba(0,62,138,.6)}
+.btn-login::before{content:'';position:absolute;top:-50%;left:-80%;width:50%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);transform:skewX(-18deg);animation:shimmer 3.5s ease-in-out infinite 3.5s}
+@keyframes shimmer{0%{left:-80%}80%,100%{left:160%}}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,62,138,.7)}
+.btn-login:active{transform:translateY(1px)}
+.rpl{position:absolute;border-radius:50%;background:rgba(255,255,255,.22);transform:scale(0);animation:rplAnim .55s linear;pointer-events:none}
+@keyframes rplAnim{to{transform:scale(5);opacity:0}}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0 14px}
+.div-l{flex:1;height:1px;background:rgba(255,255,255,.08)}
+.div-t{font-size:9.5px;color:rgba(255,255,255,.2);letter-spacing:2px;white-space:nowrap}
+.sso-row{display:flex;gap:8px}
+.sso-btn{flex:1;padding:11px 8px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);border-radius:9px;color:rgba(255,255,255,.5);font-family:'Nunito',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .25s;letter-spacing:.5px}
+.sso-btn:hover{border-color:#FFC107;color:#FFC107;background:rgba(255,193,7,.06)}
+.card-footer{padding:12px 36px 16px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;opacity:0;animation:fadeSlideUp .6s ease 3.3s forwards}
+.badges{display:flex;gap:6px}
+.badge-lg{font-size:8.5px;font-weight:700;letter-spacing:1.2px;padding:3px 8px;border-radius:20px;text-transform:uppercase}
+.badge-lg.or{background:rgba(255,87,34,.14);border:1px solid rgba(255,87,34,.35);color:#FF7043}
+.badge-lg.bl{background:rgba(0,114,206,.14);border:1px solid rgba(0,114,206,.35);color:#29B6F6}
+.badge-lg.gn{background:rgba(6,214,160,.11);border:1px solid rgba(6,214,160,.3);color:#06D6A0}
+.sec-note{font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.5px}
+#loadOverlay{position:absolute;inset:0;background:rgba(3,8,20,.93);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:80;opacity:0;pointer-events:none;transition:opacity .3s}
+#loadOverlay.show{opacity:1;pointer-events:all}
+.spin-ring{width:60px;height:60px;position:relative}
+.spin-ring div{position:absolute;inset:0;border-radius:50%;border:3px solid transparent;animation:spinR linear infinite}
+.spin-ring div:nth-child(1){border-top-color:#00B4D8;animation-duration:.7s}
+.spin-ring div:nth-child(2){inset:8px;border-right-color:#FFC107;animation-duration:1s;animation-direction:reverse}
+.spin-ring div:nth-child(3){inset:16px;border-bottom-color:#06D6A0;animation-duration:.55s}
+@keyframes spinR{to{transform:rotate(360deg)}}
+.load-bar{width:180px;height:3px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.load-bar-fill{height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#0072CE,#00B4D8,#06D6A0);transition:width 2.2s ease}
+.load-txt{font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:3px;color:rgba(255,255,255,.45);text-transform:uppercase}
+#successOverlay{position:absolute;inset:0;border-radius:20px;background:rgba(3,8,20,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:90;opacity:0;pointer-events:none;transition:opacity .5s}
+#successOverlay.show{opacity:1;pointer-events:all}
+.success-ring{width:80px;height:80px;border-radius:50%;border:2px solid #06D6A0;background:rgba(6,214,160,.1);display:flex;align-items:center;justify-content:center;font-size:34px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.success-title{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#06D6A0;letter-spacing:3px;text-transform:uppercase}
+.success-sub{font-size:12.5px;color:rgba(255,255,255,.4);text-align:center;line-height:1.6}
+
+@media(max-width:600px){
+  #loginStage{padding:40px 16px}
+  .card-header{padding:24px 24px 0}
+  .card-body{padding:20px 24px 24px}
+  .card-footer{padding:12px 24px 14px}
+  .top-bar-wrap,.bottom-bar-wrap{left:8px;right:8px}
 }
-/* ============ END LOGIN STYLES ============ */
 
+/*══════════════════════════════════════════
+  ERP STYLES
+══════════════════════════════════════════*/
 .sb{position:fixed;left:0;top:0;bottom:0;width:var(--sb);background:linear-gradient(180deg,#0f172a,#1e293b);color:#fff;overflow-y:auto;z-index:200;transition:.3s}
 .sb-h{padding:18px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px}
 .sb-logo{width:42px;height:42px;background:var(--p);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0}
@@ -85,7 +206,8 @@ body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:
 .tb-burger{display:none;background:none;border:none;font-size:22px;cursor:pointer;padding:6px;color:var(--tx)}
 .tb-search{display:flex;align-items:center;gap:6px;background:#f8fafc;border:1px solid var(--br);border-radius:10px;padding:8px 12px;flex:1;max-width:320px}
 .tb-search input{border:none;background:none;outline:none;font-size:13px;width:100%;min-width:0}
-.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;cursor:pointer}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.logout-btn{background:#fee2e2;color:#dc2626;border:none;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px}
 .main{margin-left:var(--sb);margin-top:56px;padding:16px;min-height:calc(100vh - 56px)}
 .page{display:none}.page.active{display:block}
 .card{background:#fff;border-radius:12px;border:1px solid var(--br);padding:16px;margin-bottom:14px}
@@ -142,7 +264,7 @@ tr:hover{background:#f8fafc}
 .ddl.show{display:block}
 .ddi{padding:8px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid #f1f5f9}
 .ddi:hover{background:var(--pl)}
-.divider{border-top:2px solid var(--br);margin:16px 0;padding-top:14px}
+.divider2{border-top:2px solid var(--br);margin:16px 0;padding-top:14px}
 .sec-title{font-size:13px;font-weight:700;color:var(--p);margin-bottom:10px}
 .del{color:var(--d);cursor:pointer;border:none;background:none;font-size:16px;padding:4px}
 .sec-row{color:#fff}.sec-row td{padding:10px!important;font-weight:700;font-size:11px}
@@ -198,54 +320,125 @@ tr:hover{background:#f8fafc}
 </head>
 <body>
 
-<!-- ============ LOGIN PAGE ============ -->
-<div class="login-wrapper" id="loginWrapper">
-  <div class="login-bg-stars">
-    <div class="star s1"></div><div class="star s2"></div><div class="star s3"></div>
-    <div class="star s4"></div><div class="star s5"></div><div class="star s6"></div>
-    <div class="star s7"></div><div class="star s8"></div><div class="star s9"></div>
-    <div class="star s10"></div>
-    <div class="planet1"></div>
-    <div class="planet2"></div>
-    <div class="wave"></div>
-    <div class="wave2"></div>
+<!-- ════════ PREMIUM LOGIN SCREEN ════════ -->
+<div class="login-wrap" id="loginWrap">
+  <div id="wipeStage">
+    <div class="wipe-strip"></div><div class="wipe-strip"></div><div class="wipe-strip"></div>
+    <div class="wipe-strip"></div><div class="wipe-strip"></div><div class="wipe-strip"></div>
+    <div class="wipe-strip"></div><div class="wipe-strip"></div>
   </div>
-  <div class="login-box">
-    <div class="login-top">
-      <div class="login-top-planet"></div>
-      <h1>WELCOME TO THE</h1>
-      <h2>VISHAL ERP</h2>
-      <p>Vishal Groups Electricals & Trading</p>
-      <p>Complete ERP Management System</p>
-      <div class="create-acc">
-        <a href="#" onclick="alert('Contact admin to create account')">Create Account</a>
+  
+  <div id="bgSlider">
+    <div class="bgslide bgslide-1 active"><div class="bgslide-text"><h2>Power. Precision. Pride.</h2><p>India's First Electricals EPC Company</p></div></div>
+    <div class="bgslide bgslide-2"><div class="bgslide-text"><h2>Transmission &amp; Substation</h2><p>End-to-End EPC Solutions</p></div></div>
+    <div class="bgslide bgslide-3"><div class="bgslide-text"><h2>18+ States · 500+ Projects</h2><p>Powering India's Growth</p></div></div>
+    <div class="bgslide bgslide-4"><div class="bgslide-text"><h2>Trust. Quality. Excellence.</h2><p>ISO 9001 | ISO 14001 | OHSAS 18001</p></div></div>
+  </div>
+  
+  <div class="side-bars left"><div class="sbar"></div><div class="sbar"></div><div class="sbar"></div><div class="sbar"></div><div class="sbar"></div></div>
+  <div class="side-bars right"><div class="sbar"></div><div class="sbar"></div><div class="sbar"></div><div class="sbar"></div><div class="sbar"></div></div>
+  
+  <div class="top-bar-wrap">
+    <div class="tbar"></div><div class="tbar"></div><div class="tbar"></div><div class="tbar"></div>
+    <div class="tbar"></div><div class="tbar"></div><div class="tbar"></div><div class="tbar"></div>
+    <div class="tbar"></div><div class="tbar"></div><div class="tbar"></div><div class="tbar"></div>
+  </div>
+  <div class="bottom-bar-wrap">
+    <div class="tbar"></div><div class="tbar"></div><div class="tbar"></div><div class="tbar"></div>
+    <div class="tbar"></div><div class="tbar"></div><div class="tbar"></div><div class="tbar"></div>
+    <div class="tbar"></div><div class="tbar"></div><div class="tbar"></div><div class="tbar"></div>
+  </div>
+  
+  <div id="slideDots">
+    <div class="sdot active" onclick="jumpSlide(0)"></div>
+    <div class="sdot" onclick="jumpSlide(1)"></div>
+    <div class="sdot" onclick="jumpSlide(2)"></div>
+    <div class="sdot" onclick="jumpSlide(3)"></div>
+  </div>
+  
+  <div id="loginStage">
+    <div class="lg-card" id="card">
+      <div class="card-rainbow"></div>
+      <div class="card-header">
+        <div class="brand-row">
+          <div class="logo-badge">VG</div>
+          <div class="brand-info">
+            <h1>Vishal Group <em>India</em></h1>
+            <span>First Electricals EPC Company</span>
+          </div>
+        </div>
+        <div class="ticker-outer">
+          <div class="ticker-inner">
+            <span>⚡ Powering India</span><span>🏗 EPC Excellence</span>
+            <span>🌐 18+ States</span><span>🏆 ISO Certified</span>
+            <span>⚙ 500+ Projects</span><span>🔌 5000+ MW</span>
+            <span>⚡ Powering India</span><span>🏗 EPC Excellence</span>
+            <span>🌐 18+ States</span><span>🏆 ISO Certified</span>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="login-bottom">
-      <h3>USER LOGIN</h3>
-      <form onsubmit="doLogin(event)">
-        <div class="login-input-wrap">
-          <div class="login-input-icon">👤</div>
-          <input type="text" class="login-input" id="loginUser" placeholder="Username" required autocomplete="username">
+      <div class="card-body">
+        <div class="field-group">
+          <label class="f-label" for="fuid">Employee ID / Email</label>
+          <div class="f-wrap">
+            <span class="f-icon">⚡</span>
+            <input class="f-input" id="fuid" type="text" placeholder="VGI-2024-XXXX or your email" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="text" oninput="liveValidate()"/>
+          </div>
+          <div class="f-err" id="errUid">Please enter your Employee ID or Email.</div>
         </div>
-        <div class="login-input-wrap">
-          <div class="login-input-icon">🔒</div>
-          <input type="password" class="login-input" id="loginPass" placeholder="Password" required autocomplete="current-password">
+        <div class="field-group">
+          <label class="f-label" for="fpwd">Password</label>
+          <div class="f-wrap">
+            <span class="f-icon">🔒</span>
+            <input class="f-input" id="fpwd" type="password" placeholder="Your secure password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" oninput="liveValidate()"/>
+            <button class="eye-toggle" id="eyeBtn" type="button" onclick="toggleEye()">👁</button>
+          </div>
+          <div class="f-err" id="errPwd">Invalid credentials. Please try again.</div>
         </div>
-        <div class="login-options">
-          <label class="remember-box">
-            <input type="checkbox" id="rememberMe"> Remember
+        <div class="field-group row-opts">
+          <label class="chk">
+            <input type="checkbox" id="remMe"/>
+            <div class="chk-sq"></div>
+            <span class="chk-lbl">Keep me signed in</span>
           </label>
-          <a href="#" class="forgot-link" onclick="alert('Contact admin: admin@vishalgroups.com')">Forgot password ?</a>
+          <a class="f-forgot" href="#" onclick="alert('Contact admin for password reset');return false">Forgot Password?</a>
         </div>
-        <button type="submit" class="login-btn">LOGIN</button>
-        <div class="login-error" id="loginError">❌ Invalid Username or Password</div>
-      </form>
+        <div class="field-group">
+          <button class="btn-login" id="loginBtn" onclick="handleLogin(event)">Sign In to Portal</button>
+        </div>
+        <div class="field-group divider">
+          <div class="div-l"></div>
+          <div class="div-t">OR SIGN IN WITH</div>
+          <div class="div-l"></div>
+        </div>
+        <div class="field-group sso-row">
+          <button class="sso-btn" type="button" onclick="alert('SSO coming soon')">🏢 Microsoft SSO</button>
+          <button class="sso-btn" type="button" onclick="alert('SSO coming soon')">📧 Google Workspace</button>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="badges">
+          <span class="badge-lg or">ISO 9001</span>
+          <span class="badge-lg bl">EPC Grade A</span>
+          <span class="badge-lg gn">OHSAS</span>
+        </div>
+        <div class="sec-note">🔒 256-bit SSL</div>
+      </div>
+      <div id="loadOverlay">
+        <div class="spin-ring"><div></div><div></div><div></div></div>
+        <div class="load-bar"><div class="load-bar-fill" id="lbFill"></div></div>
+        <div class="load-txt">Authenticating…</div>
+      </div>
+      <div id="successOverlay">
+        <div class="success-ring">✅</div>
+        <div class="success-title">Access Granted</div>
+        <div class="success-sub">Welcome to Vishal Group Portal<br>Loading dashboard…</div>
+      </div>
     </div>
   </div>
 </div>
-<!-- ============ END LOGIN ============ -->
 
+<!-- ════════ ERP DASHBOARD ════════ -->
 <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
 <div class="sb" id="sidebar">
   <div class="sb-h"><div class="sb-logo">VE</div><div class="sb-brand">VISHAL GROUPS<span>ELECTRICALS & TRADING</span></div><button class="sb-x" onclick="closeSidebar()">✕</button></div>
@@ -274,7 +467,8 @@ tr:hover{background:#f8fafc}
   <div style="display:flex;gap:8px;align-items:center">
     <button class="btn btn-o btn-sm" onclick="liveSync()">🔄 Sync</button>
     <button class="btn btn-sm" onclick="toggleAI()" style="background:linear-gradient(135deg,#1a56db,#7c3aed);color:#fff;border:none">🤖 AI</button>
-    <div style="display:flex;align-items:center;gap:6px" onclick="doLogout()" title="Click to Logout"><div class="avatar">VS</div><div style="font-size:11px"><div style="font-weight:700">Vishal Group</div><div style="font-size:9px;color:#94a3b8">Admin</div></div></div>
+    <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
+    <div style="display:flex;align-items:center;gap:6px"><div class="avatar">VS</div><div style="font-size:11px"><div style="font-weight:700">Vishal Group</div><div style="font-size:9px;color:#94a3b8">Admin</div></div></div>
   </div>
 </div>
 <div class="main">
@@ -310,60 +504,149 @@ tr:hover{background:#f8fafc}
 <div class="page" id="pg-stock"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:8px"><div><h2>📦 Stock <span class="badge b-live">🔴 LIVE</span></h2></div><button class="btn btn-p btn-sm" onclick="liveSync()">🔄</button></div><div class="stats"><div class="stat"><div class="stat-ic bl">🏢</div><div><div class="stat-val" id="stSites">0</div><div class="stat-lbl">Sites</div></div></div><div class="stat"><div class="stat-ic gr">💰</div><div><div class="stat-val" id="stVal">₹0</div><div class="stat-lbl">Stock Value</div></div></div><div class="stat"><div class="stat-ic or">📊</div><div><div class="stat-val" id="stWIP">₹0</div><div class="stat-lbl">Net WIP</div></div></div><div class="stat"><div class="stat-ic rd">⚠️</div><div><div class="stat-val" id="stAge">0</div><div class="stat-lbl">>180d</div></div></div></div><div id="heroStock"></div><div class="card"><div class="fbar"><div class="srch"><span>🔍</span><input placeholder="Search..." onkeyup="filterT('tStock',this.value)"></div><select class="btn btn-o btn-sm" onchange="D.fc=this.value;drawStock()"><option value="">All</option><option value="VE">VE</option><option value="VTPL">VTPL</option></select></div><div class="tw"><table id="tStock"><thead><tr><th>S.No</th><th>Site</th><th>Stock</th><th>Expenses</th><th>Net WIP</th><th>Remarks</th><th>Drive</th><th>Ageing</th></tr></thead><tbody id="tbStock"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--tl)">🔄 Click Sync...</td></tr></tbody></table></div></div></div>
 <div class="page" id="pg-debtors"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:8px"><div><h2>⏰ Debtors Ageing <span class="badge b-live">🔴 LIVE</span></h2></div><button class="btn btn-p btn-sm" onclick="fetchDebtors()">🔄 Fetch All Sites</button></div><div class="stats"><div class="stat"><div class="stat-ic rd">📋</div><div><div class="stat-val" id="dbInv">0</div><div class="stat-lbl">Pending Invoices</div></div></div><div class="stat"><div class="stat-ic or">💰</div><div><div class="stat-val" id="dbAmt">₹0</div><div class="stat-lbl">Total Short Pay</div></div></div><div class="stat"><div class="stat-ic pu">🏢</div><div><div class="stat-val" id="dbSites">0</div><div class="stat-lbl">Sites</div></div></div><div class="stat"><div class="stat-ic rd">⚠️</div><div><div class="stat-val" id="dbCrit">0</div><div class="stat-lbl">Critical >180d</div></div></div></div><div id="heroDebtors"></div><div id="debtorProgress" style="display:none"><div class="card"><div class="card-title">⏳ Fetching...</div><div style="font-size:12px;color:var(--tl);margin-top:6px" id="dbStatus">Loading...</div><div class="progress"><div class="progress-bar" id="dbBar" style="width:0%"></div></div></div></div><div class="card"><div class="tabs"><button class="tab active" onclick="dbTab('all',this)">All</button><button class="tab" onclick="dbTab('critical',this)">🔴 >180d</button><button class="tab" onclick="dbTab('overdue',this)">🟠 90-180d</button><button class="tab" onclick="dbTab('due',this)">🟡 30-90d</button><button class="tab" onclick="dbTab('current',this)">🟢 0-30d</button></div><div class="fbar"><div class="srch"><span>🔍</span><input placeholder="Search..." onkeyup="filterT('tDebtors',this.value)"></div><button class="btn btn-o btn-sm" onclick="exportDebtors()">📥 Export</button></div><div class="tw"><table id="tDebtors"><thead><tr><th>#</th><th>Site</th><th>Inv No</th><th>Date</th><th>Inv Amt</th><th>Short Pay</th><th>Days</th><th>Status</th></tr></thead><tbody id="tbDebtors"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--tl)">🔄 Click Fetch...</td></tr></tbody><tfoot><tr class="g-total"><td colspan="4" style="text-align:right">TOTAL ➤</td><td class="amt" id="dbInvTot">₹0</td><td class="amt" id="dbShortTot">₹0</td><td colspan="2"></td></tr></tfoot></table></div></div></div>
 <div class="page" id="pg-sales"><h2>💰 Vishal Groups Sale</h2><p class="card-sub" style="margin-bottom:14px">VE & VTPL • Month Wise • N/R Code</p><div class="stats"><div class="stat"><div class="stat-ic bl">🏢</div><div><div class="stat-val" id="sVE">₹0</div><div class="stat-lbl">VE Sale</div></div></div><div class="stat"><div class="stat-ic pu">🏭</div><div><div class="stat-val" id="sVTPL">₹0</div><div class="stat-lbl">VTPL Sale</div></div></div><div class="stat"><div class="stat-ic gr">📈</div><div><div class="stat-val" id="sComb">₹0</div><div class="stat-lbl">Combined</div></div></div><div class="stat"><div class="stat-ic or">🆕</div><div><div class="stat-val" id="sNew">0</div><div class="stat-lbl">New (N)</div></div></div><div class="stat"><div class="stat-ic gr">🔄</div><div><div class="stat-val" id="sRep">0</div><div class="stat-lbl">Repeat (R)</div></div></div></div><div class="card"><div class="tabs"><button class="tab active" onclick="sTab('ve',this)">🏢 VE</button><button class="tab" onclick="sTab('vtpl',this)">🏭 VTPL</button><button class="tab" onclick="sTab('mw',this)">📅 Month Wise</button></div><div class="tab-body active" id="st-ve"><div class="fbar"><div class="srch"><span>🔍</span><input placeholder="Search..." onkeyup="filterT('tVE',this.value)"></div><button class="btn btn-p btn-sm" onclick="openSaleModal('VE')">+ Add VE</button></div><div class="tw"><table id="tVE"><thead><tr><th>#</th><th>Month</th><th>Party</th><th>Site</th><th>Invoice</th><th>Date</th><th>Amount</th><th>Code</th><th>✕</th></tr></thead><tbody id="tbVE"></tbody></table></div><div style="margin-top:10px;font-weight:700;font-size:13px">VE Total: <span id="veTot" class="amt" style="color:var(--s)">₹0</span></div></div><div class="tab-body" id="st-vtpl"><div class="fbar"><div class="srch"><span>🔍</span><input placeholder="Search..." onkeyup="filterT('tVTPL',this.value)"></div><button class="btn btn-p btn-sm" onclick="openSaleModal('VTPL')">+ Add VTPL</button></div><div class="tw"><table id="tVTPL"><thead><tr><th>#</th><th>Month</th><th>Party</th><th>Site</th><th>Invoice</th><th>Date</th><th>Amount</th><th>Code</th><th>✕</th></tr></thead><tbody id="tbVTPL"></tbody></table></div><div style="margin-top:10px;font-weight:700;font-size:13px">VTPL Total: <span id="vtplTot" class="amt" style="color:var(--s)">₹0</span></div></div><div class="tab-body" id="st-mw"><div class="tw"><table id="tMW"><thead><tr><th>Month</th><th>VE</th><th>VE(N)</th><th>VE(R)</th><th>VTPL</th><th>VTPL(N)</th><th>VTPL(R)</th><th>Total</th></tr></thead><tbody id="tbMW"></tbody><tfoot><tr style="font-weight:800;background:#f0f9ff"><td>TOTAL</td><td id="mVE">₹0</td><td id="mVN">0</td><td id="mVR">0</td><td id="mVT">₹0</td><td id="mTN">0</td><td id="mTR">0</td><td id="mC">₹0</td></tr></tfoot></table></div></div></div></div>
-<div class="page" id="pg-dataentry"><h2>📝 Data Entry - Sale</h2><div class="card"><div class="card-title" style="margin-bottom:14px">📄 New Sale Entry</div><div class="fg"><div class="fi"><label>Company</label><select id="de_co"><option value="VE">VE</option><option value="VTPL">VTPL</option></select></div><div class="fi dds"><label>Party Name</label><input id="de_party" placeholder="Type..." oninput="ddSrch(this,'ddP1',getParties())" onfocus="ddSrch(this,'ddP1',getParties())"><div class="ddl" id="ddP1"></div></div><div class="fi dds"><label>Site Name</label><input id="de_site" placeholder="Type..." oninput="ddSrch(this,'ddS1',getSites())" onfocus="ddSrch(this,'ddS1',getSites())"><div class="ddl" id="ddS1"></div></div><div class="fi"><label>Invoice No</label><input id="de_inv" placeholder="INV-001"></div><div class="fi"><label>Date</label><input type="date" id="de_date"></div><div class="fi"><label>Amount (₹)</label><input type="number" inputmode="decimal" id="de_amt" placeholder="0"></div><div class="fi"><label>Code</label><select id="de_code"><option value="N">N - New</option><option value="R">R - Repeat</option></select></div></div><div class="divider"></div><div class="sec-title">📋 BOQ Items</div><div style="display:flex;gap:8px;margin-bottom:10px"><input type="file" id="boqFile" accept=".xlsx,.xls,.csv" onchange="loadBOQ(this)" style="font-size:11px"><button class="btn btn-o btn-sm" onclick="addBOQRow()">+ Row</button></div><div class="tw"><table id="tBOQ"><thead><tr><th>Sr</th><th>Desc</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Amount</th><th>✕</th></tr></thead><tbody id="tbBOQ"></tbody><tfoot><tr style="font-weight:700;background:#f0f9ff"><td colspan="5" style="text-align:right">TOTAL ➤</td><td class="amt" id="boqTotal">₹0</td><td></td></tr></tfoot></table></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-p" onclick="saveSaleEntry()">💾 Save</button><button class="btn btn-o" onclick="clearDE()">🔄 Clear</button></div></div><div class="card"><div class="card-title">📃 All Entries</div><div class="tw"><table><thead><tr><th>#</th><th>Co</th><th>Party</th><th>Site</th><th>Inv</th><th>Date</th><th>Amt</th><th>Code</th><th>BOQ</th><th>✕</th></tr></thead><tbody id="tbEntries"></tbody></table></div></div></div>
-<div class="page" id="pg-payrecv"><h2>💳 Payment Received</h2><div class="stats"><div class="stat"><div class="stat-ic gr">💰</div><div><div class="stat-val" id="pRec">₹0</div><div class="stat-lbl">Received</div></div></div><div class="stat"><div class="stat-ic rd">📉</div><div><div class="stat-val" id="pDed">₹0</div><div class="stat-lbl">Deductions</div></div></div><div class="stat"><div class="stat-ic pu">✋</div><div><div class="stat-val" id="pHold">₹0</div><div class="stat-lbl">Hold</div></div></div><div class="stat"><div class="stat-ic bl">✅</div><div><div class="stat-val" id="pNet">₹0</div><div class="stat-lbl">Net</div></div></div></div><div class="card"><div class="card-title">➕ New Payment</div><div class="sec-title">🔎 Party & Invoice</div><div class="fg"><div class="fi dds"><label>Party</label><input id="py_party" placeholder="Search..." oninput="ddSrch(this,'ddPP',getParties());updateInvDropdown()" onfocus="ddSrch(this,'ddPP',getParties())"><div class="ddl" id="ddPP"></div></div><div class="fi dds"><label>Site</label><input id="py_site" placeholder="Search..." oninput="ddSrch(this,'ddPS',getSites());updateInvDropdown()" onfocus="ddSrch(this,'ddPS',getSites())"><div class="ddl" id="ddPS"></div></div><div class="fi"><label>Invoice</label><select id="py_inv" onchange="fillInvoice()"><option value="">-- Select --</option></select></div><div class="fi"><label>Invoice Amt</label><input id="py_invAmt" readonly style="background:#f8fafc;font-weight:700"></div></div><div class="divider"></div><div class="sec-title">💰 Amount</div><div class="fg"><div class="fi"><label>Date</label><input type="date" id="py_date"></div><div class="fi"><label>Received (₹)</label><input type="number" inputmode="decimal" id="py_amt" placeholder="0" oninput="calcPayment()"></div></div><div class="divider"></div><div class="sec-title">📉 Deductions</div><div class="fg"><div class="fi"><label>IT TDS</label><input type="number" inputmode="decimal" id="dd_it" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>GST TDS</label><input type="number" inputmode="decimal" id="dd_gst" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Labour Cess</label><input type="number" inputmode="decimal" id="dd_lc" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Bill Discount</label><input type="number" inputmode="decimal" id="dd_bd" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Other Ded</label><input type="number" inputmode="decimal" id="dd_oth" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Total Ded</label><input id="dd_tot" readonly style="background:#fef3c7;font-weight:700"></div></div><div class="divider"></div><div class="sec-title">✋ Hold Amount</div><div class="fg"><div class="fi"><label>SD</label><input type="number" inputmode="decimal" id="hd_sd" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>LD</label><input type="number" inputmode="decimal" id="hd_ld" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>GST Amt</label><input type="number" inputmode="decimal" id="hd_gst" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Withheld</label><input type="number" inputmode="decimal" id="hd_wh" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Other Hold</label><input type="number" inputmode="decimal" id="hd_oth" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Total Hold</label><input id="hd_tot" readonly style="background:#e0e7ff;font-weight:700"></div></div><div class="divider"></div><div style="background:#f0fdf4;border-radius:10px;padding:14px;margin-bottom:14px"><div class="sec-title" style="color:#059669">📊 Summary</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;font-size:13px"><div>Invoice: <strong id="sm_inv">₹0</strong></div><div>Received: <strong id="sm_rec" style="color:var(--s)">₹0</strong></div><div>Deduction: <strong id="sm_ded" style="color:var(--d)">₹0</strong></div><div>Hold: <strong id="sm_hold" style="color:#7c3aed">₹0</strong></div><div>Net: <strong id="sm_net" style="color:var(--s)">₹0</strong></div><div>Balance: <strong id="sm_bal" style="color:var(--d)">₹0</strong></div></div></div><div style="display:flex;gap:8px"><button class="btn btn-p" onclick="savePayment()">💾 Save</button><button class="btn btn-o" onclick="clearPayment()">🔄 Clear</button></div></div><div class="card"><div class="card-title">🔓 Hold Recovery</div><div class="fg"><div class="fi"><label>Vendor</label><input id="rv_vendor"></div><div class="fi"><label>Invoice</label><input id="rv_inv"></div><div class="fi"><label>Date</label><input type="date" id="rv_date"></div><div class="fi"><label>Amount</label><input type="number" inputmode="decimal" id="rv_amt" placeholder="0"></div><div class="fi"><label>Type</label><select id="rv_type"><option>SD Recovery</option><option>LD Recovery</option><option>GST Recovery</option><option>Withheld Recovery</option><option>Other</option></select></div></div><button class="btn btn-s btn-sm" onclick="saveRecovery()">💾 Save</button></div><div class="card"><div class="card-title">📃 Payments</div><div class="tw"><table><thead><tr><th>#</th><th>Date</th><th>Party</th><th>Site</th><th>Inv</th><th>Inv Amt</th><th>Recv</th><th>Ded</th><th>Hold</th><th>Net</th><th>✕</th></tr></thead><tbody id="tbPay"></tbody></table></div></div><div class="card"><div class="card-title">🔓 Recoveries</div><div class="tw"><table><thead><tr><th>#</th><th>Date</th><th>Vendor</th><th>Inv</th><th>Amt</th><th>Type</th><th>✕</th></tr></thead><tbody id="tbRecov"></tbody></table></div></div></div>
+<div class="page" id="pg-dataentry"><h2>📝 Data Entry - Sale</h2><div class="card"><div class="card-title" style="margin-bottom:14px">📄 New Sale Entry</div><div class="fg"><div class="fi"><label>Company</label><select id="de_co"><option value="VE">VE</option><option value="VTPL">VTPL</option></select></div><div class="fi dds"><label>Party Name</label><input id="de_party" placeholder="Type..." oninput="ddSrch(this,'ddP1',getParties())" onfocus="ddSrch(this,'ddP1',getParties())"><div class="ddl" id="ddP1"></div></div><div class="fi dds"><label>Site Name</label><input id="de_site" placeholder="Type..." oninput="ddSrch(this,'ddS1',getSites())" onfocus="ddSrch(this,'ddS1',getSites())"><div class="ddl" id="ddS1"></div></div><div class="fi"><label>Invoice No</label><input id="de_inv" placeholder="INV-001"></div><div class="fi"><label>Date</label><input type="date" id="de_date"></div><div class="fi"><label>Amount (₹)</label><input type="number" inputmode="decimal" id="de_amt" placeholder="0"></div><div class="fi"><label>Code</label><select id="de_code"><option value="N">N - New</option><option value="R">R - Repeat</option></select></div></div><div class="divider2"></div><div class="sec-title">📋 BOQ Items</div><div style="display:flex;gap:8px;margin-bottom:10px"><input type="file" id="boqFile" accept=".xlsx,.xls,.csv" onchange="loadBOQ(this)" style="font-size:11px"><button class="btn btn-o btn-sm" onclick="addBOQRow()">+ Row</button></div><div class="tw"><table id="tBOQ"><thead><tr><th>Sr</th><th>Desc</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Amount</th><th>✕</th></tr></thead><tbody id="tbBOQ"></tbody><tfoot><tr style="font-weight:700;background:#f0f9ff"><td colspan="5" style="text-align:right">TOTAL ➤</td><td class="amt" id="boqTotal">₹0</td><td></td></tr></tfoot></table></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-p" onclick="saveSaleEntry()">💾 Save</button><button class="btn btn-o" onclick="clearDE()">🔄 Clear</button></div></div><div class="card"><div class="card-title">📃 All Entries</div><div class="tw"><table><thead><tr><th>#</th><th>Co</th><th>Party</th><th>Site</th><th>Inv</th><th>Date</th><th>Amt</th><th>Code</th><th>BOQ</th><th>✕</th></tr></thead><tbody id="tbEntries"></tbody></table></div></div></div>
+<div class="page" id="pg-payrecv"><h2>💳 Payment Received</h2><div class="stats"><div class="stat"><div class="stat-ic gr">💰</div><div><div class="stat-val" id="pRec">₹0</div><div class="stat-lbl">Received</div></div></div><div class="stat"><div class="stat-ic rd">📉</div><div><div class="stat-val" id="pDed">₹0</div><div class="stat-lbl">Deductions</div></div></div><div class="stat"><div class="stat-ic pu">✋</div><div><div class="stat-val" id="pHold">₹0</div><div class="stat-lbl">Hold</div></div></div><div class="stat"><div class="stat-ic bl">✅</div><div><div class="stat-val" id="pNet">₹0</div><div class="stat-lbl">Net</div></div></div></div><div class="card"><div class="card-title">➕ New Payment</div><div class="sec-title">🔎 Party & Invoice</div><div class="fg"><div class="fi dds"><label>Party</label><input id="py_party" placeholder="Search..." oninput="ddSrch(this,'ddPP',getParties());updateInvDropdown()" onfocus="ddSrch(this,'ddPP',getParties())"><div class="ddl" id="ddPP"></div></div><div class="fi dds"><label>Site</label><input id="py_site" placeholder="Search..." oninput="ddSrch(this,'ddPS',getSites());updateInvDropdown()" onfocus="ddSrch(this,'ddPS',getSites())"><div class="ddl" id="ddPS"></div></div><div class="fi"><label>Invoice</label><select id="py_inv" onchange="fillInvoice()"><option value="">-- Select --</option></select></div><div class="fi"><label>Invoice Amt</label><input id="py_invAmt" readonly style="background:#f8fafc;font-weight:700"></div></div><div class="divider2"></div><div class="sec-title">💰 Amount</div><div class="fg"><div class="fi"><label>Date</label><input type="date" id="py_date"></div><div class="fi"><label>Received (₹)</label><input type="number" inputmode="decimal" id="py_amt" placeholder="0" oninput="calcPayment()"></div></div><div class="divider2"></div><div class="sec-title">📉 Deductions</div><div class="fg"><div class="fi"><label>IT TDS</label><input type="number" inputmode="decimal" id="dd_it" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>GST TDS</label><input type="number" inputmode="decimal" id="dd_gst" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Labour Cess</label><input type="number" inputmode="decimal" id="dd_lc" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Bill Discount</label><input type="number" inputmode="decimal" id="dd_bd" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Other Ded</label><input type="number" inputmode="decimal" id="dd_oth" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Total Ded</label><input id="dd_tot" readonly style="background:#fef3c7;font-weight:700"></div></div><div class="divider2"></div><div class="sec-title">✋ Hold Amount</div><div class="fg"><div class="fi"><label>SD</label><input type="number" inputmode="decimal" id="hd_sd" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>LD</label><input type="number" inputmode="decimal" id="hd_ld" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>GST Amt</label><input type="number" inputmode="decimal" id="hd_gst" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Withheld</label><input type="number" inputmode="decimal" id="hd_wh" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Other Hold</label><input type="number" inputmode="decimal" id="hd_oth" placeholder="0" oninput="calcPayment()"></div><div class="fi"><label>Total Hold</label><input id="hd_tot" readonly style="background:#e0e7ff;font-weight:700"></div></div><div class="divider2"></div><div style="background:#f0fdf4;border-radius:10px;padding:14px;margin-bottom:14px"><div class="sec-title" style="color:#059669">📊 Summary</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;font-size:13px"><div>Invoice: <strong id="sm_inv">₹0</strong></div><div>Received: <strong id="sm_rec" style="color:var(--s)">₹0</strong></div><div>Deduction: <strong id="sm_ded" style="color:var(--d)">₹0</strong></div><div>Hold: <strong id="sm_hold" style="color:#7c3aed">₹0</strong></div><div>Net: <strong id="sm_net" style="color:var(--s)">₹0</strong></div><div>Balance: <strong id="sm_bal" style="color:var(--d)">₹0</strong></div></div></div><div style="display:flex;gap:8px"><button class="btn btn-p" onclick="savePayment()">💾 Save</button><button class="btn btn-o" onclick="clearPayment()">🔄 Clear</button></div></div><div class="card"><div class="card-title">🔓 Hold Recovery</div><div class="fg"><div class="fi"><label>Vendor</label><input id="rv_vendor"></div><div class="fi"><label>Invoice</label><input id="rv_inv"></div><div class="fi"><label>Date</label><input type="date" id="rv_date"></div><div class="fi"><label>Amount</label><input type="number" inputmode="decimal" id="rv_amt" placeholder="0"></div><div class="fi"><label>Type</label><select id="rv_type"><option>SD Recovery</option><option>LD Recovery</option><option>GST Recovery</option><option>Withheld Recovery</option><option>Other</option></select></div></div><button class="btn btn-s btn-sm" onclick="saveRecovery()">💾 Save</button></div><div class="card"><div class="card-title">📃 Payments</div><div class="tw"><table><thead><tr><th>#</th><th>Date</th><th>Party</th><th>Site</th><th>Inv</th><th>Inv Amt</th><th>Recv</th><th>Ded</th><th>Hold</th><th>Net</th><th>✕</th></tr></thead><tbody id="tbPay"></tbody></table></div></div><div class="card"><div class="card-title">🔓 Recoveries</div><div class="tw"><table><thead><tr><th>#</th><th>Date</th><th>Vendor</th><th>Inv</th><th>Amt</th><th>Type</th><th>✕</th></tr></thead><tbody id="tbRecov"></tbody></table></div></div></div>
 </div>
 <div class="modal-bg" id="saleModal"><div class="modal"><div class="modal-head"><h3 id="smTitle">Add Sale</h3><button class="modal-x" onclick="closeModal('saleModal')">✕</button></div><div class="fg"><div class="fi"><label>Company</label><input id="sm_co" readonly></div><div class="fi"><label>Party</label><input id="sm_party"></div><div class="fi"><label>Site</label><input id="sm_site"></div><div class="fi"><label>Invoice</label><input id="sm_invoice"></div><div class="fi"><label>Date</label><input type="date" id="sm_date"></div><div class="fi"><label>Amount</label><input type="number" inputmode="decimal" id="sm_amt"></div><div class="fi"><label>Code</label><select id="sm_code"><option value="N">N-New</option><option value="R">R-Repeat</option></select></div></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-p" onclick="saveSaleModal()">💾 Save</button><button class="btn btn-o" onclick="closeModal('saleModal')">Cancel</button></div></div></div>
 <button class="ai-fab" id="aiFab" onclick="toggleAI()">🤖<div class="ai-dot">AI</div></button>
 <div class="ai-chat" id="aiChat"><div class="ai-hdr"><div class="ai-av">🤖</div><div class="ai-inf"><h4>VG AI Assistant</h4><span>Online • ERP Connected</span></div><button class="ai-cls" onclick="toggleAI()">✕</button></div><div class="ai-body" id="aiBody"><div class="ai-msg bot"><div class="mh">🤖 VG AI</div>Namaste! 🙏 Main aapka <strong>ERP AI</strong> hoon.<br>📊 <strong>"Outstanding kitna hai?"</strong><br>💰 <strong>"Sales report do"</strong><br>📦 <strong>"Stock summary"</strong></div></div><div class="ai-qk"><button class="ai-qb" onclick="aiQ('Outstanding kitna hai?')">💼 Outstanding</button><button class="ai-qb" onclick="aiQ('Stock summary')">📦 Stock</button><button class="ai-qb" onclick="aiQ('Sales report')">💰 Sales</button><button class="ai-qb" onclick="aiQ('Critical debtors')">⏰ Debtors</button></div><div class="ai-ft"><input class="ai-inp" id="aiInput" placeholder="Type question..." onkeydown="if(event.key==='Enter')sendAI()"><button class="ai-snd" id="aiSend" onclick="sendAI()">➤</button></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// ============ LOGIN CREDENTIALS ============
-const LOGIN_USERS = {
-  'admin': 'admin123',
-  'vishal': 'vishal123',
-  'user': 'user123'
-};
-// ============ END LOGIN CREDENTIALS ============
+// ════════════════ LOGIN CONFIG ════════════════
+const LOGIN_USER='admin';
+const LOGIN_PASS='vishal123';
 
-function doLogin(e){
-  e.preventDefault();
-  const u = document.getElementById('loginUser').value.trim().toLowerCase();
-  const p = document.getElementById('loginPass').value;
-  const err = document.getElementById('loginError');
-  if(LOGIN_USERS[u] && LOGIN_USERS[u] === p){
-    err.classList.remove('show');
-    if(document.getElementById('rememberMe').checked){
-      localStorage.setItem('veLogged', u);
+// ════════════════ LOGIN ANIMATIONS ════════════════
+const strips=document.querySelectorAll('.wipe-strip');
+setTimeout(()=>{strips.forEach(s=>s.classList.add('exit'))},1000);
+
+const bgSlides=document.querySelectorAll('.bgslide');
+const dots=document.querySelectorAll('.sdot');
+let cur=0,slideInterval;
+
+function goSlide(i){
+  bgSlides[cur].classList.remove('active');
+  dots[cur].classList.remove('active');
+  cur=(i+bgSlides.length)%bgSlides.length;
+  bgSlides[cur].classList.add('active');
+  dots[cur].classList.add('active');
+}
+function jumpSlide(i){
+  bgSlides[cur].classList.remove('active');
+  cur=i;
+  bgSlides.forEach((s,idx)=>s.classList.toggle('active',idx===i));
+  document.querySelectorAll('.sdot').forEach((d,idx)=>d.classList.toggle('active',idx===i));
+  clearInterval(slideInterval);
+  slideInterval=setInterval(()=>goSlide(cur+1),5000);
+}
+slideInterval=setInterval(()=>goSlide(cur+1),5000);
+
+function toggleEye(){
+  const pw=document.getElementById('fpwd');
+  const btn=document.getElementById('eyeBtn');
+  pw.type=pw.type==='password'?'text':'password';
+  btn.textContent=pw.type==='password'?'👁':'🙈';
+}
+
+function liveValidate(){
+  const uid=document.getElementById('fuid');
+  const pwd=document.getElementById('fpwd');
+  uid.classList.toggle('ok',uid.value.trim().length>2);
+  uid.classList.remove('bad');
+  pwd.classList.toggle('ok',pwd.value.length>=6);
+  pwd.classList.remove('bad');
+  document.getElementById('errUid').classList.remove('show');
+  document.getElementById('errPwd').classList.remove('show');
+}
+
+function handleLogin(e){
+  const btn=document.getElementById('loginBtn');
+  const rect=btn.getBoundingClientRect();
+  const rip=document.createElement('span');
+  rip.className='rpl';
+  const sz=Math.max(btn.offsetWidth,btn.offsetHeight);
+  rip.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
+  btn.appendChild(rip);
+  setTimeout(()=>rip.remove(),600);
+
+  const uid=document.getElementById('fuid');
+  const pwd=document.getElementById('fpwd');
+  let ok=true;
+  document.getElementById('errUid').classList.remove('show');
+  document.getElementById('errPwd').classList.remove('show');
+
+  if(!uid.value.trim()){
+    uid.classList.add('bad');uid.classList.remove('ok');
+    document.getElementById('errUid').classList.add('show');
+    document.getElementById('errUid').textContent='Please enter your Employee ID or Email.';
+    ok=false;
+  }
+  if(pwd.value.length<6){
+    pwd.classList.add('bad');pwd.classList.remove('ok');
+    document.getElementById('errPwd').classList.add('show');
+    document.getElementById('errPwd').textContent='Password must be at least 6 characters.';
+    ok=false;
+  }
+  if(!ok)return;
+
+  // Check credentials
+  const userVal=uid.value.trim().toLowerCase();
+  const passVal=pwd.value;
+
+  const ov=document.getElementById('loadOverlay');
+  ov.classList.add('show');
+  const fill=document.getElementById('lbFill');
+  setTimeout(()=>fill.style.width='100%',80);
+
+  setTimeout(()=>{
+    if(userVal===LOGIN_USER.toLowerCase() && passVal===LOGIN_PASS){
+      // SUCCESS
+      ov.classList.remove('show');
+      fill.style.width='0';
+      document.getElementById('successOverlay').classList.add('show');
+      setTimeout(()=>{
+        sessionStorage.setItem('vgLoggedIn','yes');
+        document.getElementById('loginWrap').classList.add('hide');
+        clearInterval(slideInterval);
+        renderAll();
+        liveSync();
+      },1500);
     }else{
-      sessionStorage.setItem('veLogged', u);
+      // FAIL
+      ov.classList.remove('show');
+      fill.style.width='0';
+      pwd.classList.add('bad');pwd.classList.remove('ok');
+      uid.classList.add('bad');uid.classList.remove('ok');
+      document.getElementById('errPwd').classList.add('show');
+      document.getElementById('errPwd').textContent='❌ Invalid credentials. Try admin / vishal123';
     }
-    document.getElementById('loginWrapper').classList.add('hidden');
-  }else{
-    err.classList.add('show');
-    document.getElementById('loginPass').value = '';
+  },2200);
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && !document.getElementById('loginWrap').classList.contains('hide')){
+    handleLogin({clientX:0,clientY:0});
+  }
+});
+
+function checkLogin(){
+  if(sessionStorage.getItem('vgLoggedIn')==='yes'){
+    document.getElementById('loginWrap').classList.add('hide');
+    clearInterval(slideInterval);
+    return true;
   }
   return false;
 }
 
 function doLogout(){
-  if(!confirm('Logout?'))return;
-  localStorage.removeItem('veLogged');
-  sessionStorage.removeItem('veLogged');
-  location.reload();
-}
-
-function checkLogin(){
-  const logged = localStorage.getItem('veLogged') || sessionStorage.getItem('veLogged');
-  if(logged){
-    document.getElementById('loginWrapper').classList.add('hidden');
+  if(confirm('Logout karna hai?')){
+    sessionStorage.removeItem('vgLoggedIn');
+    location.reload();
   }
 }
-checkLogin();
 
-// ============ ORIGINAL CONFIG (UNCHANGED) ============
-const AI_KEY = 'AIzaSyAtmgwAAHE-QctXDH1Bf9-O6hP7Vwx6lyw';
-
+// ════════════════ ERP LOGIC (UNCHANGED) ════════════════
+const AI_KEY='AIzaSyAtmgwAAHE-QctXDH1Bf9-O6hP7Vwx6lyw';
 const STOCK_API='https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4AMHa8tawWnLldJFkLS9BrMz6VE-XKSAjPPkg-skCzpI/exec';
 const STOCK_CSV='https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
 const PAY_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv';
@@ -816,7 +1099,6 @@ async function sendAI(){
         const err=await r.json().catch(()=>({}));
         const msg=err.error?.message||'';
         if(r.status===429||msg.includes('quota')||msg.includes('limit')||msg.includes('RATE')){
-          console.warn(`${model} rate limited, trying next...`);
           continue;
         }
         throw new Error(msg||'API Error');
@@ -831,28 +1113,35 @@ async function sendAI(){
         aiRetryCount=0;
         success=true;
       }
-    }catch(e){console.warn(`${model} failed:`,e.message)}
+    }catch(e){}
   }
 
   if(!success){
     hideTyp();
     aiRetryCount++;
     if(aiRetryCount>=3){
-      addBot(`⚠️ <strong>API Limit Reached!</strong>\n\nThoda wait karo (1-2 min) phir try karo.\n\n💡 Tips:\n• Chhote questions puchho\n• Gap rakho\n• Page refresh karo\n\n🔄 Limit har minute reset hoti hai.`);
+      addBot(`⚠️ <strong>API Limit Reached!</strong>\n\nThoda wait karo (1-2 min) phir try karo.`);
       aiRetryCount=0;
     }else{
-      addBot(`⏳ Busy hai... ${3-aiRetryCount} retry baaki. 30 sec baad try karo.`);
+      addBot(`⏳ Busy hai... 30 sec baad try karo.`);
     }
   }
   sendBtn.disabled=false;input.focus();
 }
 
 load();
-window.addEventListener('load',()=>{renderAll();setTimeout(liveSync,800);setInterval(liveSync,5*60*1000)});
+window.addEventListener('load',()=>{
+  if(checkLogin()){
+    renderAll();
+    setTimeout(liveSync,800);
+    setInterval(liveSync,5*60*1000);
+  }
+});
+
 let touchStart=0;
 document.addEventListener('touchstart',e=>{touchStart=e.touches[0].clientX});
 document.addEventListener('touchend',e=>{const diff=e.changedTouches[0].clientX-touchStart;if(diff<-50)closeSidebar()});
-console.log('🔥 VE ERP + AI Ready');
+console.log('🔥 VG ERP + Premium Login Ready');
 </script>
 </body>
 </html>
