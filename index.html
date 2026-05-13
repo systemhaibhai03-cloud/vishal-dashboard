@@ -859,80 +859,132 @@ function renderTop5Sheet(rows, elId, title, mode){
   const nonEmpty=rows.filter(r=>r&&r.some(c=>String(c||'').trim()));
   if(!nonEmpty.length){el.innerHTML=titleHtml+'<div class="kpi-empty">No data in sheet</div>';return}
 
-  // Find header row — first row with text, or row that has 'site'/'name'/'party' keyword
+  // Find header row — look for row with name/debtor/site/party keyword
   let hdrIdx=0;
-  for(let i=0;i<Math.min(nonEmpty.length,8);i++){
+  for(let i=0;i<Math.min(nonEmpty.length,10);i++){
     const txt=nonEmpty[i].join(' ').toUpperCase();
-    if(txt.includes('SITE')||txt.includes('PARTY')||txt.includes('NAME')||txt.includes('INVOICE')||txt.includes('DEBTOR')){hdrIdx=i;break}
+    if(txt.includes('DEBTOR')||txt.includes('NAME')||txt.includes('SITE')||txt.includes('PARTY')||txt.includes('PROJECT')){hdrIdx=i;break}
   }
   const headers=nonEmpty[hdrIdx].map(h=>String(h||'').trim());
-  const dataRows=nonEmpty.slice(hdrIdx+1).filter(r=>r.some(c=>String(c||'').trim()&&!String(c||'').trim().toUpperCase().includes('TOTAL')));
 
-  if(!dataRows.length){el.innerHTML=titleHtml+'<div class="kpi-empty">No data rows found ('+nonEmpty.length+' total rows)</div>';return}
-
-  // Find best sort column
-  let sortCol=2;
-  if(mode==='age'){
-    // Look for days/ageing column by header name
+  // Find name column — first text column (debtor/party/site/name)
+  let nameCol=-1;
+  for(let c=0;c<headers.length;c++){
+    const h=headers[c].toUpperCase();
+    if(h.includes('DEBTOR')||h.includes('NAME')||h.includes('PARTY')||h.includes('SITE')||h.includes('PROJECT')){nameCol=c;break}
+  }
+  // Fallback: first column that has mostly text (non-numeric) values
+  if(nameCol<0){
     for(let c=0;c<headers.length;c++){
-      const h=headers[c].toUpperCase();
-      if(h.includes('DAY')||h.includes('AGE')||h.includes('OLD')||h.includes('PENDING')){sortCol=c;break}
+      const textCount=nonEmpty.slice(hdrIdx+1,hdrIdx+6).filter(r=>isNaN(pn(r[c]))&&String(r[c]||'').trim().length>2).length;
+      if(textCount>=2){nameCol=c;break}
     }
-    // Fallback: find column with values 0-3000 (days range)
-    if(sortCol===2){
-      for(let c=1;c<headers.length;c++){
-        const vals=dataRows.map(r=>pn(r[c])).filter(v=>v>0);
-        const avg=vals.reduce((a,b)=>a+b,0)/(vals.length||1);
-        if(avg>0&&avg<5000){sortCol=c;break}
+  }
+  if(nameCol<0)nameCol=1; // default to col 1
+
+  // Data rows — skip total/grand total rows for sorting, keep for display check
+  const allDataRows=nonEmpty.slice(hdrIdx+1).filter(r=>r.some(c=>String(c||'').trim()));
+  const dataRows=allDataRows.filter(r=>{
+    const txt=String(r[nameCol]||'').toUpperCase();
+    return !txt.includes('GRAND TOTAL')&&!txt.includes('GRAND  TOTAL');
+    // Keep "TOTAL" row only if it has a debtor name that includes total — we'll show it as rank 1 for amt
+  });
+
+  if(!dataRows.length){el.innerHTML=titleHtml+'<div class="kpi-empty">No data rows found</div>';return}
+
+  let sortCol=2;
+
+  if(mode==='age'){
+    // Ageing sheet: columns are 0-30d, 30-45d, 45-60d, <60d / Total
+    // Sort by LAST numeric column (highest aging bucket = rightmost = < 60 days or Total)
+    // First try: find column with header containing '<' or 'TOTAL' or highest bucket
+    let bestCol=-1;
+    for(let c=headers.length-1;c>=0;c--){
+      const h=headers[c].toUpperCase();
+      if(h.includes('TOTAL')||h.includes('< 60')||h.includes('<60')||h.includes('60')||h.includes('ABOVE')||h.includes('>60')){bestCol=c;break}
+    }
+    if(bestCol<0){
+      // Fallback: last column with any numeric data
+      for(let c=headers.length-1;c>nameCol;c--){
+        const hasData=dataRows.some(r=>pn(r[c])>0);
+        if(hasData){bestCol=c;break}
       }
     }
+    sortCol=bestCol>=0?bestCol:headers.length-1;
   } else {
-    // mode==='amt' — find column with largest values
+    // mode==='amt' — find column with LARGEST total sum (the main amount column)
     let maxSum=0;
-    for(let c=1;c<headers.length;c++){
+    for(let c=0;c<headers.length;c++){
+      if(c===nameCol)continue;
       const s=dataRows.reduce((a,r)=>a+pn(r[c]),0);
       if(s>maxSum){maxSum=s;sortCol=c}
     }
   }
 
-  const sorted=dataRows.filter(r=>pn(r[sortCol])>0).sort((a,b)=>pn(b[sortCol])-pn(a[sortCol])).slice(0,5);
-  if(!sorted.length){el.innerHTML=titleHtml+'<div class="kpi-empty">No numeric data found in column "'+(headers[sortCol]||sortCol)+'"</div>';return}
+  // Sort & take top 5, skip grand total row
+  const sorted=dataRows
+    .filter(r=>pn(r[sortCol])>0&&!String(r[nameCol]||'').toUpperCase().includes('GRAND'))
+    .sort((a,b)=>pn(b[sortCol])-pn(a[sortCol]))
+    .slice(0,5);
+
+  if(!sorted.length){el.innerHTML=titleHtml+'<div class="kpi-empty">No valid rows to display (sort col: "'+headers[sortCol]+'")</div>';return}
 
   const maxVal=pn(sorted[0][sortCol])||1;
   const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
-  const amtCellClass=mode==='amt'?'kpi-amt-cell':'';
+
+  // Show ALL columns up to 10
+  const showCols=Math.min(headers.length,10);
 
   let html=titleHtml;
-  html+='<div class="kpi-table-wrap"><table class="kpi-table"><thead><tr><th>#</th>';
-  headers.slice(0,10).forEach(h=>{html+='<th>'+h+'</th>'});
+  html+='<div class="kpi-table-wrap"><table class="kpi-table"><thead><tr><th style="width:40px">#</th>';
+  for(let c=0;c<showCols;c++){
+    const isSortHdr=c===sortCol;
+    html+='<th style="'+(isSortHdr?'background:rgba(0,0,0,.15)':'')+'">'+(headers[c]||'Col'+(c+1))+(isSortHdr?' ▼':'')+'</th>';
+  }
   html+='</tr></thead><tbody>';
 
   sorted.forEach((row,i)=>{
     const sortVal=pn(row[sortCol]);
-    const barW=Math.max(8,Math.round((sortVal/maxVal)*80));
-    const ageClr=sortVal>365?'#FF5722':sortVal>180?'#FF9800':sortVal>90?'#3b82f6':'#22c55e';
+    const barW=Math.max(6,Math.round((sortVal/maxVal)*60));
+    const ageClr=sortVal>500000?'#dc2626':sortVal>200000?'#d97706':sortVal>100000?'#2563eb':'#059669';
+    const ageBarClr=sortVal>365?'#dc2626':sortVal>180?'#d97706':sortVal>90?'#2563eb':'#059669';
     html+='<tr><td class="kpi-rank">'+medals[i]+'</td>';
-    row.slice(0,10).forEach((cell,ci)=>{
-      const n=pn(cell);
+    for(let ci=0;ci<showCols;ci++){
+      const cell=row[ci];
       const cv=String(cell||'').trim();
-      const isThisSort=ci===sortCol;
-      const isAmt=n>500&&ci>0&&mode==='amt';
-      const isDays=n>0&&n<5000&&ci>0&&mode==='age'&&isThisSort;
-      if(isDays){
-        html+='<td><strong style="color:'+ageClr+';font-size:13px">'+Math.round(n)+'d</strong>'
-          +'<span style="display:inline-block;height:4px;width:'+barW+'px;border-radius:2px;background:'+ageClr+'80;margin-left:6px;vertical-align:middle"></span></td>';
-      } else if(isAmt&&isThisSort){
-        html+='<td class="kpi-amt-cell" style="color:#fca5a5">'+fcF(n)+'<span style="display:inline-block;height:4px;width:'+barW+'px;border-radius:2px;background:rgba(255,87,34,.5);margin-left:6px;vertical-align:middle"></span></td>';
-      } else if(isAmt){
-        html+='<td class="kpi-amt-cell">'+fcF(n)+'</td>';
+      const n=pn(cv);
+      const isName=ci===nameCol;
+      const isSortCol=ci===sortCol;
+      const isNumeric=n>0&&!isName&&cv!=='0';
+
+      if(isName){
+        // DEBTOR NAME — always show as bold black text
+        html+='<td style="font-weight:800;color:#1e293b;font-size:13px;min-width:150px">'+(cv||'—')+'</td>';
+      } else if(isSortCol&&mode==='amt'){
+        // Main amount col — dark red, bold, with bar
+        html+='<td style="font-family:\'Courier New\',monospace;font-weight:900;font-size:14px;color:#991b1b">'
+          +fcF(n)
+          +'<span style="display:inline-block;height:5px;width:'+barW+'px;border-radius:3px;background:#dc2626;margin-left:8px;vertical-align:middle;opacity:.7"></span></td>';
+      } else if(isSortCol&&mode==='age'){
+        // Sort col in ageing — colored by size with bar
+        html+='<td style="font-family:\'Courier New\',monospace;font-weight:900;font-size:14px;color:'+ageBarClr+'">'
+          +fcF(n)
+          +'<span style="display:inline-block;height:5px;width:'+barW+'px;border-radius:3px;background:'+ageBarClr+';margin-left:8px;vertical-align:middle;opacity:.7"></span></td>';
+      } else if(isNumeric){
+        // Other numeric columns
+        html+='<td style="font-family:\'Courier New\',monospace;font-weight:700;color:#374151;font-size:12px">'+(n>0?fcF(n):'-')+'</td>';
       } else {
-        html+='<td class="kpi-site" style="'+(ci===0?'color:#fff;font-weight:700':'')+'">'+( cv||'-')+'</td>';
+        html+='<td style="color:#6b7280;font-size:12px">'+(cv||'-')+'</td>';
       }
-    });
+    }
     html+='</tr>';
   });
+
   html+='</tbody></table></div>';
-  html+='<div style="font-size:10px;color:#94a3b8;margin-top:8px;padding:0 2px;font-weight:600">Sort column: "'+headers[sortCol]+'" • '+sorted.length+' of '+dataRows.length+' rows shown • Last updated: '+new Date().toLocaleTimeString('en-IN')+'</div>';
+  html+='<div style="font-size:10px;color:#94a3b8;margin-top:8px;padding:0 2px;font-weight:600">'
+    +'Sort: "<strong style="color:#475569">'+headers[sortCol]+'</strong>" col • '
+    +sorted.length+' of '+dataRows.length+' rows • Updated: '+new Date().toLocaleTimeString('en-IN')
+    +'</div>';
   el.innerHTML=html;
 }
 
