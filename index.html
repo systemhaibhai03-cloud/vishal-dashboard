@@ -263,26 +263,75 @@ tr:hover{background:#f8fafc}
 .toast-msg{font-size:11px;color:var(--tl);line-height:1.4;word-wrap:break-word}
 .toast-x{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px;padding:0 4px}
 
-/* KPI DASHBOARD */
-.kpi-section{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:14px;padding:18px;margin-bottom:16px;color:#fff}
-.kpi-section-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.kpi-section-title .kpi-live{background:#22c55e;color:#fff;font-size:8px;padding:2px 7px;border-radius:10px;letter-spacing:1px;animation:blink 2s infinite}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
-.kpi-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;transition:.2s}
-.kpi-card:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
-.kpi-label{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:5px}
-.kpi-value{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#fff;word-break:break-all}
-.kpi-value.green{color:#06D6A0}.kpi-value.red{color:#FF5722}.kpi-value.yellow{color:#FFC107}.kpi-value.blue{color:#00B4D8}
-.kpi-sub{font-size:9px;color:rgba(255,255,255,.3);margin-top:3px}
-.kpi-table-wrap{overflow-x:auto;margin-top:14px;border-radius:8px;border:1px solid rgba(255,255,255,.1)}
-.kpi-table{width:100%;border-collapse:collapse;font-size:11px}
-.kpi-table th{background:rgba(255,255,255,.08);padding:8px 10px;text-align:left;font-weight:700;color:rgba(255,255,255,.6);border-bottom:1px solid rgba(255,255,255,.1);white-space:nowrap;font-size:10px}
-.kpi-table td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.05);color:rgba(255,255,255,.8);white-space:nowrap;font-size:11px}
-.kpi-table tr:hover td{background:rgba(255,255,255,.05)}
-.kpi-table .kpi-amt{font-family:'Courier New',monospace;font-weight:700;color:#FFC107}
+/* KPI DASHBOARD — VIBRANT THEME */
+.kpi-outer{margin-bottom:16px}
+.kpi-section{border-radius:16px;padding:20px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden}
+.kpi-section.kpi-main{background:linear-gradient(135deg,#1a0533 0%,#2d0a5e 50%,#0a1a4a 100%);border:1px solid rgba(139,92,246,.3);box-shadow:0 8px 32px rgba(139,92,246,.25),inset 0 1px 0 rgba(255,255,255,.08)}
+.kpi-section.kpi-week{background:linear-gradient(135deg,#002d1a 0%,#005c3b 50%,#003366 100%);border:1px solid rgba(6,214,160,.3);box-shadow:0 8px 32px rgba(6,214,160,.2),inset 0 1px 0 rgba(255,255,255,.08)}
+.kpi-section.kpi-debt-amt{background:linear-gradient(135deg,#330a00 0%,#5c1a00 50%,#330022 100%);border:1px solid rgba(255,87,34,.35);box-shadow:0 8px 32px rgba(255,87,34,.2),inset 0 1px 0 rgba(255,255,255,.08)}
+.kpi-section.kpi-debt-age{background:linear-gradient(135deg,#1a1500 0%,#3d2e00 50%,#1a0a00 100%);border:1px solid rgba(255,193,7,.3);box-shadow:0 8px 32px rgba(255,193,7,.18),inset 0 1px 0 rgba(255,255,255,.08)}
+.kpi-section::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;opacity:.07;pointer-events:none}
+.kpi-section.kpi-main::before{background:#a855f7}
+.kpi-section.kpi-week::before{background:#06D6A0}
+.kpi-section.kpi-debt-amt::before{background:#FF5722}
+.kpi-section.kpi-debt-age::before{background:#FFC107}
+.kpi-section-title{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.kpi-section-title .kpi-live{font-size:8px;padding:2px 8px;border-radius:10px;letter-spacing:1px;font-weight:700}
+.kpi-section.kpi-main .kpi-live{background:rgba(168,85,247,.8);color:#fff;animation:blink 2s infinite}
+.kpi-section.kpi-week .kpi-live{background:rgba(6,214,160,.8);color:#000;animation:blink 2s infinite}
+.kpi-section.kpi-debt-amt .kpi-live{background:rgba(255,87,34,.8);color:#fff;animation:blink 2s infinite}
+.kpi-section.kpi-debt-age .kpi-live{background:rgba(255,193,7,.85);color:#000;animation:blink 2s infinite}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi-card{border-radius:12px;padding:14px;transition:.25s;cursor:default;position:relative;overflow:hidden}
+.kpi-card:hover{transform:translateY(-3px)}
+.kpi-card.kc-purple{background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(109,40,217,.15));border:1px solid rgba(139,92,246,.4)}
+.kpi-card.kc-green{background:linear-gradient(135deg,rgba(6,214,160,.2),rgba(5,150,105,.12));border:1px solid rgba(6,214,160,.4)}
+.kpi-card.kc-orange{background:linear-gradient(135deg,rgba(255,87,34,.22),rgba(220,38,38,.12));border:1px solid rgba(255,87,34,.4)}
+.kpi-card.kc-blue{background:linear-gradient(135deg,rgba(0,180,216,.22),rgba(26,86,219,.12));border:1px solid rgba(0,180,216,.4)}
+.kpi-card.kc-yellow{background:linear-gradient(135deg,rgba(255,193,7,.22),rgba(217,119,6,.12));border:1px solid rgba(255,193,7,.4)}
+.kpi-card.kc-pink{background:linear-gradient(135deg,rgba(244,63,94,.22),rgba(190,24,93,.12));border:1px solid rgba(244,63,94,.4)}
+.kpi-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.65;margin-bottom:6px}
+.kpi-card.kc-purple .kpi-label{color:#c4b5fd}
+.kpi-card.kc-green .kpi-label{color:#6ee7b7}
+.kpi-card.kc-orange .kpi-label{color:#fca5a5}
+.kpi-card.kc-blue .kpi-label{color:#7dd3fc}
+.kpi-card.kc-yellow .kpi-label{color:#fde68a}
+.kpi-card.kc-pink .kpi-label{color:#fda4af}
+.kpi-value{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;line-height:1;word-break:break-all}
+.kpi-card.kc-purple .kpi-value{color:#e9d5ff}
+.kpi-card.kc-green .kpi-value{color:#6ee7b7}
+.kpi-card.kc-orange .kpi-value{color:#fca5a5}
+.kpi-card.kc-blue .kpi-value{color:#bae6fd}
+.kpi-card.kc-yellow .kpi-value{color:#fef08a}
+.kpi-card.kc-pink .kpi-value{color:#fecdd3}
+.kpi-badge{display:inline-block;font-size:8px;font-weight:800;padding:2px 7px;border-radius:8px;margin-top:5px;letter-spacing:.5px}
+.kpi-badge.planned{background:rgba(148,163,184,.2);color:#94a3b8;border:1px solid rgba(148,163,184,.3)}
+.kpi-badge.actual{background:rgba(34,197,94,.2);color:#4ade80;border:1px solid rgba(34,197,94,.3)}
+/* KPI TABLES */
+.kpi-table-wrap{overflow-x:auto;border-radius:10px;border:1px solid rgba(255,255,255,.1)}
+.kpi-table{width:100%;border-collapse:collapse;font-size:11px;min-width:500px}
+.kpi-table th{padding:9px 12px;text-align:left;font-weight:700;color:rgba(255,255,255,.55);border-bottom:1px solid rgba(255,255,255,.1);white-space:nowrap;font-size:10px;letter-spacing:.5px}
+.kpi-section.kpi-main .kpi-table th{background:rgba(139,92,246,.15)}
+.kpi-section.kpi-week .kpi-table th{background:rgba(6,214,160,.12)}
+.kpi-section.kpi-debt-amt .kpi-table th{background:rgba(255,87,34,.12)}
+.kpi-section.kpi-debt-age .kpi-table th{background:rgba(255,193,7,.1)}
+.kpi-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.05);white-space:nowrap;font-size:11px;color:rgba(255,255,255,.85)}
+.kpi-table tr:last-child td{border-bottom:none}
+.kpi-table tr:hover td{background:rgba(255,255,255,.04)}
+.kpi-table .kpi-rank{font-weight:800;font-size:13px;color:rgba(255,255,255,.3);width:30px}
+.kpi-table .kpi-site{font-weight:700;color:#fff;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+.kpi-table .kpi-amt-cell{font-family:'Courier New',monospace;font-weight:800}
+.kpi-section.kpi-main .kpi-amt-cell{color:#c4b5fd}
+.kpi-section.kpi-week .kpi-amt-cell{color:#6ee7b7}
+.kpi-section.kpi-debt-amt .kpi-amt-cell{color:#fca5a5}
+.kpi-section.kpi-debt-age .kpi-amt-cell{color:#fef08a}
+.kpi-age-bar{display:inline-block;height:4px;border-radius:2px;margin-left:8px;vertical-align:middle}
 .kpi-empty{padding:30px;text-align:center;color:rgba(255,255,255,.3);font-size:12px}
 .kpi-refresh-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:5px 12px;border-radius:8px;font-size:10px;cursor:pointer;font-weight:600}
-.kpi-refresh-btn:hover{background:rgba(255,255,255,.18)}
+.kpi-refresh-btn:hover{background:rgba(255,255,255,.2)}
+.kpi-row-planned td{opacity:.45;font-style:italic}
+.kpi-row-actual td{font-weight:700}
+.top5-medal{font-size:14px;margin-right:4px}
 
 @media(max-width:768px){
 .sb{transform:translateX(-100%);width:260px;box-shadow:4px 0 20px rgba(0,0,0,.2)}
@@ -420,10 +469,23 @@ tr:hover{background:#f8fafc}
 <div class="page" id="pg-kpi">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
     <div><h2>📈 KPI Dashboard <span class="badge b-live">🔴 LIVE</span></h2><p class="card-sub">Account Dept • Auto-fetched from Google Sheets</p></div>
-    <button class="btn btn-p btn-sm" onclick="fetchKPI()">🔄 Refresh KPI</button>
+    <button class="btn btn-p btn-sm" onclick="fetchAllKPI()">🔄 Refresh All</button>
   </div>
-  <div id="kpiContent">
-    <div class="kpi-section"><div class="kpi-section-title">📊 Loading KPI Data...<span class="kpi-live">LIVE</span></div><div class="kpi-empty">Click Refresh or wait for auto-load</div></div>
+  <div class="kpi-section kpi-main" id="kpiMonthly">
+    <div class="kpi-section-title">📊 Monthly KPI — Account Dept <span class="kpi-live">LIVE</span><button class="kpi-refresh-btn" onclick="fetchKPI()" style="margin-left:auto">🔄</button></div>
+    <div class="kpi-empty">Loading...</div>
+  </div>
+  <div class="kpi-section kpi-week" id="kpiWeekly">
+    <div class="kpi-section-title">📅 Weekly KPI <span class="kpi-live">LIVE</span><button class="kpi-refresh-btn" onclick="fetchWeeklyKPI()" style="margin-left:auto">🔄</button></div>
+    <div class="kpi-empty">Loading...</div>
+  </div>
+  <div class="kpi-section kpi-debt-amt" id="kpiTop5Amt">
+    <div class="kpi-section-title">🔴 Top 5 Debtors — Highest Amount <span class="kpi-live">LIVE</span><button class="kpi-refresh-btn" onclick="fetchTop5Amt()" style="margin-left:auto">🔄</button></div>
+    <div class="kpi-empty">Loading...</div>
+  </div>
+  <div class="kpi-section kpi-debt-age" id="kpiTop5Age">
+    <div class="kpi-section-title">⏰ Top 5 Debtors — Highest Ageing <span class="kpi-live">LIVE</span><button class="kpi-refresh-btn" onclick="fetchTop5Age()" style="margin-left:auto">🔄</button></div>
+    <div class="kpi-empty">Loading...</div>
   </div>
 </div>
 
@@ -573,7 +635,7 @@ const STOCK_API='https://script.google.com/macros/s/AKfycby25n7eswgvJxJ_-1Bfj_F4
 const STOCK_CSV='https://docs.google.com/spreadsheets/d/1hhDR4P7GqJzbrZ3yAI4lrNYXIehJo01GK8BJ-fM7csA/gviz/tq?tqx=out:csv&gid=0';
 const PAY_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vTIdqeYJVJRbkK0rk1OPzE2nWRdyfseDrLs0UXoSZf9i3Jq_CJBdNR1eMRJGLl49eRa2FXJWbbHsoiH/pub?output=csv';
 const PAY_SHEET_ID='1iHrPxhvsFnedO2Js7u3wmFbPAxLeC4F1WP71MBv5gcw';
-const KPI_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRjlpY9bep8bbudDaiMuZry79rlHp4gtSIluBrZuxo81BcTvFmOqd6kYYxrSFEA4TKqf5cTC_Cjd30o/pub?gid=0&single=true&output=csv';
+const KPI_CSV=''; // legacy - unused
 const SITE_GIDS=[174412694,118852844,548407335,751444077,1347791283,321034887,1979702996,1893067828,1234783628,977030954,1642019228,1920245490,2004258151,1666678437,458687889,178072507,1087865048,1871920534,1053026690,1485879867,1545839474,477557482,279843949,671962254,387496523,323328787,1725908395,493192291,1199190624,1110433204,606059273,1612881510,1855046779,980845244,989690966,0,2070489175,776970165,1201529354,1729965160,131840235,923489850,996674553,2095150463,22890483];
 
 // ===== SPLASH ANIMATION =====
@@ -602,7 +664,7 @@ const SITE_GIDS=[174412694,118852844,548407335,751444077,1347791283,321034887,19
 function enterERP(){
   const overlay=document.getElementById('splashOverlay');
   overlay.classList.add('exit');
-  setTimeout(()=>{overlay.style.display='none';renderAll();liveSync();fetchKPI();addNotification('🎉 Welcome!','VG ERP loaded successfully','success')},800);
+  setTimeout(()=>{overlay.style.display='none';renderAll();liveSync();fetchAllKPI();addNotification('🎉 Welcome!','VG ERP loaded successfully','success')},800);
 }
 
 // ===== DATA STORE =====
@@ -635,7 +697,7 @@ function goPage(id,el){
   if(el)el.classList.add('active');
   closeSidebar();window.scrollTo(0,0);renderAll();
   if(id==='debtors'&&D.debtors.length===0)setTimeout(fetchDebtors,500);
-  if(id==='kpi')fetchKPI();
+  if(id==='kpi')fetchAllKPI();
 }
 function rTab(id,el){const pg=document.getElementById('pg-report');pg.querySelectorAll('.tab-body').forEach(t=>t.classList.remove('active'));pg.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('rt-'+id).classList.add('active');if(el)el.classList.add('active')}
 function sTab(id,el){const pg=document.getElementById('pg-sales');pg.querySelectorAll('.tab-body').forEach(t=>t.classList.remove('active'));pg.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('st-'+id).classList.add('active');if(el)el.classList.add('active');if(id==='mw')drawMW()}
@@ -649,130 +711,194 @@ function globalSearch(v){document.querySelectorAll('.page.active table tbody tr'
 function closeModal(id){document.getElementById(id).classList.remove('show')}
 function renderAll(){drawReport();drawOutstanding();drawSales();drawEntries();drawPayments();drawRecoveries();drawStock();drawDebtors();updateStats();renderNotifications()}
 
-// ===== KPI FETCH & RENDER =====
-async function fetchKPI(){
-  document.getElementById('kpiContent').innerHTML='<div class="kpi-section"><div class="kpi-section-title">⏳ Fetching KPI Data...<span class="kpi-live">LIVE</span></div><div class="kpi-empty">Loading from Google Sheets...</div></div>';
-  try{
-    const r=await fetch(KPI_CSV+'&t='+Date.now());
-    if(!r.ok)throw new Error('Fetch failed');
-    const text=await r.text();
-    const rows=text.split('\n').map(csvRow).filter(r=>r.length>0&&r.some(c=>c.trim()));
-    D.kpiData=rows;
-    save();
-    renderKPI(rows);
-  }catch(e){
-    document.getElementById('kpiContent').innerHTML='<div class="kpi-section"><div class="kpi-section-title">❌ KPI Load Failed</div><div class="kpi-empty">'+e.message+'<br><br><button class="kpi-refresh-btn" onclick="fetchKPI()">🔄 Retry</button></div></div>';
-  }
-}
+// ===== KPI URLs =====
+const KPI_MONTHLY_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRjlpY9bep8bbudDaiMuZry79rlHp4gtSIluBrZuxo81BcTvFmOqd6kYYxrSFEA4TKqf5cTC_Cjd30o/pub?output=csv';
+const KPI_WEEKLY_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRjlpY9bep8bbudDaiMuZry79rlHp4gtSIluBrZuxo81BcTvFmOqd6kYYxrSFEA4TKqf5cTC_Cjd30o/pub?gid=1251419768&single=true&output=csv';
+const DEBTOR_AMT_CSV='https://docs.google.com/spreadsheets/d/'+PAY_SHEET_ID+'/gviz/tq?tqx=out:csv&gid=1159335272';
+const DEBTOR_AGE_CSV='https://docs.google.com/spreadsheets/d/'+PAY_SHEET_ID+'/gviz/tq?tqx=out:csv&gid=1524794951';
 
-function renderKPI(rows){
-  if(!rows||rows.length===0){
-    document.getElementById('kpiContent').innerHTML='<div class="kpi-section"><div class="kpi-section-title">📈 KPI Dashboard</div><div class="kpi-empty">No data found in sheet</div></div>';
-    return;
-  }
+async function fetchAllKPI(){fetchKPI();fetchWeeklyKPI();fetchTop5Amt();fetchTop5Age()}
 
+// ===== GENERIC KPI TABLE RENDERER =====
+function parseKPISheet(rows){
   // Find header row
-  let headerIdx=-1;
+  let hdrIdx=-1;
   for(let i=0;i<Math.min(rows.length,10);i++){
     const txt=rows[i].join(' ').toUpperCase();
-    if(txt.includes('KPI')||txt.includes('METRIC')||txt.includes('PARAMETER')||txt.includes('DESCRIPTION')||txt.includes('TARGET')||txt.includes('ACTUAL')){
-      headerIdx=i;break;
-    }
+    if(txt.includes('ACTUAL')||txt.includes('PLANNED')||txt.includes('TARGET')||txt.includes('WEEK')||txt.includes('MONTH')||txt.includes('DATE')){hdrIdx=i;break}
   }
+  if(hdrIdx<0){
+    // use first non-empty row as header
+    for(let i=0;i<rows.length;i++){if(rows[i].some(c=>c.trim())){hdrIdx=i;break}}
+  }
+  const headers=(rows[hdrIdx]||[]).map(h=>String(h||'').trim());
+  const dataRows=rows.slice(hdrIdx+1).filter(r=>r.some(c=>String(c||'').trim()));
+  return{headers,dataRows};
+}
 
-  // Extract summary stats from first few rows
-  const summaryRows=rows.slice(0,headerIdx>=0?headerIdx:Math.min(5,rows.length));
-  const dataRows=headerIdx>=0?rows.slice(headerIdx+1):rows;
+function buildKPICards(headers,dataRows,cardClass){
+  // Find columns with amounts — skip first 2 (sno/date/label)
+  const colorCycle=['kc-purple','kc-green','kc-orange','kc-blue','kc-yellow','kc-pink'];
+  let cardsHtml='<div class="kpi-grid">';
+  // Try to extract planned vs actual
+  const plannedRow=dataRows.find(r=>String(r[1]||'').toLowerCase().includes('plan'));
+  const actualRow=dataRows.find(r=>String(r[1]||'').toLowerCase().includes('actual'))||dataRows[0];
+  const baseRow=actualRow||dataRows[0];
+  if(!baseRow){return'<div class="kpi-empty">No data</div>'}
+  let ci=0;
+  for(let c=2;c<Math.min(headers.length,12);c++){
+    const label=headers[c];if(!label)continue;
+    const actualVal=pn(baseRow[c]);
+    const plannedVal=plannedRow?pn(plannedRow[c]):null;
+    if(actualVal===0&&!plannedRow)continue;
+    const cc=colorCycle[ci%colorCycle.length];ci++;
+    cardsHtml+='<div class="kpi-card '+cc+'"><div class="kpi-label">'+label+'</div>';
+    if(plannedVal!==null&&plannedVal>0){cardsHtml+='<div class="kpi-value" style="font-size:15px;opacity:.5">'+fcF(plannedVal)+'</div><div class="kpi-badge planned">Planned</div><br>'}
+    cardsHtml+='<div class="kpi-value">'+fcF(actualVal)+'</div><div class="kpi-badge actual">Actual</div></div>';
+  }
+  cardsHtml+='</div>';
+  return cardsHtml;
+}
 
-  // Collect all numeric KPI cards
-  const kpiCards=[];
-  const tableRows=[];
-
-  // Try to parse as structured KPI table
-  const headers=headerIdx>=0?rows[headerIdx]:null;
-
-  dataRows.forEach((row,i)=>{
-    if(!row||row.length===0||row.every(c=>!c.trim()))return;
-    const firstCell=String(row[0]||'').trim();
-    if(!firstCell||firstCell.toUpperCase()==='TOTAL'||firstCell.toUpperCase()==='GRAND TOTAL')return;
-
-    // If we have headers, build structured table rows
-    if(headers){
-      const obj={};
-      headers.forEach((h,idx)=>{obj[String(h).trim()]=String(row[idx]||'').trim()});
-      tableRows.push({cells:row.slice(0,Math.max(headers.length,8)),raw:obj});
-    }
-
-    // Extract KPI cards (name + numeric value pairs)
-    for(let j=0;j<row.length-1;j++){
-      const label=String(row[j]||'').trim();
-      const val=String(row[j+1]||'').trim();
-      if(label.length>3&&label.length<60&&pn(val)>0&&!label.match(/^\d/)){
-        kpiCards.push({label,value:val,rawNum:pn(val)});
-        j++;
-      }
-    }
+function buildKPITable(headers,dataRows,amtCellClass){
+  if(!dataRows.length)return'<div class="kpi-empty">No rows found</div>';
+  let h='<div class="kpi-table-wrap"><table class="kpi-table"><thead><tr>';
+  headers.slice(0,12).forEach(hh=>{h+='<th>'+hh+'</th>'});
+  h+='</tr></thead><tbody>';
+  dataRows.forEach((row,ri)=>{
+    const isPlanned=String(row[1]||'').toLowerCase().includes('plan');
+    h+='<tr class="'+(isPlanned?'kpi-row-planned':'kpi-row-actual')+'">';
+    row.slice(0,12).forEach((cell,ci)=>{
+      const cv=String(cell||'').trim();
+      const n=pn(cv);
+      const isAmt=n>500&&ci>1&&!cv.includes('-');
+      h+='<td class="'+(isAmt?'kpi-amt-cell '+amtCellClass:'')+'">'+( isAmt?fcF(n):(cv||'-'))+'</td>';
+    });
+    h+='</tr>';
   });
+  h+='</tbody></table></div>';
+  return h;
+}
 
-  let html='';
+async function fetchKPI(){
+  const el=document.getElementById('kpiMonthly');
+  const titleHtml=el.querySelector('.kpi-section-title').outerHTML;
+  el.innerHTML=titleHtml+'<div class="kpi-empty">⏳ Fetching monthly KPI...</div>';
+  try{
+    const r=await fetch(KPI_MONTHLY_CSV+'&t='+Date.now());
+    if(!r.ok)throw new Error('Failed');
+    const text=await r.text();
+    const rows=text.split('\n').map(csvRow).filter(r=>r.some(c=>c.trim()));
+    D.kpiData=rows;save();
+    const{headers,dataRows}=parseKPISheet(rows);
+    let html=titleHtml;
+    html+=buildKPICards(headers,dataRows,'kc-purple');
+    html+=buildKPITable(headers,dataRows,'');
+    el.innerHTML=html;
+    addNotification('📊 Monthly KPI Updated','Account dept data refreshed','success');
+  }catch(e){el.querySelector&&(el.innerHTML=titleHtml+'<div class="kpi-empty">❌ '+e.message+' <button class="kpi-refresh-btn" onclick="fetchKPI()">Retry</button></div>')}
+}
 
-  // Summary cards section (top KPIs)
-  const topCards=kpiCards.slice(0,12);
-  if(topCards.length>0){
-    html+='<div class="kpi-section">';
-    html+='<div class="kpi-section-title">📊 Key Performance Indicators <span class="kpi-live">LIVE</span><button class="kpi-refresh-btn" onclick="fetchKPI()" style="margin-left:auto">🔄 Refresh</button></div>';
-    html+='<div class="kpi-grid">';
-    const colorClasses=['green','yellow','blue','red','green','yellow'];
-    topCards.forEach((kpi,idx)=>{
-      const isAmt=kpi.value.includes('₹')||kpi.rawNum>10000;
-      const displayVal=isAmt?fcF(kpi.rawNum):kpi.value;
-      const colorClass=colorClasses[idx%colorClasses.length];
-      html+='<div class="kpi-card"><div class="kpi-label">'+kpi.label+'</div><div class="kpi-value '+colorClass+'">'+displayVal+'</div></div>';
-    });
-    html+='</div></div>';
-  }
+async function fetchWeeklyKPI(){
+  const el=document.getElementById('kpiWeekly');
+  const titleHtml=el.querySelector('.kpi-section-title').outerHTML;
+  el.innerHTML=titleHtml+'<div class="kpi-empty">⏳ Fetching weekly KPI...</div>';
+  try{
+    const r=await fetch(KPI_WEEKLY_CSV+'&t='+Date.now());
+    if(!r.ok)throw new Error('Failed');
+    const text=await r.text();
+    const rows=text.split('\n').map(csvRow).filter(r=>r.some(c=>c.trim()));
+    const{headers,dataRows}=parseKPISheet(rows);
+    let html=titleHtml;
+    html+=buildKPICards(headers,dataRows,'kc-green');
+    html+=buildKPITable(headers,dataRows,'');
+    el.innerHTML=html;
+  }catch(e){el.innerHTML=titleHtml+'<div class="kpi-empty">❌ '+e.message+' <button class="kpi-refresh-btn" onclick="fetchWeeklyKPI()">Retry</button></div>'}
+}
 
-  // Full data table
-  if(headers&&tableRows.length>0){
-    html+='<div class="kpi-section">';
-    html+='<div class="kpi-section-title">📋 Full KPI Report</div>';
+async function fetchTop5Amt(){
+  const el=document.getElementById('kpiTop5Amt');
+  const titleHtml=el.querySelector('.kpi-section-title').outerHTML;
+  el.innerHTML=titleHtml+'<div class="kpi-empty">⏳ Fetching top debtors by amount...</div>';
+  try{
+    const r=await fetch(DEBTOR_AMT_CSV+'&t='+Date.now());
+    if(!r.ok)throw new Error('Failed');
+    const text=await r.text();
+    const rows=text.split('\n').map(csvRow).filter(r=>r.some(c=>c.trim()));
+    // Parse: find header, then get all data rows, sort by amount, show top5
+    const{headers,dataRows}=parseKPISheet(rows);
+    // Find amount column (largest numeric column)
+    let amtCol=2;let maxSum=0;
+    for(let c=1;c<Math.min(headers.length,15);c++){
+      const colSum=dataRows.reduce((s,r)=>s+pn(r[c]),0);
+      if(colSum>maxSum){maxSum=colSum;amtCol=c}
+    }
+    const sorted=dataRows.filter(r=>pn(r[amtCol])>0).sort((a,b)=>pn(b[amtCol])-pn(a[amtCol])).slice(0,5);
+    const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+    let html=titleHtml;
+    if(!sorted.length){html+='<div class="kpi-empty">No debtor data found</div>';el.innerHTML=html;return}
+    const maxAmt=pn(sorted[0][amtCol]);
     html+='<div class="kpi-table-wrap"><table class="kpi-table"><thead><tr>';
-    headers.slice(0,10).forEach(h=>{html+='<th>'+h+'</th>'});
+    ['#',...headers.slice(0,8)].forEach(h=>html+='<th>'+h+'</th>');
     html+='</tr></thead><tbody>';
-    tableRows.forEach(row=>{
-      html+='<tr>';
-      row.cells.slice(0,10).forEach((cell,idx)=>{
+    sorted.forEach((row,i)=>{
+      const amt=pn(row[amtCol]);
+      const barW=Math.round((amt/maxAmt)*100);
+      html+='<tr><td class="kpi-rank">'+medals[i]+'</td>';
+      row.slice(0,8).forEach((cell,ci)=>{
         const n=pn(cell);
-        const isAmt=n>1000&&idx>0;
-        html+='<td class="'+(isAmt?'kpi-amt':'')+'">'+( isAmt?fcF(n):(cell||'-'))+'</td>';
+        const isAmt=n>500&&ci>0;
+        html+='<td class="'+(isAmt?'kpi-amt-cell':'kpi-site')+'">'+( isAmt?'<span>'+fcF(n)+'</span>'+(ci===amtCol?'<span class="kpi-age-bar" style="width:'+barW+'px;background:rgba(255,87,34,.6)"></span>':''):(cell||'-'))+'</td>';
       });
       html+='</tr>';
     });
-    html+='</tbody></table></div></div>';
-  } else if(rows.length>0){
-    // Fallback: show raw table
-    html+='<div class="kpi-section">';
-    html+='<div class="kpi-section-title">📋 KPI Data</div>';
-    html+='<div class="kpi-table-wrap"><table class="kpi-table"><tbody>';
-    rows.slice(0,50).forEach(row=>{
-      if(!row.some(c=>c.trim()))return;
-      html+='<tr>';
-      row.slice(0,10).forEach(cell=>{
+    html+='</tbody></table></div>';
+    el.innerHTML=html;
+  }catch(e){document.getElementById('kpiTop5Amt').innerHTML=document.getElementById('kpiTop5Amt').innerHTML.split('kpi-empty')[0]+'<div class="kpi-empty">❌ '+e.message+' <button class="kpi-refresh-btn" onclick="fetchTop5Amt()">Retry</button></div>';}
+}
+
+async function fetchTop5Age(){
+  const el=document.getElementById('kpiTop5Age');
+  const titleHtml=el.querySelector('.kpi-section-title').outerHTML;
+  el.innerHTML=titleHtml+'<div class="kpi-empty">⏳ Fetching top debtors by ageing...</div>';
+  try{
+    const r=await fetch(DEBTOR_AGE_CSV+'&t='+Date.now());
+    if(!r.ok)throw new Error('Failed');
+    const text=await r.text();
+    const rows=text.split('\n').map(csvRow).filter(r=>r.some(c=>c.trim()));
+    const{headers,dataRows}=parseKPISheet(rows);
+    // Find days/ageing column
+    let ageCol=3;
+    for(let c=1;c<Math.min(headers.length,15);c++){
+      const h=headers[c].toUpperCase();
+      if(h.includes('DAY')||h.includes('AGE')||h.includes('OLD')){ageCol=c;break}
+    }
+    const sorted=dataRows.filter(r=>pn(r[ageCol])>0).sort((a,b)=>pn(b[ageCol])-pn(a[ageCol])).slice(0,5);
+    const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+    let html=titleHtml;
+    if(!sorted.length){html+='<div class="kpi-empty">No ageing data found</div>';el.innerHTML=html;return}
+    const maxAge=pn(sorted[0][ageCol]);
+    html+='<div class="kpi-table-wrap"><table class="kpi-table"><thead><tr>';
+    ['#',...headers.slice(0,8)].forEach(h=>html+='<th>'+h+'</th>');
+    html+='</tr></thead><tbody>';
+    sorted.forEach((row,i)=>{
+      const days=pn(row[ageCol]);
+      const barW=Math.round((days/maxAge)*100);
+      const ageClr=days>365?'#FF5722':days>180?'#FFC107':days>90?'#3b82f6':'#22c55e';
+      html+='<tr><td class="kpi-rank">'+medals[i]+'</td>';
+      row.slice(0,8).forEach((cell,ci)=>{
         const n=pn(cell);
-        const isAmt=n>1000;
-        html+='<td class="'+(isAmt?'kpi-amt':'')+'">'+( isAmt?fcF(n):(cell||'-'))+'</td>';
+        const isDays=ci===ageCol;
+        const isAmt=n>500&&ci>0&&!isDays;
+        if(isDays){html+='<td><strong style="color:'+ageClr+'">'+Math.round(n)+'d</strong><span class="kpi-age-bar" style="width:'+barW+'px;background:'+ageClr+'60"></span></td>'}
+        else if(isAmt){html+='<td class="kpi-amt-cell">'+fcF(n)+'</td>'}
+        else{html+='<td class="kpi-site">'+(cell||'-')+'</td>'}
       });
       html+='</tr>';
     });
-    html+='</tbody></table></div></div>';
-  }
-
-  if(!html){
-    html='<div class="kpi-section"><div class="kpi-section-title">📈 KPI Dashboard</div><div class="kpi-empty">Data loaded but no parseable KPIs found.<br>Please check sheet format.</div></div>';
-  }
-
-  document.getElementById('kpiContent').innerHTML=html;
-  addNotification('📈 KPI Updated','Account dept KPI data refreshed','success');
+    html+='</tbody></table></div>';
+    el.innerHTML=html;
+  }catch(e){el.innerHTML=titleHtml+'<div class="kpi-empty">❌ '+e.message+'</div>'}
 }
 
 // ===== OUTSTANDING — hero only, no stat cards =====
@@ -1029,7 +1155,7 @@ window.addEventListener('load',()=>{
   },3000);
   setInterval(liveSync,5*60*1000);
   setInterval(checkAlerts,5*60*1000);
-  setInterval(fetchKPI,10*60*1000);
+  setInterval(fetchAllKPI,10*60*1000);
 });
 let touchStart=0;
 document.addEventListener('touchstart',e=>{touchStart=e.touches[0].clientX});
