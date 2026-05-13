@@ -11,108 +11,103 @@
 :root{--p:#1a56db;--pd:#1e40af;--pl:#dbeafe;--s:#059669;--w:#d97706;--d:#dc2626;--bg:#f1f5f9;--wh:#fff;--tx:#1e293b;--tl:#64748b;--br:#e2e8f0;--sb:250px}
 body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:var(--tx)}
 
-/* ============ SPLASH — PROFESSIONAL CANVA STYLE ============ */
-#splashOverlay{position:fixed;inset:0;z-index:9999;overflow:hidden;font-family:'Montserrat','Rajdhani',sans-serif}
-#splashOverlay.sp-exit{animation:spExitAnim .8s cubic-bezier(.9,0,.1,1) forwards}
-@keyframes spExitAnim{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-30px)}}
+/* ============ SPLASH CANVA SLIDES ============ */
+#spWrap{position:fixed;inset:0;z-index:9999;overflow:hidden;background:#0b1d3a;font-family:'Segoe UI',sans-serif}
+#spWrap.sp-exit{animation:spExitA .75s cubic-bezier(.77,0,.18,1) forwards}
+@keyframes spExitA{0%{clip-path:circle(150% at 50% 50%)}100%{clip-path:circle(0% at 50% 50%)}}
+.cslide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateX(100%);transition:transform .65s cubic-bezier(.77,0,.18,1),opacity .5s ease;
+  pointer-events:none}
+.cslide.cs-on{opacity:1;transform:translateX(0);pointer-events:all}
+.cslide.cs-out{opacity:0;transform:translateX(-100%)}
 
-/* SLIDE SYSTEM */
-.sp-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateX(100%);transition:transform .65s cubic-bezier(.77,0,.18,1),opacity .65s ease;pointer-events:none}
-.sp-slide.sp-active{opacity:1;transform:translateX(0);pointer-events:all}
-.sp-slide.sp-prev{opacity:0;transform:translateX(-100%)}
+/* ─ SLIDE 1 DARK BLUE ─ */
+#cs1{background:linear-gradient(135deg,#051730 0%,#0d2a5e 50%,#051730 100%)}
+.cs1-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(59,130,246,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.06) 1px,transparent 1px);background-size:52px 52px;animation:gMove 20s linear infinite}
+@keyframes gMove{to{background-position:52px 52px}}
+.cs1-glow-a{position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.2) 0%,transparent 70%);top:-180px;right:-120px;animation:gPulse 7s ease-in-out infinite}
+.cs1-glow-b{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.12) 0%,transparent 70%);bottom:-130px;left:-80px;animation:gPulse 9s ease-in-out infinite 2s}
+@keyframes gPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.cs1-parts{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.cs1p{position:absolute;border-radius:50%;background:#60a5fa;animation:pUp linear infinite}
+@keyframes pUp{0%{opacity:0;transform:translateY(100vh)}10%{opacity:.5}85%{opacity:.15}100%{opacity:0;transform:translateY(-10px)}}
+.cs1-inner{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 16px}
 
-/* SLIDE 1 — Deep Navy */
-#spS1{background:#0a1628}
-.s1-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a1628 0%,#0d2150 45%,#0a1628 100%)}
-.s1-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.07) 1px,transparent 1px);background-size:55px 55px;animation:gridMove 25s linear infinite}
-@keyframes gridMove{from{background-position:0 0}to{background-position:55px 55px}}
-.s1-glow1{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.22) 0%,transparent 70%);top:-150px;right:-100px;animation:glowP 6s ease-in-out infinite}
-.s1-glow2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.13) 0%,transparent 70%);bottom:-120px;left:-80px;animation:glowP 8s ease-in-out infinite 2s}
-@keyframes glowP{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-.s1-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.s1p{position:absolute;border-radius:50%;background:#60a5fa;animation:pRise linear infinite}
-@keyframes pRise{0%{opacity:0;transform:translateY(100vh)}10%{opacity:.5}85%{opacity:.2}100%{opacity:0;transform:translateY(-5vh)}}
+/* Ring logo */
+.cs1-ring{position:relative;width:150px;height:150px;margin-bottom:26px;animation:rPop .8s cubic-bezier(.34,1.4,.64,1) .1s both}
+@keyframes rPop{from{opacity:0;transform:scale(.3) rotate(-180deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+.cs1-ra{position:absolute;inset:-3px;border-radius:50%;border:3px solid transparent;border-top-color:#2563eb;border-right-color:#60a5fa;animation:rSpin 2s linear infinite;filter:drop-shadow(0 0 8px #2563eb88)}
+.cs1-rb{position:absolute;inset:5px;border-radius:50%;border:2px solid transparent;border-bottom-color:#93c5fd;border-left-color:#1e40af;animation:rSpin 3.2s linear infinite reverse}
+@keyframes rSpin{to{transform:rotate(360deg)}}
+.cs1-core{position:absolute;inset:18px;border-radius:50%;background:linear-gradient(145deg,#1e3a8a,#2563eb);display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(37,99,235,.6),inset 0 2px 4px rgba(255,255,255,.15)}
 
-/* S1 Content */
-.s1-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px}
-.s1-logo-wrap{position:relative;width:164px;height:164px;margin-bottom:28px;animation:logoPop .8s cubic-bezier(.34,1.4,.64,1) .1s both}
-@keyframes logoPop{from{opacity:0;transform:scale(.4) rotate(-90deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-.s1-ring-outer{position:absolute;inset:-4px;border-radius:50%;border:3px solid transparent;border-top-color:#2563eb;border-right-color:#60a5fa;animation:spinR 2.2s linear infinite;filter:drop-shadow(0 0 10px rgba(37,99,235,.8))}
-.s1-ring-mid{position:absolute;inset:6px;border-radius:50%;border:2px solid transparent;border-bottom-color:#93c5fd;border-left-color:#1d4ed8;animation:spinR 3.5s linear infinite reverse}
-.s1-ring-inner{position:absolute;inset:2px;border-radius:50%;border:1px solid rgba(96,165,250,.2)}
-@keyframes spinR{to{transform:rotate(360deg)}}
-.s1-core{position:absolute;inset:20px;border-radius:50%;background:linear-gradient(145deg,#1e3a8a,#1d4ed8 50%,#2563eb);display:flex;align-items:center;justify-content:center;box-shadow:0 0 50px rgba(37,99,235,.6),0 0 100px rgba(37,99,235,.2),inset 0 2px 4px rgba(255,255,255,.15)}
-/* VT Logo inside core */
-.vt-svg{width:82px;height:60px}
+.cs1-name{font-size:clamp(22px,4vw,38px);font-weight:900;color:#fff;letter-spacing:2px;text-transform:uppercase;line-height:1.05;animation:sUp .7s cubic-bezier(.34,1.2,.64,1) .35s both}
+.cs1-name b{color:#60a5fa}
+.cs1-tag{font-size:13px;font-style:italic;color:#93c5fd;margin-top:6px;animation:sUp .6s ease .55s both}
+@keyframes sUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.cs1-div{width:0;height:3px;background:linear-gradient(90deg,transparent,#3b82f6,#93c5fd,#3b82f6,transparent);border-radius:3px;margin:18px 0;animation:dW .8s ease .8s forwards}
+@keyframes dW{to{width:280px}}
+.cs1-sub{font-size:9px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.35);animation:sUp .5s ease 1s both}
+.cs1-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:14px;animation:sUp .5s ease 1.2s both}
+.cs1-b{font-size:8px;font-weight:700;letter-spacing:.8px;padding:5px 12px;border-radius:20px;text-transform:uppercase;border:1px solid rgba(96,165,250,.35);color:#93c5fd;background:rgba(37,99,235,.15)}
+.cs1-prog{width:270px;margin-top:20px;animation:sUp .4s ease 1.4s both}
+.cs1-plbl{font-size:8px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:7px;text-align:left}
+.cs1-ptrack{height:3px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.cs1-pfill{height:100%;width:0;background:linear-gradient(90deg,#1d4ed8,#3b82f6,#93c5fd);border-radius:3px;transition:width .07s linear}
+.cs1-next{margin-top:24px;padding:13px 40px;border-radius:50px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#fff;cursor:pointer;opacity:0;animation:sUp .5s ease 1.7s forwards;box-shadow:0 8px 30px rgba(37,99,235,.5);transition:transform .2s,box-shadow .2s}
+.cs1-next:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(37,99,235,.65)}
 
-.s1-name{font-weight:900;font-size:clamp(20px,4vw,36px);color:#fff;letter-spacing:1.5px;text-transform:uppercase;line-height:1;animation:slideU .7s cubic-bezier(.34,1.2,.64,1) .4s both}
-.s1-name-blue{color:#60a5fa}
-.s1-tagline{font-size:13px;font-style:italic;color:#93c5fd;margin-top:6px;font-weight:400;animation:slideU .6s ease .6s both}
-@keyframes slideU{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
-.s1-div{width:0;height:3px;background:linear-gradient(90deg,transparent,#2563eb,#93c5fd,#2563eb,transparent);border-radius:3px;margin:18px 0;animation:divW .8s ease .9s forwards}
-@keyframes divW{to{width:280px}}
-.s1-sub{font-size:9px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.35);animation:slideU .5s ease 1.1s both}
-.s1-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:14px;animation:slideU .5s ease 1.25s both}
-.s1-bdg{font-size:8.5px;font-weight:700;letter-spacing:.8px;padding:5px 12px;border-radius:20px;text-transform:uppercase;border:1px solid rgba(96,165,250,.35);color:#93c5fd;background:rgba(37,99,235,.12)}
-.s1-prog-wrap{width:280px;margin-top:22px;animation:slideU .4s ease 1.4s both}
-.s1-prog-lbl{font-size:8.5px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:7px;text-align:left}
-.s1-prog-track{height:3px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
-.s1-prog-fill{height:100%;width:0;background:linear-gradient(90deg,#1d4ed8,#3b82f6,#93c5fd);border-radius:3px;transition:width .07s linear;box-shadow:0 0 8px #3b82f6}
-.s1-btn{margin-top:26px;padding:15px 52px;border-radius:50px;background:linear-gradient(135deg,#1d4ed8,#2563eb,#3b82f6);border:1px solid rgba(255,255,255,.15);font-size:12px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#fff;cursor:pointer;opacity:0;animation:slideU .5s ease 1.8s forwards;box-shadow:0 8px 32px rgba(37,99,235,.55);transition:transform .2s,box-shadow .2s;font-family:inherit;position:relative;overflow:hidden}
-.s1-btn:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(37,99,235,.65)}
-.s1-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent)}
-.s1-ver{margin-top:12px;font-size:9px;color:rgba(255,255,255,.18);letter-spacing:3px;opacity:0;animation:slideU .4s ease 2s forwards}
+/* ─ SLIDE 2 SERVICES ─ */
+#cs2{background:#fff}
+.cs2-bg{position:absolute;inset:0;background:linear-gradient(160deg,#f0f7ff 0%,#dbeafe 25%,#fff 60%)}
+.cs2-inner{position:relative;z-index:5;width:100%;max-width:1100px;padding:0 20px;text-align:center}
+.cs2-badge{display:inline-block;font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#1d4ed8;background:#dbeafe;padding:5px 16px;border-radius:20px;margin-bottom:12px}
+.cs2-title{font-size:clamp(26px,4vw,42px);font-weight:900;color:#1e3a8a;letter-spacing:-0.5px;margin-bottom:6px}
+.cs2-title span{color:#2563eb}
+.cs2-sub{font-size:13px;color:#64748b;margin-bottom:28px;font-weight:400}
+.cs2-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.cs2-card{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:3/4;cursor:default;transition:transform .3s,box-shadow .3s;box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.cs2-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 16px 48px rgba(0,0,0,.2)}
+.cs2-img{width:100%;height:100%;object-fit:cover;display:block}
+.cs2-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,20,50,.85) 0%,rgba(10,20,50,.2) 50%,transparent 100%)}
+.cs2-clabel{position:absolute;bottom:0;left:0;right:0;padding:14px 14px 16px;text-align:left}
+.cs2-clabel h3{font-size:14px;font-weight:800;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.cs2-clabel p{font-size:10px;color:rgba(255,255,255,.65);margin:3px 0 0;font-weight:500}
+.cs2-nxt{padding:13px 44px;border-radius:50px;background:#1d4ed8;border:none;font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#fff;cursor:pointer;box-shadow:0 8px 24px rgba(29,78,216,.4);transition:.25s}
+.cs2-nxt:hover{background:#1e40af;transform:translateY(-2px);box-shadow:0 12px 32px rgba(29,78,216,.5)}
 
-/* SLIDE 2 — White + Blue */
-#spS2{background:#fff}
-.s2-bg{position:absolute;inset:0;background:linear-gradient(150deg,#f0f7ff 0%,#dbeafe 35%,#fff 65%,#f0f9ff 100%)}
-.s2-circle1{position:absolute;top:-120px;right:-100px;width:450px;height:450px;border-radius:50%;background:linear-gradient(135deg,#bfdbfe,#dbeafe);opacity:.45}
-.s2-circle2{position:absolute;bottom:-80px;left:-80px;width:320px;height:320px;border-radius:50%;background:linear-gradient(135deg,#dbeafe,#e0f2fe);opacity:.35}
-.s2-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(37,99,235,.035) 0px,transparent 1px,transparent 44px);animation:linesF 15s linear infinite}
-@keyframes linesF{from{background-position:0 0}to{background-position:0 45px}}
-
-.s2-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 24px;max-width:580px;width:100%}
-.s2-icon{width:88px;height:88px;border-radius:22px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:22px;box-shadow:0 12px 40px rgba(37,99,235,.32);animation:iconP .6s cubic-bezier(.34,1.5,.64,1) both}
-@keyframes iconP{from{opacity:0;transform:scale(.3) rotate(-30deg)}to{opacity:1;transform:none}}
-.s2-title{font-size:clamp(26px,4.5vw,44px);font-weight:900;color:#1e3a8a;line-height:1;letter-spacing:-1px}
-.s2-title em{color:#2563eb;font-style:normal}
-.s2-desc{font-size:14px;color:#475569;margin-top:10px;font-weight:500;line-height:1.6}
-.s2-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px;width:100%}
-.s2-box{background:#fff;border:2px solid #dbeafe;border-radius:14px;padding:16px 8px;text-align:center;box-shadow:0 4px 16px rgba(37,99,235,.07);transition:.2s}
-.s2-box:hover{border-color:#2563eb;transform:translateY(-3px);box-shadow:0 8px 24px rgba(37,99,235,.15)}
-.s2-num{font-size:28px;font-weight:900;color:#1d4ed8;line-height:1}
-.s2-lbl{font-size:9px;font-weight:700;color:#64748b;letter-spacing:.8px;text-transform:uppercase;margin-top:4px}
-.s2-next{margin-top:24px;padding:13px 36px;border-radius:50px;background:#fff;border:2px solid #2563eb;font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#2563eb;cursor:pointer;transition:.25s;display:flex;align-items:center;gap:8px;font-family:inherit}
-.s2-next:hover{background:#2563eb;color:#fff;box-shadow:0 8px 24px rgba(37,99,235,.3)}
-
-/* SLIDE 3 — Split Dark/White */
-#spS3{background:#0a1628}
-.s3-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a1628 0%,#0f2040 100%)}
-.s3-panel{position:absolute;left:0;top:0;bottom:0;width:42%;background:linear-gradient(160deg,#1d4ed8 0%,#1e40af 100%);clip-path:polygon(0 0,88% 0,100% 100%,0 100%)}
-.s3-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);background-size:32px 32px}
-.s3-content{position:relative;z-index:10;display:grid;grid-template-columns:1fr 1fr;width:100%;height:100%;align-items:center}
-.s3-left{padding:48px 36px;display:flex;flex-direction:column;justify-content:center}
-.s3-right{padding:48px 40px;display:flex;flex-direction:column;justify-content:center;gap:12px}
-.s3-eyebrow{font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
-.s3-title{font-size:clamp(20px,3.2vw,36px);font-weight:900;color:#fff;line-height:1.1;letter-spacing:-0.5px}
-.s3-title em{color:#60a5fa;font-style:normal}
-.s3-body{font-size:13px;color:rgba(255,255,255,.5);margin-top:14px;line-height:1.7;font-weight:400}
-.s3-cta{margin-top:28px;padding:14px 38px;border-radius:50px;background:#fff;border:none;font-size:11px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:#1d4ed8;cursor:pointer;width:fit-content;box-shadow:0 8px 30px rgba(0,0,0,.35);transition:.2s;font-family:inherit}
-.s3-cta:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(0,0,0,.45)}
-.s3-mod{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:13px;transition:.2s;backdrop-filter:blur(8px)}
-.s3-mod:hover{background:rgba(255,255,255,.09);border-color:rgba(96,165,250,.3)}
-.s3-ico{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 4px 12px rgba(37,99,235,.4)}
-.s3-mn{font-size:12px;font-weight:700;color:#fff}
-.s3-ms{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+/* ─ SLIDE 3 CLIENTS ─ */
+#cs3{background:#fff}
+.cs3-bg{position:absolute;inset:0;background:linear-gradient(160deg,#f8faff 0%,#eff6ff 30%,#fff 70%)}
+.cs3-inner{position:relative;z-index:5;width:100%;max-width:1000px;padding:0 20px;text-align:center}
+.cs3-badge{display:inline-block;font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#1d4ed8;background:#dbeafe;padding:5px 16px;border-radius:20px;margin-bottom:12px}
+.cs3-title{font-size:clamp(26px,4vw,42px);font-weight:900;color:#1e3a8a;letter-spacing:-0.5px;margin-bottom:6px}
+.cs3-title span{color:#2563eb}
+.cs3-sub{font-size:13px;color:#64748b;margin-bottom:32px}
+/* Marquee logo strip */
+.cs3-marquee-wrap{overflow:hidden;width:100%;position:relative;margin-bottom:36px}
+.cs3-marquee-wrap::before,.cs3-marquee-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+.cs3-marquee-wrap::before{left:0;background:linear-gradient(90deg,#fff,transparent)}
+.cs3-marquee-wrap::after{right:0;background:linear-gradient(270deg,#fff,transparent)}
+.cs3-track{display:flex;gap:40px;animation:marquee 18s linear infinite;width:max-content}
+.cs3-track:hover{animation-play-state:paused}
+.cs3-logo{width:100px;height:70px;display:flex;align-items:center;justify-content:center;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:10px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.06);transition:.2s}
+.cs3-logo:hover{border-color:#2563eb;box-shadow:0 4px 20px rgba(37,99,235,.15);transform:translateY(-3px)}
+.cs3-logo svg,.cs3-logo img{max-width:80px;max-height:50px;object-fit:contain}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+/* Enter button */
+.cs3-enter{padding:16px 56px;border-radius:50px;background:linear-gradient(135deg,#1e3a8a,#2563eb,#3b82f6);border:none;font-size:13px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#fff;cursor:pointer;box-shadow:0 10px 36px rgba(37,99,235,.5);transition:.25s;position:relative;overflow:hidden;animation:sUp .5s ease .3s both}
+.cs3-enter:hover{transform:translateY(-4px);box-shadow:0 18px 48px rgba(37,99,235,.65)}
+.cs3-enter::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent)}
+.cs3-enter-lbl{position:relative;z-index:1}
 
 /* NAV DOTS */
-.sp-dots-nav{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;gap:10px;align-items:center}
-.sp-dot-btn{width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;transition:.4s cubic-bezier(.34,1.4,.64,1);padding:0;outline:none}
-#spS1.sp-active~.sp-dots-nav .sp-dot-btn,.sp-slide:nth-child(1).sp-active+*+*+.sp-dots-nav .sp-dot-btn{background:rgba(255,255,255,.25)}
-.sp-dot-btn.sp-dot-on{width:26px;border-radius:4px}
-
-/* SKIP */
-.sp-skip{position:fixed;top:20px;right:22px;z-index:10000;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.55);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:8px 18px;border-radius:20px;cursor:pointer;transition:.2s;font-family:inherit}
+.sp-nav{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;gap:10px;align-items:center}
+.sp-nd{width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;transition:.4s cubic-bezier(.34,1.4,.64,1);padding:0;outline:none;background:rgba(255,255,255,.3)}
+.sp-nd.sp-on{width:28px;border-radius:4px;background:#2563eb}
+#cs2 ~ .sp-nav .sp-nd, #cs3 ~ .sp-nav .sp-nd{background:rgba(37,99,235,.25)}
+#cs2 ~ .sp-nav .sp-nd.sp-on, #cs3 ~ .sp-nav .sp-nd.sp-on{background:#2563eb}
+.sp-skip{position:fixed;top:20px;right:22px;z-index:10000;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.6);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:8px 18px;border-radius:20px;cursor:pointer;transition:.2s;font-family:inherit}
 .sp-skip:hover{background:rgba(255,255,255,.18);color:#fff}
 
 /* ============ APP SHELL ============ */
@@ -397,103 +392,129 @@ tr:hover{background:#f8fafc}
 <body>
 
 <!-- ============ SPLASH ============ -->
-<div id="splashOverlay">
+<div id="spWrap">
 
-  <!-- SLIDE 1 — Dark Blue Branded -->
-  <div class="sp-slide sp-active" id="spS1">
-    <div class="s1-bg"></div>
-    <div class="s1-grid"></div>
-    <div class="s1-glow1"></div><div class="s1-glow2"></div>
-    <div class="s1-particles" id="s1Parts"></div>
-    <div class="s1-content">
-      <div class="s1-logo-wrap">
-        <div class="s1-ring-outer"></div>
-        <div class="s1-ring-mid"></div>
-        <div class="s1-ring-inner"></div>
-        <div class="s1-core">
-          <!-- Vishal Technopower Logo -->
-          <svg class="vt-svg" viewBox="0 0 90 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Left triangle - light blue -->
-            <polygon points="4,62 20,10 20,62" fill="#93c5fd" opacity=".85"/>
-            <!-- Mid triangle - white -->
-            <polygon points="14,62 30,10 30,62" fill="rgba(255,255,255,.95)"/>
-            <!-- Right triangle - dark blue -->
-            <polygon points="24,62 40,10 40,62" fill="#1d4ed8"/>
-            <!-- Lightning bolt - amber -->
-            <polygon points="28,30 23,44 30,40 26,56 36,38 29,41" fill="#f59e0b"/>
-            <!-- VISHAL text -->
-            <text x="45" y="28" font-family="Arial Black,sans-serif" font-weight="900" font-size="13" fill="white" letter-spacing="1">VISHAL</text>
-            <text x="45" y="44" font-family="Arial Black,sans-serif" font-weight="900" font-size="9.5" fill="#60a5fa" letter-spacing="1">TECHNOPOWER</text>
+  <!-- SLIDE 1: Branding -->
+  <div class="cslide cs-on" id="cs1">
+    <div class="cs1-grid"></div>
+    <div class="cs1-glow-a"></div><div class="cs1-glow-b"></div>
+    <div class="cs1-parts" id="cs1parts"></div>
+    <div class="cs1-inner">
+      <div class="cs1-ring">
+        <div class="cs1-ra"></div>
+        <div class="cs1-rb"></div>
+        <div class="cs1-core">
+          <svg width="82" height="62" viewBox="0 0 82 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="2,58 16,6 16,58" fill="#93c5fd" opacity=".9"/>
+            <polygon points="11,58 25,6 25,58" fill="rgba(255,255,255,.95)"/>
+            <polygon points="20,58 34,6 34,58" fill="#1d4ed8"/>
+            <polygon points="24,26 19,40 26,36 22,54 33,34 26,38" fill="#f59e0b"/>
+            <text x="38" y="26" font-family="Arial Black" font-weight="900" font-size="12" fill="white" letter-spacing="1">VISHAL</text>
+            <text x="38" y="40" font-family="Arial" font-weight="700" font-size="8.5" fill="#93c5fd" letter-spacing=".5">TECHNOPOWER</text>
+            <text x="38" y="52" font-family="Arial" font-weight="400" font-size="6.5" fill="rgba(255,255,255,.5)" letter-spacing=".3">Pvt. Ltd.</text>
           </svg>
         </div>
       </div>
-      <div class="s1-name">VISHAL <span class="s1-name-blue">TECHNOPOWER</span></div>
-      <div class="s1-tagline">Engineering Your Electrical Needs!</div>
-      <div class="s1-div"></div>
-      <div class="s1-sub">Enterprise Resource Planning System</div>
-      <div class="s1-badges">
-        <span class="s1-bdg">ISO 9001</span>
-        <span class="s1-bdg">EPC Grade A</span>
-        <span class="s1-bdg">OHSAS 18001</span>
-        <span class="s1-bdg">18+ States</span>
+      <div class="cs1-name">VISHAL <b>TECHNOPOWER</b></div>
+      <div class="cs1-tag">Engineering Your Electrical Needs!</div>
+      <div class="cs1-div"></div>
+      <div class="cs1-sub">Enterprise Resource Planning Portal</div>
+      <div class="cs1-badges">
+        <span class="cs1-b">ISO 9001</span>
+        <span class="cs1-b">EPC Grade A</span>
+        <span class="cs1-b">OHSAS 18001</span>
+        <span class="cs1-b">18+ States</span>
+        <span class="cs1-b">500+ Projects</span>
       </div>
-      <div class="s1-prog-wrap">
-        <div class="s1-prog-lbl" id="s1Lbl">Initializing...</div>
-        <div class="s1-prog-track"><div class="s1-prog-fill" id="s1Fill"></div></div>
+      <div class="cs1-prog">
+        <div class="cs1-plbl" id="cs1lbl">Initializing ERP System...</div>
+        <div class="cs1-ptrack"><div class="cs1-pfill" id="cs1fill"></div></div>
       </div>
-      <button class="s1-btn" onclick="enterERP()">⚡&nbsp; Enter Portal</button>
-      <div class="s1-ver">VTP ERP v3.0 &nbsp;•&nbsp; 2025</div>
+      <button class="cs1-next" onclick="spGo(1)">Our Services &nbsp;→</button>
     </div>
   </div>
 
-  <!-- SLIDE 2 — White Clean Stats -->
-  <div class="sp-slide" id="spS2">
-    <div class="s2-bg"></div>
-    <div class="s2-circle1"></div><div class="s2-circle2"></div>
-    <div class="s2-lines"></div>
-    <div class="s2-content">
-      <div class="s2-icon">⚡</div>
-      <div class="s2-title">Powering <em>India's</em> Growth</div>
-      <div class="s2-desc">End-to-End EPC Solutions &nbsp;•&nbsp; Transmission &nbsp;•&nbsp; Substation &nbsp;•&nbsp; Distribution</div>
-      <div class="s2-grid">
-        <div class="s2-box"><div class="s2-num">18+</div><div class="s2-lbl">States</div></div>
-        <div class="s2-box"><div class="s2-num">500+</div><div class="s2-lbl">Projects</div></div>
-        <div class="s2-box"><div class="s2-num">5K+</div><div class="s2-lbl">MW Done</div></div>
-        <div class="s2-box"><div class="s2-num">20+</div><div class="s2-lbl">Years Exp</div></div>
+  <!-- SLIDE 2: OUR SERVICES -->
+  <div class="cslide" id="cs2">
+    <div class="cs2-bg"></div>
+    <div class="cs2-inner">
+      <div class="cs2-badge">What We Do</div>
+      <div class="cs2-title">OUR <span>SERVICES</span></div>
+      <div class="cs2-sub">Service solutions specially customized and engineered after detailed case study of your requirements.</div>
+      <div class="cs2-grid">
+        <div class="cs2-card">
+          <img class="cs2-img" src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=400&q=80" alt="Sub Stations">
+          <div class="cs2-overlay"></div>
+          <div class="cs2-clabel"><h3>Sub - Stations</h3><p>EHV/HV/MV Substation works</p></div>
+        </div>
+        <div class="cs2-card">
+          <img class="cs2-img" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&q=80" alt="Cable Laying">
+          <div class="cs2-overlay"></div>
+          <div class="cs2-clabel"><h3>HT &amp; LT Cable Laying</h3><p>Underground &amp; overhead cabling</p></div>
+        </div>
+        <div class="cs2-card">
+          <img class="cs2-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80" alt="Industrial Electrification">
+          <div class="cs2-overlay"></div>
+          <div class="cs2-clabel"><h3>Industrial Electrifications</h3><p>Complete industrial power systems</p></div>
+        </div>
+        <div class="cs2-card">
+          <img class="cs2-img" src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=400&q=80" alt="EV Infra">
+          <div class="cs2-overlay"></div>
+          <div class="cs2-clabel"><h3>EV Infra Projects</h3><p>EV charging infrastructure</p></div>
+        </div>
       </div>
-      <button class="s2-next" onclick="spGo(2)">ERP Modules &nbsp;→</button>
+      <button class="cs2-nxt" onclick="spGo(2)">Our Clients &nbsp;→</button>
     </div>
   </div>
 
-  <!-- SLIDE 3 — Split Layout ERP Modules -->
-  <div class="sp-slide" id="spS3">
-    <div class="s3-bg"></div>
-    <div class="s3-panel"></div>
-    <div class="s3-dots"></div>
-    <div class="s3-content">
-      <div class="s3-left">
-        <div class="s3-eyebrow">Your Digital Command Center</div>
-        <div class="s3-title">Smart<br><em>ERP</em><br>Dashboard</div>
-        <div class="s3-body">Live data from Google Sheets. AI-powered insights. Real-time outstanding, stock & debtors — all in one place.</div>
-        <button class="s3-cta" onclick="enterERP()">⚡ Enter Portal</button>
+  <!-- SLIDE 3: OUR CLIENTS + ENTER -->
+  <div class="cslide" id="cs3">
+    <div class="cs3-bg"></div>
+    <div class="cs3-inner">
+      <div class="cs3-badge">Trusted By</div>
+      <div class="cs3-title">OUR <span>CLIENTS</span></div>
+      <div class="cs3-sub">Proudly serving India's leading public &amp; private sector organisations</div>
+      <div class="cs3-marquee-wrap">
+        <div class="cs3-track" id="cs3track">
+          <!-- HPDA -->
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><circle cx="40" cy="30" r="28" fill="#f59e0b" stroke="#d97706" stroke-width="2"/><circle cx="40" cy="30" r="22" fill="#fff" stroke="#d97706" stroke-width="1"/><text x="40" y="26" text-anchor="middle" font-family="Arial Black" font-size="11" font-weight="900" fill="#1e3a8a">HPDA</text><text x="40" y="38" text-anchor="middle" font-family="Arial" font-size="5" fill="#64748b">HAPUR PILAKHUA</text></svg></div>
+          <!-- HP HPCL -->
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><rect x="5" y="5" width="70" height="50" rx="4" fill="#fff" stroke="#1d4ed8" stroke-width="2.5"/><circle cx="40" cy="28" r="16" fill="#1d4ed8"/><text x="40" y="33" text-anchor="middle" font-family="Arial Black" font-size="14" font-weight="900" fill="#fff">HP</text><text x="40" y="48" text-anchor="middle" font-family="Arial" font-size="6" fill="#1d4ed8" font-weight="700">HINDUSTAN PETROLEUM</text></svg></div>
+          <!-- IndianOil -->
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><circle cx="40" cy="28" r="24" fill="#f97316" stroke="#ea580c" stroke-width="2"/><circle cx="40" cy="28" r="18" fill="#fff"/><text x="40" y="24" text-anchor="middle" font-family="Arial Black" font-size="7" font-weight="900" fill="#f97316">इंडियनऑयल</text><text x="40" y="35" text-anchor="middle" font-family="Arial Black" font-size="7" font-weight="900" fill="#1e3a8a">IndianOil</text><text x="40" y="56" text-anchor="middle" font-family="Arial" font-size="6" fill="#475569">IOCL</text></svg></div>
+          <!-- Indian Railways -->
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><circle cx="40" cy="28" r="25" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/><circle cx="40" cy="28" r="19" fill="none" stroke="#fff" stroke-width="1"/><text x="40" y="22" text-anchor="middle" font-family="Arial" font-size="5" fill="#fff" letter-spacing="1">INDIAN</text><text x="40" y="30" text-anchor="middle" font-family="Arial Black" font-size="8" font-weight="900" fill="#f59e0b">RAILWAYS</text><text x="40" y="40" text-anchor="middle" font-family="Arial" font-size="5" fill="#93c5fd">भारतीय रेल</text><text x="40" y="56" text-anchor="middle" font-family="Arial" font-size="6" fill="#475569">IR</text></svg></div>
+          <!-- NTPC -->
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><rect x="5" y="10" width="70" height="40" rx="6" fill="#1d4ed8"/><text x="40" y="30" text-anchor="middle" font-family="Arial Black" font-size="18" font-weight="900" fill="#fff">NTPC</text><text x="40" y="42" text-anchor="middle" font-family="Arial" font-size="5.5" fill="rgba(255,255,255,.7)" letter-spacing=".5">NATIONAL THERMAL POWER</text></svg></div>
+          <!-- Jubilant -->
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><rect x="3" y="5" width="74" height="50" rx="4" fill="#fff" stroke="#e2e8f0" stroke-width="1"/><text x="40" y="26" text-anchor="middle" font-family="Georgia" font-size="13" font-weight="700" fill="#1e3a8a" letter-spacing=".5">JUBILANT</text><text x="40" y="36" text-anchor="middle" font-family="Arial" font-size="5" fill="#64748b">AGRI &amp; CONSUMER PRODUCTS</text><rect x="10" y="40" width="60" height="2" rx="1" fill="#22c55e"/></svg></div>
+          <!-- L&T -->
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><circle cx="40" cy="30" r="26" fill="none" stroke="#1e3a8a" stroke-width="3"/><text x="40" y="37" text-anchor="middle" font-family="Arial Black" font-size="22" font-weight="900" fill="#1e3a8a">L&amp;T</text></svg></div>
+          <!-- GAIL -->
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><rect x="5" y="8" width="70" height="44" rx="6" fill="#15803d"/><text x="40" y="32" text-anchor="middle" font-family="Arial Black" font-size="20" font-weight="900" fill="#fff">GAIL</text><text x="40" y="44" text-anchor="middle" font-family="Arial" font-size="5.5" fill="rgba(255,255,255,.7)">GAS AUTHORITY OF INDIA</text></svg></div>
+          <!-- HPDA duplicate for seamless loop -->
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><circle cx="40" cy="30" r="28" fill="#f59e0b" stroke="#d97706" stroke-width="2"/><circle cx="40" cy="30" r="22" fill="#fff" stroke="#d97706" stroke-width="1"/><text x="40" y="26" text-anchor="middle" font-family="Arial Black" font-size="11" font-weight="900" fill="#1e3a8a">HPDA</text><text x="40" y="38" text-anchor="middle" font-family="Arial" font-size="5" fill="#64748b">HAPUR PILAKHUA</text></svg></div>
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><rect x="5" y="5" width="70" height="50" rx="4" fill="#fff" stroke="#1d4ed8" stroke-width="2.5"/><circle cx="40" cy="28" r="16" fill="#1d4ed8"/><text x="40" y="33" text-anchor="middle" font-family="Arial Black" font-size="14" font-weight="900" fill="#fff">HP</text><text x="40" y="48" text-anchor="middle" font-family="Arial" font-size="6" fill="#1d4ed8" font-weight="700">HINDUSTAN PETROLEUM</text></svg></div>
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><circle cx="40" cy="28" r="24" fill="#f97316" stroke="#ea580c" stroke-width="2"/><circle cx="40" cy="28" r="18" fill="#fff"/><text x="40" y="24" text-anchor="middle" font-family="Arial Black" font-size="7" font-weight="900" fill="#f97316">इंडियनऑयल</text><text x="40" y="35" text-anchor="middle" font-family="Arial Black" font-size="7" font-weight="900" fill="#1e3a8a">IndianOil</text></svg></div>
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><circle cx="40" cy="28" r="25" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/><text x="40" y="30" text-anchor="middle" font-family="Arial Black" font-size="8" font-weight="900" fill="#f59e0b">RAILWAYS</text></svg></div>
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><rect x="5" y="10" width="70" height="40" rx="6" fill="#1d4ed8"/><text x="40" y="36" text-anchor="middle" font-family="Arial Black" font-size="18" font-weight="900" fill="#fff">NTPC</text></svg></div>
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><circle cx="40" cy="30" r="26" fill="none" stroke="#1e3a8a" stroke-width="3"/><text x="40" y="37" text-anchor="middle" font-family="Arial Black" font-size="22" font-weight="900" fill="#1e3a8a">L&amp;T</text></svg></div>
+          <div class="cs3-logo"><svg viewBox="0 0 80 60" fill="none"><rect x="5" y="8" width="70" height="44" rx="6" fill="#15803d"/><text x="40" y="36" text-anchor="middle" font-family="Arial Black" font-size="20" font-weight="900" fill="#fff">GAIL</text></svg></div>
+        </div>
       </div>
-      <div class="s3-right">
-        <div class="s3-mod"><div class="s3-ico">💼</div><div><div class="s3-mn">Outstanding</div><div class="s3-ms">Live payment tracking</div></div></div>
-        <div class="s3-mod"><div class="s3-ico">📦</div><div><div class="s3-mn">Stock WIP</div><div class="s3-ms">Site-wise inventory</div></div></div>
-        <div class="s3-mod"><div class="s3-ico">⏰</div><div><div class="s3-mn">Debtors Ageing</div><div class="s3-ms">45 sites auto-fetched</div></div></div>
-        <div class="s3-mod"><div class="s3-ico">📈</div><div><div class="s3-mn">KPI Dashboard</div><div class="s3-ms">Account dept live data</div></div></div>
-        <div class="s3-mod"><div class="s3-ico">🤖</div><div><div class="s3-mn">AI Assistant</div><div class="s3-ms">Hinglish ERP chat</div></div></div>
-      </div>
+      <button class="cs3-enter" onclick="enterERP()">
+        <span class="cs3-enter-lbl">⚡&nbsp;&nbsp;Enter ERP Portal</span>
+      </button>
+      <div style="font-size:9px;color:#94a3b8;letter-spacing:2px;margin-top:14px">VTP ERP v3.0 &nbsp;•&nbsp; 2025</div>
     </div>
   </div>
 
-  <!-- Navigation Dots -->
-  <div class="sp-dots-nav" id="spDotsNav">
-    <button class="sp-dot-btn sp-dot-on" onclick="spGo(0)"></button>
-    <button class="sp-dot-btn" onclick="spGo(1)"></button>
-    <button class="sp-dot-btn" onclick="spGo(2)"></button>
+  <!-- Nav dots -->
+  <div class="sp-nav">
+    <button class="sp-nd sp-on" onclick="spGo(0)"></button>
+    <button class="sp-nd" onclick="spGo(1)"></button>
+    <button class="sp-nd" onclick="spGo(2)"></button>
   </div>
-  <!-- Skip -->
   <button class="sp-skip" onclick="enterERP()">Skip →</button>
 </div>
 <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
@@ -744,30 +765,42 @@ const KPI_CSV=''; // legacy - unused
 const SITE_GIDS=[174412694,118852844,548407335,751444077,1347791283,321034887,1979702996,1893067828,1234783628,977030954,1642019228,1920245490,2004258151,1666678437,458687889,178072507,1087865048,1871920534,1053026690,1485879867,1545839474,477557482,279843949,671962254,387496523,323328787,1725908395,493192291,1199190624,1110433204,606059273,1612881510,1855046779,980845244,989690966,0,2070489175,776970165,1201529354,1729965160,131840235,923489850,996674553,2095150463,22890483];
 
 // ===== SPLASH SLIDES =====
-let spCur=0,spTimer=null;
+let spCur=0;
 function spGo(n){
-  const slides=document.querySelectorAll('.sp-slide');
-  const dots=document.querySelectorAll('.sp-dot-btn');
-  slides.forEach((s,i)=>{s.classList.remove('sp-active','sp-prev');if(i<n)s.classList.add('sp-prev')});
-  dots.forEach((d,i)=>d.classList.toggle('sp-dot-on',i===n));
-  // dot color: white on dark slides (0,2), dark on light slide (1)
-  const isDark=(n!==1);
-  dots.forEach(d=>{d.style.background=d.classList.contains('sp-dot-on')?(isDark?'#2563eb':'#1d4ed8'):(isDark?'rgba(255,255,255,.25)':'rgba(37,99,235,.25)')});
-  setTimeout(()=>{const el=document.getElementById('spS'+n);if(el)el.classList.add('sp-active')},10);
+  const slides=document.querySelectorAll('.cslide');
+  const dots=document.querySelectorAll('.sp-nd');
+  slides.forEach((s,i)=>{
+    s.classList.remove('cs-on','cs-out');
+    if(i<n) s.classList.add('cs-out');
+  });
+  dots.forEach((d,i)=>d.classList.toggle('sp-on',i===n));
+  // dot color adjust
+  const dark=(n===0);
+  dots.forEach(d=>{
+    d.style.background=d.classList.contains('sp-on')
+      ?'#2563eb'
+      :(dark?'rgba(255,255,255,.28)':'rgba(37,99,235,.22)');
+  });
+  setTimeout(()=>{const el=document.getElementById('cs'+(n+1));if(el)el.classList.add('cs-on')},12);
   spCur=n;
 }
 (function initSplash(){
-  // Floating particles for slide 1
-  const pc=document.getElementById('s1Parts');
-  if(pc){for(let i=0;i<25;i++){const p=document.createElement('div');p.className='s1p';p.style.cssText='left:'+Math.random()*100+'%;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px;animation-duration:'+(6+Math.random()*10)+'s;animation-delay:'+(Math.random()*8)+'s;opacity:'+(0.2+Math.random()*0.4);pc.appendChild(p)}}
-  // Progress bar
+  // particles
+  const pc=document.getElementById('cs1parts');
+  if(pc){for(let i=0;i<22;i++){const p=document.createElement('div');p.className='cs1p';p.style.cssText='left:'+Math.random()*100+'%;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px;animation-duration:'+(7+Math.random()*9)+'s;animation-delay:'+(Math.random()*7)+'s';pc.appendChild(p)}}
+  // progress
   let pct=0;
-  const fill=document.getElementById('s1Fill'),lbl=document.getElementById('s1Lbl');
-  const msgs=['Initializing modules...','Loading live data...','Connecting sheets...','Almost ready...','Ready!'];
-  const t=setInterval(()=>{pct+=Math.random()*2.5+1.2;if(pct>=100){pct=100;clearInterval(t)}if(fill)fill.style.width=pct+'%';if(lbl)lbl.textContent=msgs[Math.min(Math.floor(pct/25),4)]},75);
-  // Auto-advance
-  spTimer=setTimeout(()=>{if(spCur===0)spGo(1)},3800);
-  setTimeout(()=>{if(spCur===1)spGo(2)},7800);
+  const fill=document.getElementById('cs1fill'),lbl=document.getElementById('cs1lbl');
+  const msgs=['Initializing modules...','Connecting Google Sheets...','Loading live data...','Almost ready...','Ready!'];
+  const t=setInterval(()=>{
+    pct+=Math.random()*2.2+1;
+    if(pct>=100){pct=100;clearInterval(t)}
+    if(fill)fill.style.width=pct+'%';
+    if(lbl)lbl.textContent=msgs[Math.min(Math.floor(pct/25),4)];
+  },75);
+  // auto-advance
+  setTimeout(()=>{if(spCur===0)spGo(1)},4200);
+  setTimeout(()=>{if(spCur===1)spGo(2)},8500);
 })();
 
 function enterERP(){
