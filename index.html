@@ -11,93 +11,109 @@
 :root{--p:#1a56db;--pd:#1e40af;--pl:#dbeafe;--s:#059669;--w:#d97706;--d:#dc2626;--bg:#f1f5f9;--wh:#fff;--tx:#1e293b;--tl:#64748b;--br:#e2e8f0;--sb:250px}
 body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:var(--tx)}
 
-/* ============ SPLASH — VISHAL TECHNOPOWER WHITE/BLUE ============ */
-#splashOverlay{position:fixed;inset:0;z-index:9999;overflow:hidden;background:#eef4ff}
-#splashOverlay.exit{animation:spExit .8s cubic-bezier(.76,0,.24,1) forwards}
-@keyframes spExit{to{opacity:0;transform:scale(1.05)}}
+/* ============ SPLASH — PROFESSIONAL CANVA STYLE ============ */
+#splashOverlay{position:fixed;inset:0;z-index:9999;overflow:hidden;font-family:'Montserrat','Rajdhani',sans-serif}
+#splashOverlay.sp-exit{animation:spExitAnim .8s cubic-bezier(.9,0,.1,1) forwards}
+@keyframes spExitAnim{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-30px)}}
 
-/* BG */
-.sp-bg{position:absolute;inset:0;background:linear-gradient(145deg,#ffffff 0%,#dbeafe 45%,#bfdbfe 100%)}
-.sp-blob{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
-.sp-blob1{width:650px;height:650px;background:#1d4ed8;opacity:.1;top:-220px;right:-180px;animation:blobF 14s ease-in-out infinite}
-.sp-blob2{width:500px;height:500px;background:#1e40af;opacity:.08;bottom:-200px;left:-160px;animation:blobF 18s ease-in-out infinite reverse}
-.sp-blob3{width:280px;height:280px;background:#3b82f6;opacity:.1;top:55%;left:55%;animation:blobF 9s ease-in-out infinite 1s}
-@keyframes blobF{0%,100%{transform:translate(0,0)}50%{transform:translate(25px,-35px)}}
+/* SLIDE SYSTEM */
+.sp-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateX(100%);transition:transform .65s cubic-bezier(.77,0,.18,1),opacity .65s ease;pointer-events:none}
+.sp-slide.sp-active{opacity:1;transform:translateX(0);pointer-events:all}
+.sp-slide.sp-prev{opacity:0;transform:translateX(-100%)}
 
-/* Canva-style animated slide strips */
-.sp-strips{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.sp-strip{position:absolute;height:3px;border-radius:3px;opacity:.55}
-.sp-strip:nth-child(1){top:0;left:0;right:0;background:linear-gradient(90deg,#1e3a8a,#2563eb,#60a5fa,#1e3a8a);background-size:300%;animation:stripSlide 3s linear infinite}
-.sp-strip:nth-child(2){bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#60a5fa,#1d4ed8,#93c5fd,#1d4ed8);background-size:300%;animation:stripSlide 3.5s linear infinite reverse}
-.sp-strip:nth-child(3){top:0;bottom:0;left:0;width:3px;height:auto;background:linear-gradient(180deg,#1e3a8a,#2563eb,#60a5fa,#1e3a8a);background-size:100% 300%;animation:stripSlideV 2.5s linear infinite}
-.sp-strip:nth-child(4){top:0;bottom:0;right:0;width:2px;height:auto;background:linear-gradient(180deg,#60a5fa,#1d4ed8,#93c5fd);background-size:100% 300%;animation:stripSlideV 3s linear infinite reverse}
-@keyframes stripSlide{from{background-position:0 0}to{background-position:300% 0}}
-@keyframes stripSlideV{from{background-position:0 0}to{background-position:0 300%}}
+/* SLIDE 1 — Deep Navy */
+#spS1{background:#0a1628}
+.s1-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a1628 0%,#0d2150 45%,#0a1628 100%)}
+.s1-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.07) 1px,transparent 1px);background-size:55px 55px;animation:gridMove 25s linear infinite}
+@keyframes gridMove{from{background-position:0 0}to{background-position:55px 55px}}
+.s1-glow1{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.22) 0%,transparent 70%);top:-150px;right:-100px;animation:glowP 6s ease-in-out infinite}
+.s1-glow2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.13) 0%,transparent 70%);bottom:-120px;left:-80px;animation:glowP 8s ease-in-out infinite 2s}
+@keyframes glowP{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.s1-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.s1p{position:absolute;border-radius:50%;background:#60a5fa;animation:pRise linear infinite}
+@keyframes pRise{0%{opacity:0;transform:translateY(100vh)}10%{opacity:.5}85%{opacity:.2}100%{opacity:0;transform:translateY(-5vh)}}
 
-/* Animated dot grid */
-.sp-dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,#2563eb22 1px,transparent 1px);background-size:36px 36px;animation:dotsDrift 20s linear infinite}
-@keyframes dotsDrift{from{background-position:0 0}to{background-position:36px 36px}}
+/* S1 Content */
+.s1-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px}
+.s1-logo-wrap{position:relative;width:164px;height:164px;margin-bottom:28px;animation:logoPop .8s cubic-bezier(.34,1.4,.64,1) .1s both}
+@keyframes logoPop{from{opacity:0;transform:scale(.4) rotate(-90deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+.s1-ring-outer{position:absolute;inset:-4px;border-radius:50%;border:3px solid transparent;border-top-color:#2563eb;border-right-color:#60a5fa;animation:spinR 2.2s linear infinite;filter:drop-shadow(0 0 10px rgba(37,99,235,.8))}
+.s1-ring-mid{position:absolute;inset:6px;border-radius:50%;border:2px solid transparent;border-bottom-color:#93c5fd;border-left-color:#1d4ed8;animation:spinR 3.5s linear infinite reverse}
+.s1-ring-inner{position:absolute;inset:2px;border-radius:50%;border:1px solid rgba(96,165,250,.2)}
+@keyframes spinR{to{transform:rotate(360deg)}}
+.s1-core{position:absolute;inset:20px;border-radius:50%;background:linear-gradient(145deg,#1e3a8a,#1d4ed8 50%,#2563eb);display:flex;align-items:center;justify-content:center;box-shadow:0 0 50px rgba(37,99,235,.6),0 0 100px rgba(37,99,235,.2),inset 0 2px 4px rgba(255,255,255,.15)}
+/* VT Logo inside core */
+.vt-svg{width:82px;height:60px}
 
-/* Slides */
-.sp-slides{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.sp-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateX(60px);transition:opacity .6s ease,transform .6s ease;pointer-events:none}
-.sp-slide.active{opacity:1;transform:translateX(0);pointer-events:all}
-.sp-slide.prev{opacity:0;transform:translateX(-60px)}
+.s1-name{font-weight:900;font-size:clamp(20px,4vw,36px);color:#fff;letter-spacing:1.5px;text-transform:uppercase;line-height:1;animation:slideU .7s cubic-bezier(.34,1.2,.64,1) .4s both}
+.s1-name-blue{color:#60a5fa}
+.s1-tagline{font-size:13px;font-style:italic;color:#93c5fd;margin-top:6px;font-weight:400;animation:slideU .6s ease .6s both}
+@keyframes slideU{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.s1-div{width:0;height:3px;background:linear-gradient(90deg,transparent,#2563eb,#93c5fd,#2563eb,transparent);border-radius:3px;margin:18px 0;animation:divW .8s ease .9s forwards}
+@keyframes divW{to{width:280px}}
+.s1-sub{font-size:9px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.35);animation:slideU .5s ease 1.1s both}
+.s1-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:14px;animation:slideU .5s ease 1.25s both}
+.s1-bdg{font-size:8.5px;font-weight:700;letter-spacing:.8px;padding:5px 12px;border-radius:20px;text-transform:uppercase;border:1px solid rgba(96,165,250,.35);color:#93c5fd;background:rgba(37,99,235,.12)}
+.s1-prog-wrap{width:280px;margin-top:22px;animation:slideU .4s ease 1.4s both}
+.s1-prog-lbl{font-size:8.5px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:7px;text-align:left}
+.s1-prog-track{height:3px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.s1-prog-fill{height:100%;width:0;background:linear-gradient(90deg,#1d4ed8,#3b82f6,#93c5fd);border-radius:3px;transition:width .07s linear;box-shadow:0 0 8px #3b82f6}
+.s1-btn{margin-top:26px;padding:15px 52px;border-radius:50px;background:linear-gradient(135deg,#1d4ed8,#2563eb,#3b82f6);border:1px solid rgba(255,255,255,.15);font-size:12px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#fff;cursor:pointer;opacity:0;animation:slideU .5s ease 1.8s forwards;box-shadow:0 8px 32px rgba(37,99,235,.55);transition:transform .2s,box-shadow .2s;font-family:inherit;position:relative;overflow:hidden}
+.s1-btn:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(37,99,235,.65)}
+.s1-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent)}
+.s1-ver{margin-top:12px;font-size:9px;color:rgba(255,255,255,.18);letter-spacing:3px;opacity:0;animation:slideU .4s ease 2s forwards}
 
-/* Card */
-.sp-card{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-radius:28px;padding:44px 52px 36px;box-shadow:0 20px 70px rgba(30,64,175,.16),0 4px 20px rgba(30,64,175,.1),inset 0 1px 0 #fff;width:min(480px,90vw);text-align:center;position:relative;overflow:hidden}
-.sp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#1e3a8a,#2563eb,#60a5fa,#2563eb,#1e3a8a);background-size:300%;animation:stripSlide 3s linear infinite}
-.sp-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#60a5fa,#1d4ed8,#93c5fd);background-size:300%;animation:stripSlide 3.5s linear infinite reverse}
+/* SLIDE 2 — White + Blue */
+#spS2{background:#fff}
+.s2-bg{position:absolute;inset:0;background:linear-gradient(150deg,#f0f7ff 0%,#dbeafe 35%,#fff 65%,#f0f9ff 100%)}
+.s2-circle1{position:absolute;top:-120px;right:-100px;width:450px;height:450px;border-radius:50%;background:linear-gradient(135deg,#bfdbfe,#dbeafe);opacity:.45}
+.s2-circle2{position:absolute;bottom:-80px;left:-80px;width:320px;height:320px;border-radius:50%;background:linear-gradient(135deg,#dbeafe,#e0f2fe);opacity:.35}
+.s2-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(37,99,235,.035) 0px,transparent 1px,transparent 44px);animation:linesF 15s linear infinite}
+@keyframes linesF{from{background-position:0 0}to{background-position:0 45px}}
 
-/* Slide 1 — Logo + Title */
-.sp-logo-anim{margin:0 auto 18px;width:220px;animation:logoIn .7s cubic-bezier(.34,1.2,.64,1) .2s both}
-@keyframes logoIn{from{opacity:0;transform:scale(.8) translateY(-15px)}to{opacity:1;transform:none}}
+.s2-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 24px;max-width:580px;width:100%}
+.s2-icon{width:88px;height:88px;border-radius:22px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:22px;box-shadow:0 12px 40px rgba(37,99,235,.32);animation:iconP .6s cubic-bezier(.34,1.5,.64,1) both}
+@keyframes iconP{from{opacity:0;transform:scale(.3) rotate(-30deg)}to{opacity:1;transform:none}}
+.s2-title{font-size:clamp(26px,4.5vw,44px);font-weight:900;color:#1e3a8a;line-height:1;letter-spacing:-1px}
+.s2-title em{color:#2563eb;font-style:normal}
+.s2-desc{font-size:14px;color:#475569;margin-top:10px;font-weight:500;line-height:1.6}
+.s2-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px;width:100%}
+.s2-box{background:#fff;border:2px solid #dbeafe;border-radius:14px;padding:16px 8px;text-align:center;box-shadow:0 4px 16px rgba(37,99,235,.07);transition:.2s}
+.s2-box:hover{border-color:#2563eb;transform:translateY(-3px);box-shadow:0 8px 24px rgba(37,99,235,.15)}
+.s2-num{font-size:28px;font-weight:900;color:#1d4ed8;line-height:1}
+.s2-lbl{font-size:9px;font-weight:700;color:#64748b;letter-spacing:.8px;text-transform:uppercase;margin-top:4px}
+.s2-next{margin-top:24px;padding:13px 36px;border-radius:50px;background:#fff;border:2px solid #2563eb;font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#2563eb;cursor:pointer;transition:.25s;display:flex;align-items:center;gap:8px;font-family:inherit}
+.s2-next:hover{background:#2563eb;color:#fff;box-shadow:0 8px 24px rgba(37,99,235,.3)}
 
-/* Spinning ring (same as image2 style) */
-.sp-ring-wrap{position:relative;width:140px;height:140px;margin:0 auto 20px;animation:logoIn .7s cubic-bezier(.34,1.2,.64,1) .2s both}
-.sp-ring-svg{position:absolute;inset:0;width:100%;height:100%;animation:ringRotate 3s linear infinite}
-@keyframes ringRotate{to{transform:rotate(360deg)}}
-.sp-ring-inner{position:absolute;inset:12px;border-radius:50%;background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(30,64,175,.4),inset 0 2px 4px rgba(255,255,255,.2)}
-.sp-vt-logo{width:90px;height:auto;display:block;margin:0 auto}
+/* SLIDE 3 — Split Dark/White */
+#spS3{background:#0a1628}
+.s3-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a1628 0%,#0f2040 100%)}
+.s3-panel{position:absolute;left:0;top:0;bottom:0;width:42%;background:linear-gradient(160deg,#1d4ed8 0%,#1e40af 100%);clip-path:polygon(0 0,88% 0,100% 100%,0 100%)}
+.s3-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);background-size:32px 32px}
+.s3-content{position:relative;z-index:10;display:grid;grid-template-columns:1fr 1fr;width:100%;height:100%;align-items:center}
+.s3-left{padding:48px 36px;display:flex;flex-direction:column;justify-content:center}
+.s3-right{padding:48px 40px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.s3-eyebrow{font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
+.s3-title{font-size:clamp(20px,3.2vw,36px);font-weight:900;color:#fff;line-height:1.1;letter-spacing:-0.5px}
+.s3-title em{color:#60a5fa;font-style:normal}
+.s3-body{font-size:13px;color:rgba(255,255,255,.5);margin-top:14px;line-height:1.7;font-weight:400}
+.s3-cta{margin-top:28px;padding:14px 38px;border-radius:50px;background:#fff;border:none;font-size:11px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:#1d4ed8;cursor:pointer;width:fit-content;box-shadow:0 8px 30px rgba(0,0,0,.35);transition:.2s;font-family:inherit}
+.s3-cta:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(0,0,0,.45)}
+.s3-mod{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:13px;transition:.2s;backdrop-filter:blur(8px)}
+.s3-mod:hover{background:rgba(255,255,255,.09);border-color:rgba(96,165,250,.3)}
+.s3-ico{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 4px 12px rgba(37,99,235,.4)}
+.s3-mn{font-size:12px;font-weight:700;color:#fff}
+.s3-ms{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
 
-.sp-company{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:800;color:#1e3a8a;letter-spacing:.5px;line-height:1.1;animation:fadeUp .6s ease .7s both}
-.sp-company b{color:#2563eb}
-.sp-italic{font-family:'Nunito',sans-serif;font-style:italic;font-size:13px;color:#3b82f6;font-weight:600;margin-top:3px;animation:fadeUp .5s ease .9s both}
-.sp-line{height:2px;background:linear-gradient(90deg,transparent,#2563eb,transparent);margin:16px auto;width:0;animation:lineGrow .6s ease 1s forwards;border-radius:2px}
-@keyframes lineGrow{to{width:260px}}
-.sp-erp-label{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#64748b;animation:fadeUp .5s ease 1.2s both}
-.sp-badges{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-top:12px;animation:fadeUp .5s ease 1.4s both}
-.sp-bdg{font-size:8px;font-weight:800;letter-spacing:1px;padding:4px 10px;border-radius:20px;text-transform:uppercase;background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8}
+/* NAV DOTS */
+.sp-dots-nav{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;gap:10px;align-items:center}
+.sp-dot-btn{width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;transition:.4s cubic-bezier(.34,1.4,.64,1);padding:0;outline:none}
+#spS1.sp-active~.sp-dots-nav .sp-dot-btn,.sp-slide:nth-child(1).sp-active+*+*+.sp-dots-nav .sp-dot-btn{background:rgba(255,255,255,.25)}
+.sp-dot-btn.sp-dot-on{width:26px;border-radius:4px}
 
-/* Progress */
-.sp-prog-wrap{margin-top:18px;animation:fadeUp .4s ease 1.5s both}
-.sp-prog-txt{font-size:9px;font-weight:700;color:#94a3b8;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
-.sp-prog-bar{height:5px;background:#e2e8f0;border-radius:5px;overflow:hidden;width:100%}
-.sp-prog-fill{height:100%;width:0;background:linear-gradient(90deg,#1e3a8a,#2563eb,#60a5fa);border-radius:5px;transition:width .08s linear}
-
-/* Enter button */
-.sp-enter{margin-top:22px;padding:14px 44px;border-radius:50px;background:linear-gradient(135deg,#1e3a8a,#2563eb);border:none;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#fff;cursor:pointer;opacity:0;animation:fadeUp .5s ease 1.9s forwards;box-shadow:0 8px 28px rgba(37,99,235,.4);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
-.sp-enter:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 36px rgba(37,99,235,.5)}
-.sp-enter-inner{position:relative;z-index:1}
-.sp-ver{font-size:9px;color:#94a3b8;letter-spacing:2px;margin-top:14px;opacity:0;animation:fadeUp .4s ease 2.1s forwards}
-
-/* Slide dots nav */
-.sp-nav{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:20}
-.sp-nav-dot{width:8px;height:8px;border-radius:50%;background:#bfdbfe;border:none;cursor:pointer;transition:.3s;padding:0}
-.sp-nav-dot.on{background:#2563eb;width:24px;border-radius:4px}
-
-/* Slide 2 & 3 content */
-.sp-slide2-icon{font-size:52px;margin-bottom:14px;animation:iconBounce .6s cubic-bezier(.34,1.5,.64,1) both}
-.sp-slide2-title{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:800;color:#1e3a8a;margin-bottom:8px}
-.sp-slide2-sub{font-size:13px;color:#475569;font-weight:600;line-height:1.6}
-@keyframes iconBounce{from{opacity:0;transform:scale(.5) translateY(20px)}to{opacity:1;transform:none}}
-.sp-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-.sp-stat-box{background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:14px;text-align:center}
-.sp-stat-num{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:800;color:#1d4ed8}
-.sp-stat-lbl{font-size:10px;font-weight:700;color:#64748b;letter-spacing:.5px;margin-top:2px}
-.sp-next-btn{margin-top:20px;background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8;padding:10px 28px;border-radius:50px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.2s}
-.sp-next-btn:hover{background:#dbeafe}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* SKIP */
+.sp-skip{position:fixed;top:20px;right:22px;z-index:10000;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.55);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:8px 18px;border-radius:20px;cursor:pointer;transition:.2s;font-family:inherit}
+.sp-skip:hover{background:rgba(255,255,255,.18);color:#fff}
 
 /* ============ APP SHELL ============ */
 .sb{position:fixed;left:0;top:0;bottom:0;width:var(--sb);background:linear-gradient(180deg,#0f172a,#1e293b);color:#fff;overflow-y:auto;z-index:200;transition:.3s}
@@ -380,111 +396,106 @@ tr:hover{background:#f8fafc}
 </head>
 <body>
 
-<!-- ============ SPLASH — VISHAL TECHNOPOWER ============ -->
+<!-- ============ SPLASH ============ -->
 <div id="splashOverlay">
-  <div class="sp-bg"></div>
-  <div class="sp-blob sp-blob1"></div>
-  <div class="sp-blob sp-blob2"></div>
-  <div class="sp-blob sp-blob3"></div>
-  <div class="sp-dots"></div>
-  <div class="sp-strips">
-    <div class="sp-strip"></div>
-    <div class="sp-strip"></div>
-    <div class="sp-strip"></div>
-    <div class="sp-strip"></div>
-  </div>
 
-  <div class="sp-slides">
-
-    <!-- SLIDE 1 — Logo & Branding -->
-    <div class="sp-slide active" id="spSlide0">
-      <div class="sp-card">
-        <!-- Spinning ring logo (like image2) -->
-        <div class="sp-ring-wrap">
-          <svg class="sp-ring-svg" viewBox="0 0 140 140" fill="none">
-            <circle cx="70" cy="70" r="64" stroke="#e2e8f0" stroke-width="3"/>
-            <circle cx="70" cy="70" r="64" stroke="url(#ringGrad)" stroke-width="4" stroke-linecap="round" stroke-dasharray="280 120"/>
-            <defs>
-              <linearGradient id="ringGrad" x1="0" y1="0" x2="140" y2="140" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#1e3a8a"/>
-                <stop offset="50%" stop-color="#60a5fa"/>
-                <stop offset="100%" stop-color="#1e3a8a"/>
-              </linearGradient>
-            </defs>
+  <!-- SLIDE 1 — Dark Blue Branded -->
+  <div class="sp-slide sp-active" id="spS1">
+    <div class="s1-bg"></div>
+    <div class="s1-grid"></div>
+    <div class="s1-glow1"></div><div class="s1-glow2"></div>
+    <div class="s1-particles" id="s1Parts"></div>
+    <div class="s1-content">
+      <div class="s1-logo-wrap">
+        <div class="s1-ring-outer"></div>
+        <div class="s1-ring-mid"></div>
+        <div class="s1-ring-inner"></div>
+        <div class="s1-core">
+          <!-- Vishal Technopower Logo -->
+          <svg class="vt-svg" viewBox="0 0 90 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Left triangle - light blue -->
+            <polygon points="4,62 20,10 20,62" fill="#93c5fd" opacity=".85"/>
+            <!-- Mid triangle - white -->
+            <polygon points="14,62 30,10 30,62" fill="rgba(255,255,255,.95)"/>
+            <!-- Right triangle - dark blue -->
+            <polygon points="24,62 40,10 40,62" fill="#1d4ed8"/>
+            <!-- Lightning bolt - amber -->
+            <polygon points="28,30 23,44 30,40 26,56 36,38 29,41" fill="#f59e0b"/>
+            <!-- VISHAL text -->
+            <text x="45" y="28" font-family="Arial Black,sans-serif" font-weight="900" font-size="13" fill="white" letter-spacing="1">VISHAL</text>
+            <text x="45" y="44" font-family="Arial Black,sans-serif" font-weight="900" font-size="9.5" fill="#60a5fa" letter-spacing="1">TECHNOPOWER</text>
           </svg>
-          <div class="sp-ring-inner">
-            <!-- Vishal Technopower Logo SVG (recreated from image) -->
-            <svg class="sp-vt-logo" viewBox="0 0 90 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Triangle logo mark -->
-              <polygon points="8,52 30,8 30,52" fill="#5b8dd9" opacity="0.7"/>
-              <polygon points="12,52 34,8 34,52" fill="white" opacity="0.9"/>
-              <polygon points="18,52 40,8 40,52" fill="#1e3a8a"/>
-              <!-- Lightning bolt -->
-              <polygon points="26,28 22,38 28,35 24,48 32,33 26,36" fill="#f59e0b"/>
-            </svg>
-          </div>
         </div>
-
-        <div class="sp-company">VISHAL <b>TECHNOPOWER</b></div>
-        <div class="sp-italic">Engineering Your Electrical Needs!</div>
-        <div class="sp-line"></div>
-        <div class="sp-erp-label">Enterprise Resource Planning System</div>
-        <div class="sp-badges">
-          <span class="sp-bdg">ISO 9001</span>
-          <span class="sp-bdg">EPC Grade A</span>
-          <span class="sp-bdg">OHSAS 18001</span>
-          <span class="sp-bdg">18+ States</span>
-        </div>
-        <div class="sp-prog-wrap">
-          <div class="sp-prog-txt" id="spTxt">Initializing ERP...</div>
-          <div class="sp-prog-bar"><div class="sp-prog-fill" id="spFill"></div></div>
-        </div>
-        <button class="sp-enter" onclick="enterERP()"><span class="sp-enter-inner">⚡ Enter Portal</span></button>
-        <div class="sp-ver">VTP ERP v3.0 • 2025</div>
       </div>
-    </div>
-
-    <!-- SLIDE 2 — About -->
-    <div class="sp-slide" id="spSlide1">
-      <div class="sp-card">
-        <div class="sp-slide2-icon">⚡</div>
-        <div class="sp-slide2-title">Powering India's Growth</div>
-        <div class="sp-slide2-sub">End-to-End EPC Solutions<br>Transmission • Substation • Distribution</div>
-        <div class="sp-stat-grid">
-          <div class="sp-stat-box"><div class="sp-stat-num">18+</div><div class="sp-stat-lbl">States</div></div>
-          <div class="sp-stat-box"><div class="sp-stat-num">500+</div><div class="sp-stat-lbl">Projects</div></div>
-          <div class="sp-stat-box"><div class="sp-stat-num">5000+</div><div class="sp-stat-lbl">MW Installed</div></div>
-          <div class="sp-stat-box"><div class="sp-stat-num">20+</div><div class="sp-stat-lbl">Years Exp</div></div>
-        </div>
-        <button class="sp-next-btn" onclick="spGoSlide(2)">Next →</button>
+      <div class="s1-name">VISHAL <span class="s1-name-blue">TECHNOPOWER</span></div>
+      <div class="s1-tagline">Engineering Your Electrical Needs!</div>
+      <div class="s1-div"></div>
+      <div class="s1-sub">Enterprise Resource Planning System</div>
+      <div class="s1-badges">
+        <span class="s1-bdg">ISO 9001</span>
+        <span class="s1-bdg">EPC Grade A</span>
+        <span class="s1-bdg">OHSAS 18001</span>
+        <span class="s1-bdg">18+ States</span>
       </div>
-    </div>
-
-    <!-- SLIDE 3 — ERP Modules -->
-    <div class="sp-slide" id="spSlide2">
-      <div class="sp-card">
-        <div class="sp-slide2-icon">📊</div>
-        <div class="sp-slide2-title">ERP Modules</div>
-        <div class="sp-stat-grid">
-          <div class="sp-stat-box"><div class="sp-stat-num" style="font-size:20px">💼</div><div class="sp-stat-lbl">Outstanding</div></div>
-          <div class="sp-stat-box"><div class="sp-stat-num" style="font-size:20px">📦</div><div class="sp-stat-lbl">Stock WIP</div></div>
-          <div class="sp-stat-box"><div class="sp-stat-num" style="font-size:20px">📈</div><div class="sp-stat-lbl">KPI Live</div></div>
-          <div class="sp-stat-box"><div class="sp-stat-num" style="font-size:20px">🤖</div><div class="sp-stat-lbl">AI Assistant</div></div>
-        </div>
-        <button class="sp-enter" onclick="enterERP()" style="margin-top:20px;opacity:1;animation:none"><span class="sp-enter-inner">⚡ Enter Portal</span></button>
+      <div class="s1-prog-wrap">
+        <div class="s1-prog-lbl" id="s1Lbl">Initializing...</div>
+        <div class="s1-prog-track"><div class="s1-prog-fill" id="s1Fill"></div></div>
       </div>
+      <button class="s1-btn" onclick="enterERP()">⚡&nbsp; Enter Portal</button>
+      <div class="s1-ver">VTP ERP v3.0 &nbsp;•&nbsp; 2025</div>
     </div>
-
   </div>
 
-  <!-- Slide nav dots -->
-  <div class="sp-nav">
-    <button class="sp-nav-dot on" onclick="spGoSlide(0)"></button>
-    <button class="sp-nav-dot" onclick="spGoSlide(1)"></button>
-    <button class="sp-nav-dot" onclick="spGoSlide(2)"></button>
+  <!-- SLIDE 2 — White Clean Stats -->
+  <div class="sp-slide" id="spS2">
+    <div class="s2-bg"></div>
+    <div class="s2-circle1"></div><div class="s2-circle2"></div>
+    <div class="s2-lines"></div>
+    <div class="s2-content">
+      <div class="s2-icon">⚡</div>
+      <div class="s2-title">Powering <em>India's</em> Growth</div>
+      <div class="s2-desc">End-to-End EPC Solutions &nbsp;•&nbsp; Transmission &nbsp;•&nbsp; Substation &nbsp;•&nbsp; Distribution</div>
+      <div class="s2-grid">
+        <div class="s2-box"><div class="s2-num">18+</div><div class="s2-lbl">States</div></div>
+        <div class="s2-box"><div class="s2-num">500+</div><div class="s2-lbl">Projects</div></div>
+        <div class="s2-box"><div class="s2-num">5K+</div><div class="s2-lbl">MW Done</div></div>
+        <div class="s2-box"><div class="s2-num">20+</div><div class="s2-lbl">Years Exp</div></div>
+      </div>
+      <button class="s2-next" onclick="spGo(2)">ERP Modules &nbsp;→</button>
+    </div>
   </div>
+
+  <!-- SLIDE 3 — Split Layout ERP Modules -->
+  <div class="sp-slide" id="spS3">
+    <div class="s3-bg"></div>
+    <div class="s3-panel"></div>
+    <div class="s3-dots"></div>
+    <div class="s3-content">
+      <div class="s3-left">
+        <div class="s3-eyebrow">Your Digital Command Center</div>
+        <div class="s3-title">Smart<br><em>ERP</em><br>Dashboard</div>
+        <div class="s3-body">Live data from Google Sheets. AI-powered insights. Real-time outstanding, stock & debtors — all in one place.</div>
+        <button class="s3-cta" onclick="enterERP()">⚡ Enter Portal</button>
+      </div>
+      <div class="s3-right">
+        <div class="s3-mod"><div class="s3-ico">💼</div><div><div class="s3-mn">Outstanding</div><div class="s3-ms">Live payment tracking</div></div></div>
+        <div class="s3-mod"><div class="s3-ico">📦</div><div><div class="s3-mn">Stock WIP</div><div class="s3-ms">Site-wise inventory</div></div></div>
+        <div class="s3-mod"><div class="s3-ico">⏰</div><div><div class="s3-mn">Debtors Ageing</div><div class="s3-ms">45 sites auto-fetched</div></div></div>
+        <div class="s3-mod"><div class="s3-ico">📈</div><div><div class="s3-mn">KPI Dashboard</div><div class="s3-ms">Account dept live data</div></div></div>
+        <div class="s3-mod"><div class="s3-ico">🤖</div><div><div class="s3-mn">AI Assistant</div><div class="s3-ms">Hinglish ERP chat</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Dots -->
+  <div class="sp-dots-nav" id="spDotsNav">
+    <button class="sp-dot-btn sp-dot-on" onclick="spGo(0)"></button>
+    <button class="sp-dot-btn" onclick="spGo(1)"></button>
+    <button class="sp-dot-btn" onclick="spGo(2)"></button>
+  </div>
+  <!-- Skip -->
+  <button class="sp-skip" onclick="enterERP()">Skip →</button>
 </div>
-
 <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
 <div class="sb" id="sidebar">
   <div class="sb-h"><div class="sb-logo">VE</div><div class="sb-brand">VISHAL GROUPS<span>ELECTRICALS &amp; TRADING</span></div><button class="sb-x" onclick="closeSidebar()">✕</button></div>
@@ -733,30 +744,30 @@ const KPI_CSV=''; // legacy - unused
 const SITE_GIDS=[174412694,118852844,548407335,751444077,1347791283,321034887,1979702996,1893067828,1234783628,977030954,1642019228,1920245490,2004258151,1666678437,458687889,178072507,1087865048,1871920534,1053026690,1485879867,1545839474,477557482,279843949,671962254,387496523,323328787,1725908395,493192291,1199190624,1110433204,606059273,1612881510,1855046779,980845244,989690966,0,2070489175,776970165,1201529354,1729965160,131840235,923489850,996674553,2095150463,22890483];
 
 // ===== SPLASH SLIDES =====
-let spCur=0;
-function spGoSlide(n){
-  document.querySelectorAll('.sp-slide').forEach((s,i)=>{
-    s.classList.remove('active','prev');
-    if(i<n)s.classList.add('prev');
-  });
-  document.querySelectorAll('.sp-nav-dot').forEach((d,i)=>d.classList.toggle('on',i===n));
-  setTimeout(()=>{const el=document.getElementById('spSlide'+n);if(el)el.classList.add('active')},10);
+let spCur=0,spTimer=null;
+function spGo(n){
+  const slides=document.querySelectorAll('.sp-slide');
+  const dots=document.querySelectorAll('.sp-dot-btn');
+  slides.forEach((s,i)=>{s.classList.remove('sp-active','sp-prev');if(i<n)s.classList.add('sp-prev')});
+  dots.forEach((d,i)=>d.classList.toggle('sp-dot-on',i===n));
+  // dot color: white on dark slides (0,2), dark on light slide (1)
+  const isDark=(n!==1);
+  dots.forEach(d=>{d.style.background=d.classList.contains('sp-dot-on')?(isDark?'#2563eb':'#1d4ed8'):(isDark?'rgba(255,255,255,.25)':'rgba(37,99,235,.25)')});
+  setTimeout(()=>{const el=document.getElementById('spS'+n);if(el)el.classList.add('sp-active')},10);
   spCur=n;
 }
 (function initSplash(){
+  // Floating particles for slide 1
+  const pc=document.getElementById('s1Parts');
+  if(pc){for(let i=0;i<25;i++){const p=document.createElement('div');p.className='s1p';p.style.cssText='left:'+Math.random()*100+'%;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px;animation-duration:'+(6+Math.random()*10)+'s;animation-delay:'+(Math.random()*8)+'s;opacity:'+(0.2+Math.random()*0.4);pc.appendChild(p)}}
+  // Progress bar
   let pct=0;
-  const fill=document.getElementById('spFill');
-  const txt=document.getElementById('spTxt');
+  const fill=document.getElementById('s1Fill'),lbl=document.getElementById('s1Lbl');
   const msgs=['Initializing modules...','Loading live data...','Connecting sheets...','Almost ready...','Ready!'];
-  const timer=setInterval(()=>{
-    pct+=Math.random()*3+1.5;
-    if(pct>=100){pct=100;clearInterval(timer)}
-    if(fill)fill.style.width=pct+'%';
-    if(txt)txt.textContent=msgs[Math.min(Math.floor(pct/25),msgs.length-1)];
-  },80);
-  // Auto-advance: 0→1 at 3.5s, 1→2 at 7s
-  setTimeout(()=>{if(spCur===0)spGoSlide(1)},3500);
-  setTimeout(()=>{if(spCur===1)spGoSlide(2)},7000);
+  const t=setInterval(()=>{pct+=Math.random()*2.5+1.2;if(pct>=100){pct=100;clearInterval(t)}if(fill)fill.style.width=pct+'%';if(lbl)lbl.textContent=msgs[Math.min(Math.floor(pct/25),4)]},75);
+  // Auto-advance
+  spTimer=setTimeout(()=>{if(spCur===0)spGo(1)},3800);
+  setTimeout(()=>{if(spCur===1)spGo(2)},7800);
 })();
 
 function enterERP(){
