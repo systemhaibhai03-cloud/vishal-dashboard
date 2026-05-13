@@ -263,75 +263,67 @@ tr:hover{background:#f8fafc}
 .toast-msg{font-size:11px;color:var(--tl);line-height:1.4;word-wrap:break-word}
 .toast-x{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px;padding:0 4px}
 
-/* KPI DASHBOARD — VIBRANT THEME */
+/* KPI DASHBOARD — WHITE CLEAN THEME */
 .kpi-outer{margin-bottom:16px}
-.kpi-section{border-radius:16px;padding:20px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden}
-.kpi-section.kpi-main{background:linear-gradient(135deg,#1a0533 0%,#2d0a5e 50%,#0a1a4a 100%);border:1px solid rgba(139,92,246,.3);box-shadow:0 8px 32px rgba(139,92,246,.25),inset 0 1px 0 rgba(255,255,255,.08)}
-.kpi-section.kpi-week{background:linear-gradient(135deg,#002d1a 0%,#005c3b 50%,#003366 100%);border:1px solid rgba(6,214,160,.3);box-shadow:0 8px 32px rgba(6,214,160,.2),inset 0 1px 0 rgba(255,255,255,.08)}
-.kpi-section.kpi-debt-amt{background:linear-gradient(135deg,#330a00 0%,#5c1a00 50%,#330022 100%);border:1px solid rgba(255,87,34,.35);box-shadow:0 8px 32px rgba(255,87,34,.2),inset 0 1px 0 rgba(255,255,255,.08)}
-.kpi-section.kpi-debt-age{background:linear-gradient(135deg,#1a1500 0%,#3d2e00 50%,#1a0a00 100%);border:1px solid rgba(255,193,7,.3);box-shadow:0 8px 32px rgba(255,193,7,.18),inset 0 1px 0 rgba(255,255,255,.08)}
-.kpi-section::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;opacity:.07;pointer-events:none}
-.kpi-section.kpi-main::before{background:#a855f7}
-.kpi-section.kpi-week::before{background:#06D6A0}
-.kpi-section.kpi-debt-amt::before{background:#FF5722}
-.kpi-section.kpi-debt-age::before{background:#FFC107}
-.kpi-section-title{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.kpi-section-title .kpi-live{font-size:8px;padding:2px 8px;border-radius:10px;letter-spacing:1px;font-weight:700}
-.kpi-section.kpi-main .kpi-live{background:rgba(168,85,247,.8);color:#fff;animation:blink 2s infinite}
-.kpi-section.kpi-week .kpi-live{background:rgba(6,214,160,.8);color:#000;animation:blink 2s infinite}
-.kpi-section.kpi-debt-amt .kpi-live{background:rgba(255,87,34,.8);color:#fff;animation:blink 2s infinite}
-.kpi-section.kpi-debt-age .kpi-live{background:rgba(255,193,7,.85);color:#000;animation:blink 2s infinite}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
-.kpi-card{border-radius:12px;padding:14px;transition:.25s;cursor:default;position:relative;overflow:hidden}
-.kpi-card:hover{transform:translateY(-3px)}
-.kpi-card.kc-purple{background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(109,40,217,.15));border:1px solid rgba(139,92,246,.4)}
-.kpi-card.kc-green{background:linear-gradient(135deg,rgba(6,214,160,.2),rgba(5,150,105,.12));border:1px solid rgba(6,214,160,.4)}
-.kpi-card.kc-orange{background:linear-gradient(135deg,rgba(255,87,34,.22),rgba(220,38,38,.12));border:1px solid rgba(255,87,34,.4)}
-.kpi-card.kc-blue{background:linear-gradient(135deg,rgba(0,180,216,.22),rgba(26,86,219,.12));border:1px solid rgba(0,180,216,.4)}
-.kpi-card.kc-yellow{background:linear-gradient(135deg,rgba(255,193,7,.22),rgba(217,119,6,.12));border:1px solid rgba(255,193,7,.4)}
-.kpi-card.kc-pink{background:linear-gradient(135deg,rgba(244,63,94,.22),rgba(190,24,93,.12));border:1px solid rgba(244,63,94,.4)}
-.kpi-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.65;margin-bottom:6px}
-.kpi-card.kc-purple .kpi-label{color:#c4b5fd}
-.kpi-card.kc-green .kpi-label{color:#6ee7b7}
-.kpi-card.kc-orange .kpi-label{color:#fca5a5}
-.kpi-card.kc-blue .kpi-label{color:#7dd3fc}
-.kpi-card.kc-yellow .kpi-label{color:#fde68a}
-.kpi-card.kc-pink .kpi-label{color:#fda4af}
-.kpi-value{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;line-height:1;word-break:break-all}
-.kpi-card.kc-purple .kpi-value{color:#e9d5ff}
-.kpi-card.kc-green .kpi-value{color:#6ee7b7}
-.kpi-card.kc-orange .kpi-value{color:#fca5a5}
-.kpi-card.kc-blue .kpi-value{color:#bae6fd}
-.kpi-card.kc-yellow .kpi-value{color:#fef08a}
-.kpi-card.kc-pink .kpi-value{color:#fecdd3}
-.kpi-badge{display:inline-block;font-size:8px;font-weight:800;padding:2px 7px;border-radius:8px;margin-top:5px;letter-spacing:.5px}
-.kpi-badge.planned{background:rgba(148,163,184,.2);color:#94a3b8;border:1px solid rgba(148,163,184,.3)}
-.kpi-badge.actual{background:rgba(34,197,94,.2);color:#4ade80;border:1px solid rgba(34,197,94,.3)}
+.kpi-section{border-radius:16px;padding:20px;margin-bottom:16px;color:#1e293b;position:relative;overflow:hidden;background:#fff;border:2px solid #e2e8f0;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.kpi-section.kpi-main{border-top:5px solid #7c3aed;background:linear-gradient(180deg,#f5f3ff 0%,#fff 60%)}
+.kpi-section.kpi-week{border-top:5px solid #059669;background:linear-gradient(180deg,#f0fdf4 0%,#fff 60%)}
+.kpi-section.kpi-debt-amt{border-top:5px solid #dc2626;background:linear-gradient(180deg,#fff5f5 0%,#fff 60%)}
+.kpi-section.kpi-debt-age{border-top:5px solid #d97706;background:linear-gradient(180deg,#fffbeb 0%,#fff 60%)}
+.kpi-section-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#1e293b}
+.kpi-section.kpi-main .kpi-section-title{color:#5b21b6}
+.kpi-section.kpi-week .kpi-section-title{color:#065f46}
+.kpi-section.kpi-debt-amt .kpi-section-title{color:#991b1b}
+.kpi-section.kpi-debt-age .kpi-section-title{color:#92400e}
+.kpi-section-title .kpi-live{font-size:9px;padding:3px 9px;border-radius:12px;letter-spacing:1px;font-weight:800;animation:blink 2s infinite;color:#fff}
+.kpi-section.kpi-main .kpi-live{background:#7c3aed}
+.kpi-section.kpi-week .kpi-live{background:#059669}
+.kpi-section.kpi-debt-amt .kpi-live{background:#dc2626}
+.kpi-section.kpi-debt-age .kpi-live{background:#d97706}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.kpi-card{border-radius:12px;padding:16px;transition:.25s;cursor:default;border:1.5px solid}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.kpi-card.kc-purple{background:#f5f3ff;border-color:#ddd6fe}
+.kpi-card.kc-green{background:#f0fdf4;border-color:#bbf7d0}
+.kpi-card.kc-orange{background:#fff7ed;border-color:#fed7aa}
+.kpi-card.kc-blue{background:#eff6ff;border-color:#bfdbfe}
+.kpi-card.kc-yellow{background:#fffbeb;border-color:#fde68a}
+.kpi-card.kc-pink{background:#fdf2f8;border-color:#fbcfe8}
+.kpi-label{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;color:#64748b}
+.kpi-value{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:800;line-height:1;word-break:break-all}
+.kpi-card.kc-purple .kpi-value{color:#5b21b6}
+.kpi-card.kc-green .kpi-value{color:#065f46}
+.kpi-card.kc-orange .kpi-value{color:#9a3412}
+.kpi-card.kc-blue .kpi-value{color:#1e40af}
+.kpi-card.kc-yellow .kpi-value{color:#92400e}
+.kpi-card.kc-pink .kpi-value{color:#9d174d}
+.kpi-badge{display:inline-block;font-size:9px;font-weight:800;padding:2px 8px;border-radius:8px;margin-top:6px;letter-spacing:.5px}
+.kpi-badge.planned{background:#e2e8f0;color:#475569}
+.kpi-badge.actual{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
 /* KPI TABLES */
-.kpi-table-wrap{overflow-x:auto;border-radius:10px;border:1px solid rgba(255,255,255,.1)}
-.kpi-table{width:100%;border-collapse:collapse;font-size:11px;min-width:500px}
-.kpi-table th{padding:9px 12px;text-align:left;font-weight:700;color:rgba(255,255,255,.55);border-bottom:1px solid rgba(255,255,255,.1);white-space:nowrap;font-size:10px;letter-spacing:.5px}
-.kpi-section.kpi-main .kpi-table th{background:rgba(139,92,246,.15)}
-.kpi-section.kpi-week .kpi-table th{background:rgba(6,214,160,.12)}
-.kpi-section.kpi-debt-amt .kpi-table th{background:rgba(255,87,34,.12)}
-.kpi-section.kpi-debt-age .kpi-table th{background:rgba(255,193,7,.1)}
-.kpi-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.05);white-space:nowrap;font-size:11px;color:rgba(255,255,255,.85)}
+.kpi-table-wrap{overflow-x:auto;border-radius:10px;border:1.5px solid #e2e8f0}
+.kpi-table{width:100%;border-collapse:collapse;font-size:13px;min-width:500px}
+.kpi-table th{padding:11px 14px;text-align:left;font-weight:800;color:#fff;border-bottom:2px solid rgba(255,255,255,.2);white-space:nowrap;font-size:11px;letter-spacing:.5px}
+.kpi-section.kpi-main .kpi-table th{background:#7c3aed}
+.kpi-section.kpi-week .kpi-table th{background:#059669}
+.kpi-section.kpi-debt-amt .kpi-table th{background:#dc2626}
+.kpi-section.kpi-debt-age .kpi-table th{background:#d97706}
+.kpi-table td{padding:10px 14px;border-bottom:1px solid #f1f5f9;white-space:nowrap;font-size:13px;color:#1e293b;font-weight:600}
 .kpi-table tr:last-child td{border-bottom:none}
-.kpi-table tr:hover td{background:rgba(255,255,255,.04)}
-.kpi-table .kpi-rank{font-weight:800;font-size:13px;color:rgba(255,255,255,.3);width:30px}
-.kpi-table .kpi-site{font-weight:700;color:#fff;max-width:200px;overflow:hidden;text-overflow:ellipsis}
-.kpi-table .kpi-amt-cell{font-family:'Courier New',monospace;font-weight:800}
-.kpi-section.kpi-main .kpi-amt-cell{color:#c4b5fd}
-.kpi-section.kpi-week .kpi-amt-cell{color:#6ee7b7}
-.kpi-section.kpi-debt-amt .kpi-amt-cell{color:#fca5a5}
-.kpi-section.kpi-debt-age .kpi-amt-cell{color:#fef08a}
-.kpi-age-bar{display:inline-block;height:4px;border-radius:2px;margin-left:8px;vertical-align:middle}
-.kpi-empty{padding:30px;text-align:center;color:rgba(255,255,255,.3);font-size:12px}
-.kpi-refresh-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:5px 12px;border-radius:8px;font-size:10px;cursor:pointer;font-weight:600}
-.kpi-refresh-btn:hover{background:rgba(255,255,255,.2)}
-.kpi-row-planned td{opacity:.45;font-style:italic}
-.kpi-row-actual td{font-weight:700}
-.top5-medal{font-size:14px;margin-right:4px}
+.kpi-table tr:hover td{background:#f8fafc}
+.kpi-table .kpi-rank{font-weight:900;font-size:16px;color:#94a3b8;width:36px}
+.kpi-table .kpi-site{font-weight:800;color:#1e293b;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+.kpi-table .kpi-amt-cell{font-family:'Courier New',monospace;font-weight:800;font-size:14px}
+.kpi-section.kpi-main .kpi-amt-cell{color:#5b21b6}
+.kpi-section.kpi-week .kpi-amt-cell{color:#065f46}
+.kpi-section.kpi-debt-amt .kpi-amt-cell{color:#dc2626}
+.kpi-section.kpi-debt-age .kpi-amt-cell{color:#92400e}
+.kpi-table .kpi-row-planned td{color:#94a3b8;font-weight:500;font-style:italic;background:#fafafa}
+.kpi-table .kpi-row-actual td{font-weight:700;color:#1e293b}
+.kpi-empty{padding:30px;text-align:center;color:#94a3b8;font-size:13px;font-weight:600}
+.kpi-refresh-btn{background:#f1f5f9;border:1.5px solid #e2e8f0;color:#475569;padding:6px 14px;border-radius:8px;font-size:11px;cursor:pointer;font-weight:700}
+.kpi-refresh-btn:hover{background:#e2e8f0;color:#1e293b}
+.top5-medal{font-size:16px;margin-right:4px}
 
 @media(max-width:768px){
 .sb{transform:translateX(-100%);width:260px;box-shadow:4px 0 20px rgba(0,0,0,.2)}
@@ -714,8 +706,10 @@ function renderAll(){drawReport();drawOutstanding();drawSales();drawEntries();dr
 // ===== KPI URLs =====
 const KPI_MONTHLY_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRjlpY9bep8bbudDaiMuZry79rlHp4gtSIluBrZuxo81BcTvFmOqd6kYYxrSFEA4TKqf5cTC_Cjd30o/pub?output=csv';
 const KPI_WEEKLY_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRjlpY9bep8bbudDaiMuZry79rlHp4gtSIluBrZuxo81BcTvFmOqd6kYYxrSFEA4TKqf5cTC_Cjd30o/pub?gid=1251419768&single=true&output=csv';
-const DEBTOR_AMT_CSV='https://docs.google.com/spreadsheets/d/'+PAY_SHEET_ID+'/gviz/tq?tqx=out:csv&gid=1159335272';
-const DEBTOR_AGE_CSV='https://docs.google.com/spreadsheets/d/'+PAY_SHEET_ID+'/gviz/tq?tqx=out:csv&gid=1524794951';
+// These GIDs are from the account dept sheet (same base as KPI)
+const KPI_SHEET_BASE='https://docs.google.com/spreadsheets/d/e/2PACX-1vRjlpY9bep8bbudDaiMuZry79rlHp4gtSIluBrZuxo81BcTvFmOqd6kYYxrSFEA4TKqf5cTC_Cjd30o/pub';
+const DEBTOR_AMT_CSV=KPI_SHEET_BASE+'?gid=1159335272&single=true&output=csv';
+const DEBTOR_AGE_CSV=KPI_SHEET_BASE+'?gid=1524794951&single=true&output=csv';
 
 async function fetchAllKPI(){fetchKPI();fetchWeeklyKPI();fetchTop5Amt();fetchTop5Age()}
 
@@ -819,86 +813,127 @@ async function fetchWeeklyKPI(){
 async function fetchTop5Amt(){
   const el=document.getElementById('kpiTop5Amt');
   const titleHtml=el.querySelector('.kpi-section-title').outerHTML;
-  el.innerHTML=titleHtml+'<div class="kpi-empty">⏳ Fetching top debtors by amount...</div>';
-  try{
-    const r=await fetch(DEBTOR_AMT_CSV+'&t='+Date.now());
-    if(!r.ok)throw new Error('Failed');
-    const text=await r.text();
-    const rows=text.split('\n').map(csvRow).filter(r=>r.some(c=>c.trim()));
-    // Parse: find header, then get all data rows, sort by amount, show top5
-    const{headers,dataRows}=parseKPISheet(rows);
-    // Find amount column (largest numeric column)
-    let amtCol=2;let maxSum=0;
-    for(let c=1;c<Math.min(headers.length,15);c++){
-      const colSum=dataRows.reduce((s,r)=>s+pn(r[c]),0);
-      if(colSum>maxSum){maxSum=colSum;amtCol=c}
-    }
-    const sorted=dataRows.filter(r=>pn(r[amtCol])>0).sort((a,b)=>pn(b[amtCol])-pn(a[amtCol])).slice(0,5);
-    const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
-    let html=titleHtml;
-    if(!sorted.length){html+='<div class="kpi-empty">No debtor data found</div>';el.innerHTML=html;return}
-    const maxAmt=pn(sorted[0][amtCol]);
-    html+='<div class="kpi-table-wrap"><table class="kpi-table"><thead><tr>';
-    ['#',...headers.slice(0,8)].forEach(h=>html+='<th>'+h+'</th>');
-    html+='</tr></thead><tbody>';
-    sorted.forEach((row,i)=>{
-      const amt=pn(row[amtCol]);
-      const barW=Math.round((amt/maxAmt)*100);
-      html+='<tr><td class="kpi-rank">'+medals[i]+'</td>';
-      row.slice(0,8).forEach((cell,ci)=>{
-        const n=pn(cell);
-        const isAmt=n>500&&ci>0;
-        html+='<td class="'+(isAmt?'kpi-amt-cell':'kpi-site')+'">'+( isAmt?'<span>'+fcF(n)+'</span>'+(ci===amtCol?'<span class="kpi-age-bar" style="width:'+barW+'px;background:rgba(255,87,34,.6)"></span>':''):(cell||'-'))+'</td>';
-      });
-      html+='</tr>';
-    });
-    html+='</tbody></table></div>';
-    el.innerHTML=html;
-  }catch(e){document.getElementById('kpiTop5Amt').innerHTML=document.getElementById('kpiTop5Amt').innerHTML.split('kpi-empty')[0]+'<div class="kpi-empty">❌ '+e.message+' <button class="kpi-refresh-btn" onclick="fetchTop5Amt()">Retry</button></div>';}
+  el.innerHTML=titleHtml+'<div class="kpi-empty">⏳ Fetching...</div>';
+  // Try both published and gviz URL formats
+  const urls=[
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRjlpY9bep8bbudDaiMuZry79rlHp4gtSIluBrZuxo81BcTvFmOqd6kYYxrSFEA4TKqf5cTC_Cjd30o/pub?gid=1159335272&single=true&output=csv',
+    'https://docs.google.com/spreadsheets/d/1yQik8kd8QQcCsom7hFE3AY3k6OSjYL7LrcPTq3BBja4/gviz/tq?tqx=out:csv&gid=1159335272',
+    'https://docs.google.com/spreadsheets/d/1iHrPxhvsFnedO2Js7u3wmFbPAxLeC4F1WP71MBv5gcw/gviz/tq?tqx=out:csv&gid=1159335272'
+  ];
+  let text='',ok=false,usedUrl='';
+  for(const url of urls){
+    try{const r=await fetch(url+'&t='+Date.now());if(r.ok){text=await r.text();if(text.length>50&&!text.includes('<!DOCTYPE')){ok=true;usedUrl=url;break}}}catch(e){}
+  }
+  if(!ok){el.innerHTML=titleHtml+'<div class="kpi-empty">❌ Sheet not accessible. Please make sure GID 1159335272 is published (File → Share → Publish to web).<br><button class="kpi-refresh-btn" onclick="fetchTop5Amt()" style="margin-top:8px">🔄 Retry</button></div>';return}
+  const rows=text.split('\n').map(csvRow);
+  renderTop5Sheet(rows,'kpiTop5Amt','🔴 Top 5 Debtors — Highest Amount','amt');
 }
 
 async function fetchTop5Age(){
   const el=document.getElementById('kpiTop5Age');
   const titleHtml=el.querySelector('.kpi-section-title').outerHTML;
-  el.innerHTML=titleHtml+'<div class="kpi-empty">⏳ Fetching top debtors by ageing...</div>';
-  try{
-    const r=await fetch(DEBTOR_AGE_CSV+'&t='+Date.now());
-    if(!r.ok)throw new Error('Failed');
-    const text=await r.text();
-    const rows=text.split('\n').map(csvRow).filter(r=>r.some(c=>c.trim()));
-    const{headers,dataRows}=parseKPISheet(rows);
-    // Find days/ageing column
-    let ageCol=3;
-    for(let c=1;c<Math.min(headers.length,15);c++){
+  el.innerHTML=titleHtml+'<div class="kpi-empty">⏳ Fetching...</div>';
+  // Try both published and gviz URL formats for gid=1524794951
+  const urls=[
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRjlpY9bep8bbudDaiMuZry79rlHp4gtSIluBrZuxo81BcTvFmOqd6kYYxrSFEA4TKqf5cTC_Cjd30o/pub?gid=1524794951&single=true&output=csv',
+    'https://docs.google.com/spreadsheets/d/1yQik8kd8QQcCsom7hFE3AY3k6OSjYL7LrcPTq3BBja4/gviz/tq?tqx=out:csv&gid=1524794951',
+    'https://docs.google.com/spreadsheets/d/1iHrPxhvsFnedO2Js7u3wmFbPAxLeC4F1WP71MBv5gcw/gviz/tq?tqx=out:csv&gid=1524794951'
+  ];
+  let text='',ok=false,errLog='';
+  for(const url of urls){
+    try{const r=await fetch(url+'&t='+Date.now());const t=await r.text();errLog+='URL: '+url.slice(-40)+' → '+r.status+' len:'+t.length+'\n';if(r.ok&&t.length>50&&!t.includes('<!DOCTYPE')){text=t;ok=true;break}}catch(e){errLog+=e.message+'\n'}
+  }
+  if(!ok){
+    el.innerHTML=titleHtml+'<div class="kpi-empty" style="text-align:left;font-size:12px;color:#475569">❌ Sheet GID 1524794951 not accessible.<br><br>Please:<br>1. Open your Google Sheet<br>2. Go to <strong>File → Share → Publish to web</strong><br>3. Select "Entire Document" → CSV → Publish<br><br><details style="margin-top:8px"><summary style="cursor:pointer;color:#94a3b8;font-size:11px">Debug info</summary><pre style="font-size:9px;color:#94a3b8;white-space:pre-wrap;background:#f8fafc;padding:8px;border-radius:6px;margin-top:6px">'+errLog+'</pre></details><button class="kpi-refresh-btn" onclick="fetchTop5Age()" style="margin-top:10px">🔄 Retry</button></div>';
+    return;
+  }
+  const rows=text.split('\n').map(csvRow);
+  renderTop5Sheet(rows,'kpiTop5Age','⏰ Top 5 Debtors — Highest Ageing','age');
+}
+
+function renderTop5Sheet(rows, elId, title, mode){
+  const el=document.getElementById(elId);
+  const titleHtml=el.querySelector('.kpi-section-title').outerHTML;
+
+  // Filter non-empty rows
+  const nonEmpty=rows.filter(r=>r&&r.some(c=>String(c||'').trim()));
+  if(!nonEmpty.length){el.innerHTML=titleHtml+'<div class="kpi-empty">No data in sheet</div>';return}
+
+  // Find header row — first row with text, or row that has 'site'/'name'/'party' keyword
+  let hdrIdx=0;
+  for(let i=0;i<Math.min(nonEmpty.length,8);i++){
+    const txt=nonEmpty[i].join(' ').toUpperCase();
+    if(txt.includes('SITE')||txt.includes('PARTY')||txt.includes('NAME')||txt.includes('INVOICE')||txt.includes('DEBTOR')){hdrIdx=i;break}
+  }
+  const headers=nonEmpty[hdrIdx].map(h=>String(h||'').trim());
+  const dataRows=nonEmpty.slice(hdrIdx+1).filter(r=>r.some(c=>String(c||'').trim()&&!String(c||'').trim().toUpperCase().includes('TOTAL')));
+
+  if(!dataRows.length){el.innerHTML=titleHtml+'<div class="kpi-empty">No data rows found ('+nonEmpty.length+' total rows)</div>';return}
+
+  // Find best sort column
+  let sortCol=2;
+  if(mode==='age'){
+    // Look for days/ageing column by header name
+    for(let c=0;c<headers.length;c++){
       const h=headers[c].toUpperCase();
-      if(h.includes('DAY')||h.includes('AGE')||h.includes('OLD')){ageCol=c;break}
+      if(h.includes('DAY')||h.includes('AGE')||h.includes('OLD')||h.includes('PENDING')){sortCol=c;break}
     }
-    const sorted=dataRows.filter(r=>pn(r[ageCol])>0).sort((a,b)=>pn(b[ageCol])-pn(a[ageCol])).slice(0,5);
-    const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
-    let html=titleHtml;
-    if(!sorted.length){html+='<div class="kpi-empty">No ageing data found</div>';el.innerHTML=html;return}
-    const maxAge=pn(sorted[0][ageCol]);
-    html+='<div class="kpi-table-wrap"><table class="kpi-table"><thead><tr>';
-    ['#',...headers.slice(0,8)].forEach(h=>html+='<th>'+h+'</th>');
-    html+='</tr></thead><tbody>';
-    sorted.forEach((row,i)=>{
-      const days=pn(row[ageCol]);
-      const barW=Math.round((days/maxAge)*100);
-      const ageClr=days>365?'#FF5722':days>180?'#FFC107':days>90?'#3b82f6':'#22c55e';
-      html+='<tr><td class="kpi-rank">'+medals[i]+'</td>';
-      row.slice(0,8).forEach((cell,ci)=>{
-        const n=pn(cell);
-        const isDays=ci===ageCol;
-        const isAmt=n>500&&ci>0&&!isDays;
-        if(isDays){html+='<td><strong style="color:'+ageClr+'">'+Math.round(n)+'d</strong><span class="kpi-age-bar" style="width:'+barW+'px;background:'+ageClr+'60"></span></td>'}
-        else if(isAmt){html+='<td class="kpi-amt-cell">'+fcF(n)+'</td>'}
-        else{html+='<td class="kpi-site">'+(cell||'-')+'</td>'}
-      });
-      html+='</tr>';
+    // Fallback: find column with values 0-3000 (days range)
+    if(sortCol===2){
+      for(let c=1;c<headers.length;c++){
+        const vals=dataRows.map(r=>pn(r[c])).filter(v=>v>0);
+        const avg=vals.reduce((a,b)=>a+b,0)/(vals.length||1);
+        if(avg>0&&avg<5000){sortCol=c;break}
+      }
+    }
+  } else {
+    // mode==='amt' — find column with largest values
+    let maxSum=0;
+    for(let c=1;c<headers.length;c++){
+      const s=dataRows.reduce((a,r)=>a+pn(r[c]),0);
+      if(s>maxSum){maxSum=s;sortCol=c}
+    }
+  }
+
+  const sorted=dataRows.filter(r=>pn(r[sortCol])>0).sort((a,b)=>pn(b[sortCol])-pn(a[sortCol])).slice(0,5);
+  if(!sorted.length){el.innerHTML=titleHtml+'<div class="kpi-empty">No numeric data found in column "'+(headers[sortCol]||sortCol)+'"</div>';return}
+
+  const maxVal=pn(sorted[0][sortCol])||1;
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const amtCellClass=mode==='amt'?'kpi-amt-cell':'';
+
+  let html=titleHtml;
+  html+='<div class="kpi-table-wrap"><table class="kpi-table"><thead><tr><th>#</th>';
+  headers.slice(0,10).forEach(h=>{html+='<th>'+h+'</th>'});
+  html+='</tr></thead><tbody>';
+
+  sorted.forEach((row,i)=>{
+    const sortVal=pn(row[sortCol]);
+    const barW=Math.max(8,Math.round((sortVal/maxVal)*80));
+    const ageClr=sortVal>365?'#FF5722':sortVal>180?'#FF9800':sortVal>90?'#3b82f6':'#22c55e';
+    html+='<tr><td class="kpi-rank">'+medals[i]+'</td>';
+    row.slice(0,10).forEach((cell,ci)=>{
+      const n=pn(cell);
+      const cv=String(cell||'').trim();
+      const isThisSort=ci===sortCol;
+      const isAmt=n>500&&ci>0&&mode==='amt';
+      const isDays=n>0&&n<5000&&ci>0&&mode==='age'&&isThisSort;
+      if(isDays){
+        html+='<td><strong style="color:'+ageClr+';font-size:13px">'+Math.round(n)+'d</strong>'
+          +'<span style="display:inline-block;height:4px;width:'+barW+'px;border-radius:2px;background:'+ageClr+'80;margin-left:6px;vertical-align:middle"></span></td>';
+      } else if(isAmt&&isThisSort){
+        html+='<td class="kpi-amt-cell" style="color:#fca5a5">'+fcF(n)+'<span style="display:inline-block;height:4px;width:'+barW+'px;border-radius:2px;background:rgba(255,87,34,.5);margin-left:6px;vertical-align:middle"></span></td>';
+      } else if(isAmt){
+        html+='<td class="kpi-amt-cell">'+fcF(n)+'</td>';
+      } else {
+        html+='<td class="kpi-site" style="'+(ci===0?'color:#fff;font-weight:700':'')+'">'+( cv||'-')+'</td>';
+      }
     });
-    html+='</tbody></table></div>';
-    el.innerHTML=html;
-  }catch(e){el.innerHTML=titleHtml+'<div class="kpi-empty">❌ '+e.message+'</div>'}
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  html+='<div style="font-size:10px;color:#94a3b8;margin-top:8px;padding:0 2px;font-weight:600">Sort column: "'+headers[sortCol]+'" • '+sorted.length+' of '+dataRows.length+' rows shown • Last updated: '+new Date().toLocaleTimeString('en-IN')+'</div>';
+  el.innerHTML=html;
 }
 
 // ===== OUTSTANDING — hero only, no stat cards =====
