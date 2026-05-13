@@ -804,9 +804,14 @@ function spGo(n){
 })();
 
 function enterERP(){
-  const overlay=document.getElementById('splashOverlay');
-  overlay.classList.add('exit');
-  setTimeout(()=>{overlay.style.display='none';renderAll();liveSync();fetchAllKPI();addNotification('🎉 Welcome!','VG ERP loaded successfully','success')},800);
+  const overlay=document.getElementById('spWrap')||document.getElementById('splashOverlay');
+  if(!overlay)return;
+  overlay.classList.add('sp-exit');
+  setTimeout(()=>{
+    overlay.style.display='none';
+    renderAll();liveSync();fetchAllKPI();
+    addNotification('🎉 Welcome!','VG ERP loaded successfully','success');
+  },750);
 }
 
 // ===== DATA STORE =====
